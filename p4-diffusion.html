@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diffusion Policy | Robot Learning Survey 2026</title>
+<link rel="stylesheet" href="shared.css">
+<style>h2{border-bottom-color:var(--accent-diff)} .card{border-top-color:var(--accent-diff)} .card .tag{background:#e0f7ff;color:#0077b6} .card .paper-link{color:#0077b6}</style>
+</head>
+<body>
+<nav>
+  <span class="logo">Robot Learning 2026</span>
+  <a href="index.html">Home</a>
+  <a href="p1-vla.html">VLA</a>
+  <a href="p2-wam.html">WAM</a>
+  <a href="p3-rl-sim2real.html">RL</a>
+  <a href="p4-diffusion.html" class="active" style="background:var(--accent-diff);color:#fff">Diffusion</a>
+  <a href="p5-hybrid.html">Hybrid</a>
+  <a href="p6-unitree.html">Unitree</a>
+  <a href="p7-citation-graph.html">Graph</a>
+</nav>
+
+<div class="container">
+
+<h1 style="font-size:1.8rem;margin-bottom:0.3rem">Diffusion Policy: 扩散模型驱动的机器人策略</h1>
+<p style="color:var(--text-secondary);margin-bottom:2rem">从 DDPM 到 Flow Matching — 模仿学习的新 SOTA</p>
+
+<section>
+<h2>核心原理</h2>
+<p>Diffusion Policy 将策略建模为<strong>条件扩散/流匹配生成模型</strong>：给定当前观测，从高斯噪声逐步去噪生成一段未来动作序列。</p>
+
+<div class="diagram">
+  Diffusion Policy 核心:
+
+  训练: 学习去噪过程
+  ┌────────┐   加噪    ┌──────────┐   学习逆过程   ┌────────────┐
+  │ GT动作  │ ──────► │ 噪声动作  │ ◄──────────── │ 去噪网络    │
+  │ 序列    │          │ + 观测条件│               │ ε_θ(aₜ,t,o)│
+  └────────┘          └──────────┘               └────────────┘
+
+  推理: 迭代去噪生成
+  ┌──────┐   K步去噪   ┌──────────┐
+  │ 纯噪声│ ──────────►│ 动作序列  │  (action chunking)
+  │ + obs │            │ [a₁...aH]│
+  └──────┘            └──────────┘
+
+  关键优势:
+  ✓ 多模态动作分布建模 (同一状态多种可行动作)
+  ✓ Action Chunking 减少复合误差
+  ✓ 训练稳定 (去噪目标简单)
+  ✓ 数据高效 (10-50 个 demo 即可)</div>
+</section>
+
+<section>
+<h2>里程碑演进</h2>
+<div class="timeline">
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-diff)">2023.06</span>
+    <h4>Diffusion Policy (Chi et al.)</h4>
+    <p>开创性工作：DDPM 建模多模态动作分布 + Action Chunking。~100 步去噪→DDIM 10 步。证明扩散模型可直接用于机器人策略。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-diff)">2023.06</span>
+    <h4>ACT / ALOHA (Zhao et al.)</h4>
+    <p>CVAE + Action Chunking Transformer。非扩散路线但同期发表，推动了 action chunking 成为标配。双臂遥操作系统影响深远。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-diff)">2024.04</span>
+    <h4>3D Diffusion Policy / DP3</h4>
+    <p>3D 点云替代 2D 图像输入，10 条 demo 解决复杂 6-DOF 操作。证明 3D 表征对数据效率的关键作用。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-diff)">2024.09</span>
+    <h4>Consistency Policy</h4>
+    <p>将 Consistency Model 引入机器人策略：1-2 步生成，推理加速 10x。首次证明无需多步去噪也能保持多模态。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-diff)">2024.10</span>
+    <h4>π₀ — Flow Matching VLA</h4>
+    <p>VLM backbone + Flow Matching 动作头。连续流匹配替代离散 token，适合高精度灵巧操作。开启 VLA + Flow 融合路线。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-diff)">2026.01</span>
+    <h4>DMPO — 真正单步 &gt;120Hz</h4>
+    <p>MeanFlow 数学推导单步推理 + 分散正则化 + RL 微调。首次实现实时扩散策略推理，打通 Diffusion→RL 全链路。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-diff)">2026.04</span>
+    <h4>MV-VDP / POCO — 新 SOTA</h4>
+    <p>多视角视频扩散策略（10 demo 超越 VLA）+ 模型无关 RL 微调框架（真机 96.7%）。Diffusion Policy 进入成熟期。</p>
+  </div>
+</div>
+</section>
+
+<section>
+<h2>方法演进</h2>
+<table>
+  <tr><th>方法</th><th>时间</th><th>生成模型</th><th>采样步数</th><th>关键创新</th></tr>
+  <tr>
+    <td><strong>Diffusion Policy</strong></td>
+    <td>2023</td>
+    <td>DDPM</td>
+    <td>~100 → DDIM 10</td>
+    <td>开创性工作，多模态动作分布</td>
+  </tr>
+  <tr>
+    <td><strong>ACT (ALOHA)</strong></td>
+    <td>2023</td>
+    <td>CVAE</td>
+    <td>1 (non-diffusion)</td>
+    <td>Action Chunking + Transformer, 双臂系统</td>
+  </tr>
+  <tr>
+    <td><strong>3D Diffusion Policy (DP3)</strong></td>
+    <td>2024</td>
+    <td>DDPM + 3D点云</td>
+    <td>~10</td>
+    <td>3D 表征，10 demo 解决复杂任务</td>
+  </tr>
+  <tr>
+    <td><strong>Consistency Policy</strong></td>
+    <td>2024</td>
+    <td>Consistency Model</td>
+    <td>1-2</td>
+    <td>10x 推理加速</td>
+  </tr>
+  <tr>
+    <td><strong>π₀ (Flow Matching)</strong></td>
+    <td>2024</td>
+    <td>Flow Matching</td>
+    <td>~10</td>
+    <td>VLM backbone + 连续流匹配</td>
+  </tr>
+  <tr>
+    <td><strong>DMPO</strong></td>
+    <td>2026</td>
+    <td>MeanFlow</td>
+    <td><strong>1 (单步!)</strong></td>
+    <td>真正单步推理 &gt;120Hz + RL fine-tune</td>
+  </tr>
+  <tr>
+    <td><strong>MV-VDP</strong></td>
+    <td>2026</td>
+    <td>Video Diffusion</td>
+    <td>~10</td>
+    <td>多视角视频 + 热力图，预测环境演化</td>
+  </tr>
+</table>
+</section>
+
+<section>
+<h2>扩散策略前沿 (2026)</h2>
+
+<h3>多模态与视频扩散</h3>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.04</span>
+  <h4>MV-VDP: Multi-View Video Diffusion Policy</h4>
+  <div class="meta">CASIA / Tsinghua | Li et al. | arXiv:2604.03181</div>
+  <p>同时预测多视角热力图视频和 RGB 视频。不仅指定机器人做什么动作，还预测环境如何响应这些动作。<strong>仅 10 条轨迹</strong>，无需额外预训练，即可完成复杂真实世界任务。超越 VLA 和 3D-based 方法。</p>
+  <div class="mini-diagram">
+  Multi-View Obs ──┐
+  (RGB × N views)  ├──► Video Diffusion ──► 预测视频 (RGB + Heatmap)
+  Heatmap × N ─────┘     Backbone             │
+                                               ▼
+                                         Action Head ──► 动作序列
+  </div>
+  <div class="insight">核心 Insight: 通过多视角视频扩散同时建模动作与环境响应，使策略具备"想象未来"的能力，仅需 10 条演示即可超越需要大量预训练的 VLA 方法。</div>
+  <a href="https://arxiv.org/abs/2604.03181" target="_blank" class="paper-link">arXiv 2604.03181 →</a>
+</div>
+
+</div>
+
+<h3>RL 微调扩散策略</h3>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.04</span>
+  <span class="tag">RL+Diffusion</span>
+  <h4>POCO: RL Fine-tune Diffusion Policy</h4>
+  <div class="meta">CASIA / UCAS | Chen et al. | arXiv:2604.01860</div>
+  <p>解决"如何用 RL 微调扩散策略"的关键难题。将策略改进建模为后验推断，通过 EM 算法将 reward 加权隐式后验蒸馏到策略中。模型无关设计可扩展到大型 VLA。真机 4 个接触密集任务 96.7% 成功率。</p>
+  <div class="mini-diagram">
+  Diffusion Policy (预训练)
+       │
+       ▼
+  ┌─ E-step: 采样 → reward 加权 → 隐式后验 q*(a|o) ─┐
+  │                                                    │
+  └─ M-step: 蒸馏 q* 到 π_θ (策略更新) ◄──────────────┘
+       │
+       ▼  (迭代收敛)
+  RL-refined Policy → 96.7% 真机成功率
+  </div>
+  <div class="insight">核心 Insight: 将 RL 微调扩散策略转化为 EM 后验推断问题，避免直接对扩散过程做策略梯度，实现了模型无关的稳定 RL 微调范式。</div>
+  <a href="https://arxiv.org/abs/2604.01860" target="_blank" class="paper-link">arXiv 2604.01860 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.01</span>
+  <h4>DMPO: One-Step Generation &gt;120Hz</h4>
+  <div class="meta">SYSU | Zou et al. | arXiv:2601.20701</div>
+  <p>真正的单步生成，无需知识蒸馏。三要素：MeanFlow (数学推导单步推理) + 分散正则化 (防止表征坍塌) + RL 微调 (超越专家演示)。操作和运动任务均超越多步 baseline，GPU 上达数百 Hz。</p>
+  <div class="mini-diagram">
+  噪声 z ──► MeanFlow (单步!) ──► 动作序列
+               │
+  三大支柱:    ├─ MeanFlow: v_θ 直接映射噪声→动作 (无需迭代)
+               ├─ 分散正则化: 防止所有噪声坍塌到同一输出
+               └─ RL fine-tune: 突破演示上界
+                                          推理速度: &gt;120 Hz
+  </div>
+  <div class="insight">核心 Insight: 通过 MeanFlow 理论证明扩散模型可精确单步生成，配合分散正则化解决模式坍塌，首次实现 >120Hz 实时扩散策略推理。</div>
+  <a href="https://arxiv.org/abs/2601.20701" target="_blank" class="paper-link">arXiv 2601.20701 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2024.10</span>
+  <h4>OneDP: One-Step Diffusion Policy</h4>
+  <div class="meta">NVIDIA / UT Austin | Wang et al. | arXiv:2410.21257</div>
+  <p>通过自蒸馏将多步扩散策略压缩为单步生成器。不需要额外教师模型——策略自己蒸馏自己。在灵巧操作任务上实现 10x 推理加速且性能无损。</p>
+  <div class="mini-diagram">
+  OneDP 自蒸馏:
+  ┌────────────────────────────────────────────┐
+  │ 多步 Diffusion Policy (Teacher = Self)     │
+  │         ▼ 自蒸馏                           │
+  │ 单步 Student Policy                        │
+  │   noise → 1-step → action                  │
+  │                                            │
+  │ 关键: Teacher 和 Student 共享权重           │
+  │   渐进式减少步数: 10→5→2→1                  │
+  │   每轮 Student = 上轮蒸馏结果               │
+  └────────────────────────────────────────────┘
+  推理加速: 10x  性能损失: <2%</div>
+  <div class="insight">核心 Insight: 不需要独立的教师模型——多步扩散策略本身就是最好的教师。渐进式自蒸馏比一步到位的蒸馏更稳定。</div>
+  <a href="https://arxiv.org/abs/2410.21257" target="_blank" class="paper-link">arXiv 2410.21257 →</a>
+</div>
+
+</div>
+
+<h3>Flow Matching + RL 融合</h3>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2025.01</span>
+  <h4>REFINE-DP: 人形全身 Diffusion + RL</h4>
+  <div class="meta">Georgia Tech | Gu et al. | arXiv:2603.13707</div>
+  <p>将 Diffusion Policy 从桌面操作扩展到人形全身 loco-manipulation。先用人类演示训练 Diffusion Policy，再用 RL 微调使其适应真实物理约束。首次在人形机器人上验证 Diffusion+RL 路线。</p>
+  <div class="mini-diagram">
+  REFINE-DP 两阶段:
+  ┌────────────────────────────────────────────┐
+  │ Phase 1: Diffusion Policy Pre-train        │
+  │   人类全身运动演示 → 扩散策略               │
+  │   (覆盖 locomotion + manipulation)         │
+  │         ▼                                  │
+  │ Phase 2: RL Fine-tune                      │
+  │   物理约束 reward (稳定性/能耗/安全)        │
+  │   → 适应真实动力学                          │
+  │   → 超越演示水平                            │
+  └────────────────────────────────────────────┘
+  目标平台: 人形机器人全身 loco-manipulation</div>
+  <div class="insight">核心 Insight: Diffusion Policy 在桌面操作大获成功，但人形全身控制需要额外的物理约束。RL 微调弥补了演示数据中缺失的动力学知识（稳定性、能耗等）。</div>
+  <a href="https://arxiv.org/abs/2603.13707" target="_blank" class="paper-link">arXiv 2603.13707 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2025.07</span>
+  <h4>FlowRL: Flow + RL 统一分类框架</h4>
+  <div class="meta">Georgia Tech | Gao et al. | arXiv:2603.27450</div>
+  <p>首次对 Flow/Diffusion + RL 的所有集成方式做系统分类：策略梯度法、后验推断法、蒸馏法、引导法。提供模块化开源框架和统一 benchmark，使不同方法可公平对比。</p>
+  <div class="mini-diagram">
+  FlowRL 四类集成方式:
+  ┌────────────────────────────────────────────┐
+  │ 1. Policy Gradient (直接梯度)               │
+  │    DMPO: 单步可微 → 直接策略梯度            │
+  │                                            │
+  │ 2. Posterior Inference (后验推断)            │
+  │    POCO: E-step采样 → M-step蒸馏            │
+  │                                            │
+  │ 3. Distillation (蒸馏法)                    │
+  │    reward-weighted 样本 → 蒸馏到策略         │
+  │                                            │
+  │ 4. Guidance (引导法)                        │
+  │    reward gradient → 引导去噪方向           │
+  └────────────────────────────────────────────┘
+  开源: 统一框架 + benchmark + 公平对比</div>
+  <div class="insight">核心 Insight: Flow/Diffusion + RL 的集成方式看似繁多，实际归纳为四类范式。策略梯度法最直接但需单步可微，后验推断法最通用但需额外采样。</div>
+  <a href="https://arxiv.org/abs/2603.27450" target="_blank" class="paper-link">arXiv 2603.27450 →</a>
+</div>
+
+</div>
+</section>
+
+<section>
+<h2>Diffusion vs RL: 互补而非替代</h2>
+<div class="diagram">
+  Diffusion Policy                    RL
+  ─────────────────────               ─────────────
+  数据源: 人类演示                     数据源: reward 函数 + 探索
+  上界: 受限于演示者水平               上界: 可超越人类
+  稳定性: 非常稳定                     稳定性: 容易不稳定
+  样本效率: 极高 (10-50 demo)          样本效率: 低 (需数十亿步)
+  多模态: 天然建模                     多模态: 需要特殊处理
+
+  2026 趋势: Diffusion pretrain → RL fine-tune (POCO/DMPO)
+  = 模仿学习的稳定性 + RL 的超越能力</div>
+</section>
+
+</div>
+<footer>Robot Learning Survey 2026 &mdash; Diffusion Policy 专题</footer>
+</body>
+</html>

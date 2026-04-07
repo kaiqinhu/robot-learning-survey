@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Robot Learning Survey 2026</title>
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<nav>
+  <span class="logo">Robot Learning 2026</span>
+  <a href="index.html" class="active">Home</a>
+  <a href="p1-vla.html">VLA</a>
+  <a href="p2-wam.html">WAM</a>
+  <a href="p3-rl-sim2real.html">RL</a>
+  <a href="p4-diffusion.html">Diffusion</a>
+  <a href="p5-hybrid.html">Hybrid</a>
+  <a href="p6-unitree.html">Unitree</a>
+  <a href="p7-citation-graph.html">Graph</a>
+</nav>
+
+<div class="hero">
+  <h1>Robot Learning Algorithm Survey</h1>
+  <p>2024-2026 机器人控制学习算法全景综述 — 从 VLA、世界动作模型(WAM)、强化学习 Sim-to-Real、Diffusion Policy 到混合范式</p>
+  <p style="margin-top:0.8rem;font-size:0.85rem;opacity:0.7">Updated: April 2026 | 覆盖 60+ 篇最新论文</p>
+</div>
+
+<div class="container">
+
+<section>
+  <h2>技术路线全景图</h2>
+  <div class="diagram">
+                          Robot Learning 2026 技术路线
+  ┌──────────────────────────────────────────────────────────────┐
+  │                                                              │
+  │   ┌─────────┐    ┌─────────┐    ┌──────────┐   ┌─────────┐ │
+  │   │  VLA    │    │  WAM    │    │ Diffusion│   │RL Sim2R │ │
+  │   │ Vision  │    │ World   │    │ Policy   │   │ PPO/SAC │ │
+  │   │Language │    │ Action  │    │ DDPM/Flow│   │ AMP     │ │
+  │   │ Action  │    │ Model   │    │ Matching │   │ Curricul│ │
+  │   └────┬────┘    └────┬────┘    └─────┬────┘   └────┬────┘ │
+  │        │              │               │              │      │
+  │        └──────┬───────┘               │              │      │
+  │               │                       │              │      │
+  │        ┌──────▼───────┐               │              │      │
+  │        │  Hybrid VLA  │◄──────────────┘              │      │
+  │        │  + World     │                              │      │
+  │        │  + RL        │◄─────────────────────────────┘      │
+  │        └──────────────┘                                     │
+  │              2026 SOTA: π₀.5, GigaWorld, SC-VLA             │
+  └──────────────────────────────────────────────────────────────┘</div>
+</section>
+
+<section>
+  <h2>六大专题</h2>
+  <div class="pill-grid">
+
+    <a href="p1-vla.html" class="pill-card">
+      <div class="icon" style="background:#dbeafe;color:var(--accent-vla)">V</div>
+      <div>
+        <h3>VLA 视觉-语言-动作模型</h3>
+        <p>RT-2 → OpenVLA → π₀ → FocusVLA — 从 VLM 到通用机器人策略</p>
+      </div>
+    </a>
+
+    <a href="p2-wam.html" class="pill-card">
+      <div class="icon" style="background:#ede9fe;color:var(--accent-wam)">W</div>
+      <div>
+        <h3>WAM 世界动作模型</h3>
+        <p>DreamZero / GigaWorld / DIAL / DyWA — 视频预测驱动的动作生成</p>
+      </div>
+    </a>
+
+    <a href="p3-rl-sim2real.html" class="pill-card">
+      <div class="icon" style="background:#ffe4e6;color:var(--accent-rl)">R</div>
+      <div>
+        <h3>RL Sim-to-Real</h3>
+        <p>PPO + Domain Rand + AMP + Teacher-Student — 人形全身运动控制</p>
+      </div>
+    </a>
+
+    <a href="p4-diffusion.html" class="pill-card">
+      <div class="icon" style="background:#e0f7ff;color:#0077b6">D</div>
+      <div>
+        <h3>Diffusion Policy</h3>
+        <p>DDPM/Flow Matching/Consistency — 从模仿学习到精细操作</p>
+      </div>
+    </a>
+
+    <a href="p5-hybrid.html" class="pill-card">
+      <div class="icon" style="background:#fff3e0;color:var(--accent-hybrid)">H</div>
+      <div>
+        <h3>混合范式 2026</h3>
+        <p>VLA + World Model + RL Fine-tune — π₀.5 / SC-VLA / POCO</p>
+      </div>
+    </a>
+
+    <a href="p6-unitree.html" class="pill-card">
+      <div class="icon" style="background:#d1fae5;color:#047857">U</div>
+      <div>
+        <h3>Unitree 开源生态</h3>
+        <p>G1/Go2 + Isaac Lab + 20+ 篇 2026 论文 — 最活跃的开源人形平台</p>
+      </div>
+    </a>
+
+    <a href="p7-citation-graph.html" class="pill-card">
+      <div class="icon" style="background:#ede9fe;color:#8b5cf6">G</div>
+      <div>
+        <h3>Citation Graph</h3>
+        <p>论文引用关系力导向图 — 交互式可视化 60+ 篇论文的引用网络</p>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section>
+  <h2>演进时间线</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="year">2022</span>
+      <h4>RT-1 (Google)</h4>
+      <p>首个大规模真机数据训练的 Transformer 机器人策略</p>
+    </div>
+    <div class="timeline-item">
+      <span class="year">2023</span>
+      <h4>RT-2 / Diffusion Policy / ACT</h4>
+      <p>VLM→action tokens; DDPM 建模多模态动作分布; Action Chunking</p>
+    </div>
+    <div class="timeline-item">
+      <span class="year">2023</span>
+      <h4>Open X-Embodiment (RT-X)</h4>
+      <p>22 种机器人、527 技能、跨具身正迁移</p>
+    </div>
+    <div class="timeline-item">
+      <span class="year">2024 Q2</span>
+      <h4>OpenVLA / 3D Diffusion Policy (DP3)</h4>
+      <p>开源 VLA; 3D 点云 + diffusion 真机 85% 成功率</p>
+    </div>
+    <div class="timeline-item">
+      <span class="year">2024 Q4</span>
+      <h4>π₀ (Physical Intelligence) / VPP</h4>
+      <p>Flow matching VLA; 视频扩散模型做视觉表征驱动策略</p>
+    </div>
+    <div class="timeline-item" style="--accent: var(--accent-wam);">
+      <span class="year" style="color:var(--accent-wam)">2025 Q1</span>
+      <h4>DreamZero / π₀.5 / SC-VLA</h4>
+      <p>WAM 范式爆发 — 视频预测 + 动作解码; VLA + RL fine-tune</p>
+    </div>
+    <div class="timeline-item" style="--accent: var(--accent-wam);">
+      <span class="year" style="color:var(--accent-wam)">2025 Q2-Q3</span>
+      <h4>GigaWorld / DIAL / FocusVLA / ManipArena</h4>
+      <p>WAM 高效化(9x加速); 潜在意图瓶颈; 视觉注意力优化; 标准评测</p>
+    </div>
+    <div class="timeline-item" style="--accent: var(--accent-hybrid);">
+      <span class="year" style="color:var(--accent-hybrid)">2025 Q4</span>
+      <h4>GEN-0 (Generalist AI) — 具身 Scaling Law</h4>
+      <p>首个在 270K 小时真实物理数据上确立可预测扩展定律的具身基础模型 — 具身 AI 的 "GPT-3 时刻"</p>
+    </div>
+    <div class="timeline-item" style="--accent: var(--accent-rl);">
+      <span class="year" style="color:var(--accent-rl)">2026 Q1</span>
+      <h4>Unitree G1 论文井喷 / POCO / MV-VDP / BAT</h4>
+      <p>20+ 篇 G1 真机论文; RL fine-tune 扩散策略; 多视角视频扩散; 策略切换框架</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>核心对比：VLA vs WAM vs RL vs Diffusion</h2>
+  <table>
+    <tr>
+      <th>维度</th><th>VLA</th><th>WAM</th><th>RL Sim2Real</th><th>Diffusion Policy</th>
+    </tr>
+    <tr>
+      <td><strong>核心思路</strong></td>
+      <td>VLM 直接输出 action token</td>
+      <td>视频预测未来状态 → 解码动作</td>
+      <td>仿真 reward 优化 → 真机迁移</td>
+      <td>条件扩散生成动作序列</td>
+    </tr>
+    <tr>
+      <td><strong>语言理解</strong></td>
+      <td>强（继承 VLM）</td>
+      <td>中-强（视频+语言）</td>
+      <td>弱（需额外规划器）</td>
+      <td>弱-中（需条件注入）</td>
+    </tr>
+    <tr>
+      <td><strong>物理动力学</strong></td>
+      <td>弱（隐式）</td>
+      <td>强（显式预测）</td>
+      <td>最强（仿真器）</td>
+      <td>中（数据隐含）</td>
+    </tr>
+    <tr>
+      <td><strong>泛化能力</strong></td>
+      <td>语义泛化强，物理弱</td>
+      <td>两者兼顾</td>
+      <td>同 domain 强</td>
+      <td>分布内强</td>
+    </tr>
+    <tr>
+      <td><strong>数据需求</strong></td>
+      <td>大规模机器人+互联网</td>
+      <td>视频数据(丰富)</td>
+      <td>仿真无限生成</td>
+      <td>少量高质量 demo</td>
+    </tr>
+    <tr>
+      <td><strong>推理速度</strong></td>
+      <td>中 (VLM 推理)</td>
+      <td>慢→快(GigaWorld 9x)</td>
+      <td>最快 (小网络)</td>
+      <td>慢 (多步采样)</td>
+    </tr>
+    <tr>
+      <td><strong>最佳场景</strong></td>
+      <td>语言指令操作</td>
+      <td>新环境零样本泛化</td>
+      <td>全身运动控制</td>
+      <td>精细灵巧操作</td>
+    </tr>
+    <tr>
+      <td><strong>代表 2026</strong></td>
+      <td>FocusVLA, FAN-VLA</td>
+      <td>GigaWorld, DreamZero</td>
+      <td>BAT, AGILE, SLowRL</td>
+      <td>MV-VDP, POCO</td>
+    </tr>
+  </table>
+</section>
+
+</div>
+
+<footer>
+  Robot Learning Survey 2026 &mdash; 基于 60+ 篇 arXiv 论文整理 &mdash; Last updated April 2026
+</footer>
+
+</body>
+</html>
