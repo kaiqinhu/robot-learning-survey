@@ -8,17 +8,7 @@
 <style>h2{border-bottom-color:var(--accent-hybrid)} .card{border-top-color:var(--accent-hybrid)} .card .tag{background:#fff3e0;color:var(--accent-hybrid)} .card .paper-link{color:var(--accent-hybrid)}</style>
 </head>
 <body>
-<nav>
-  <span class="logo">Robot Learning 2026</span>
-  <a href="index.html">Home</a>
-  <a href="p1-vla.html">VLA</a>
-  <a href="p2-wam.html">WAM</a>
-  <a href="p3-rl-sim2real.html">RL</a>
-  <a href="p4-diffusion.html">Diffusion</a>
-  <a href="p5-hybrid.html" class="active" style="background:var(--accent-hybrid);color:#fff">Hybrid</a>
-  <a href="p6-unitree.html">Unitree</a>
-  <a href="p7-citation-graph.html">Graph</a>
-</nav>
+<nav id="main-nav"></nav>
 
 <div class="container">
 
@@ -53,33 +43,7 @@
 
 <section>
 <h2>里程碑演进</h2>
-<div class="timeline">
-  <div class="timeline-item">
-    <span class="year" style="color:var(--accent-hybrid)">2024.10</span>
-    <h4>π₀ (Physical Intelligence)</h4>
-    <p>VLM + Flow Matching 动作头。首个将 VLM 预训练 + 连续动作生成组合的工业级系统。叠衣服、清桌子等灵巧操作。</p>
-  </div>
-  <div class="timeline-item">
-    <span class="year" style="color:var(--accent-hybrid)">2025.02</span>
-    <h4>π₀.5 / SC-VLA / DreamZero</h4>
-    <p>混合范式三条路线同时爆发：VLA+RL (π₀.5)、VLA+WorldModel+RL (SC-VLA)、WAM 零样本 (DreamZero)。证明三阶段训练范式的普适性。</p>
-  </div>
-  <div class="timeline-item">
-    <span class="year" style="color:var(--accent-hybrid)">2025.11</span>
-    <h4>GEN-0 / NORA-1.5 / AtomVLA</h4>
-    <p>GEN-0 (Generalist AI) 首个在 270K 小时真实物理数据上建立具身 scaling law 的基础模型。世界模型 + 偏好奖励训练 VLA (NORA-1.5)；潜在世界模型后训练 (AtomVLA)。</p>
-  </div>
-  <div class="timeline-item">
-    <span class="year" style="color:var(--accent-hybrid)">2026.01</span>
-    <h4>DMPO — 单步 Flow + RL &gt;120Hz</h4>
-    <p>MeanFlow 单步蒸馏 + RL 微调。证明 Flow Matching → 单步生成 → RL 微调可无缝衔接。推理速度突破实时瓶颈。</p>
-  </div>
-  <div class="timeline-item">
-    <span class="year" style="color:var(--accent-hybrid)">2026.03-04</span>
-    <h4>POCO / DIAL / DreamPlan / AdaWorldPolicy</h4>
-    <p>模型无关 RL 微调 + 双系统世界建模 + 视频世界模型 RL + 在线自适应。混合范式全面成熟，细分路线各自深化。</p>
-  </div>
-</div>
+<div class="timeline" data-page="p5" data-accent="hybrid"></div>
 </section>
 
 <section>
@@ -121,259 +85,15 @@
 
 <section>
 <h2>三阶段训练范式: VLA + RL</h2>
-<div class="card-grid">
-
-<div class="card">
-  <span class="tag">2025.02</span>
-  <span class="tag">里程碑</span>
-  <h4>π₀.5 (Physical Intelligence)</h4>
-  <div class="meta">Physical Intelligence | Black et al. | arXiv:2504.16054</div>
-  <p>在 π₀ (VLM + Flow Matching) 基础上加入 RL 微调阶段。预训练提供通用操作能力，RL 在具体任务上提升成功率和鲁棒性。<strong>VLA + RL 混合的标志性工作</strong>。</p>
-  <div class="mini-diagram">
-  π₀.5 三阶段训练流水线:
-  ┌────────────────────────────────────────────────┐
-  │ Phase 1: VLM Pre-train (Internet-scale)        │
-  │   Vision + Language → 语义理解                  │
-  │         ▼                                      │
-  │ Phase 2: Flow Matching SFT (Robot data)        │
-  │   Obs + Lang → Continuous Action (去噪生成)     │
-  │         ▼                                      │
-  │ Phase 3: RL Fine-tune (Task-specific)          │
-  │   Success reward → 超越演示水平                 │
-  └────────────────────────────────────────────────┘
-  = LLM Pre-train → SFT → RLHF 的机器人完美映射</div>
-  <div class="insight">核心 Insight: π₀.5 证明了 LLM 领域的 "Pre-train → SFT → RLHF" 范式可以完整迁移到机器人控制。Flow Matching 作为 SFT 阶段提供连续动作生成能力，RL 微调阶段在不破坏预训练泛化性的前提下显著提升任务成功率。</div>
-  <a href="https://arxiv.org/abs/2504.16054" target="_blank" class="paper-link">arXiv 2504.16054 →</a>
-</div>
-
-<div class="card">
-  <span class="tag">2025.02</span>
-  <span class="tag">VLA+WM+RL</span>
-  <h4>SC-VLA: Self-Correcting VLA</h4>
-  <div class="meta">UESTC | Liu et al. | arXiv:2602.21633</div>
-  <p>三合一：VLA + 稀疏世界想象 + 自纠正。辅助预测头预测任务进度和未来轨迹趋势（稀疏想象），在线动作精炼模块基于预测重塑 dense reward。比最优 baseline <strong>少用 16% 步数，成功率高 9%</strong>。</p>
-  <div class="mini-diagram">
-  SC-VLA 三合一架构:
-  ┌──────────────────────────────────────────────────┐
-  │ VLA Backbone (Vision-Language-Action)             │
-  │  ┌──────────┐                                    │
-  │  │ obs+lang │──►┬──► Action Head ──► a_t         │
-  │  └──────────┘  │                                 │
-  │                ├──► Progress Head ──► p_t (进度)  │
-  │                │                                 │
-  │                └──► Trajectory Head ──► τ (趋势)  │
-  │                      (稀疏世界想象)               │
-  │                           ▼                      │
-  │           ┌──────────────────────────┐           │
-  │           │ Online Action Refinement │           │
-  │           │ dense reward = f(p_t, τ) │           │
-  │           │ a_t' = refine(a_t, r)    │           │
-  │           └──────────────────────────┘           │
-  └──────────────────────────────────────────────────┘
-  效果: -16% 步数, +9% 成功率 vs best baseline</div>
-  <div class="insight">核心 Insight: 不需要完整的视频级世界模型——仅预测任务进度和轨迹趋势（稀疏想象）就足以构建 dense reward 信号，在推理时实时精炼动作，以极低开销获得世界模型+RL 的收益。</div>
-  <a href="https://arxiv.org/abs/2602.21633" target="_blank" class="paper-link">arXiv 2602.21633 →</a>
-</div>
-
-</div>
+<div class="card-grid" data-ids="2504.16054,2602.21633" data-page="p5"></div>
 
 <p style="margin:1.5rem 0 0.5rem;font-size:0.85rem;color:var(--text-secondary)"><strong>更多 VLA + RL 微调:</strong> <a href="p4-diffusion.html#poco">POCO (模型无关 RL 微调)</a> · <a href="p4-diffusion.html#dmpo">DMPO (单步 Flow + RL >120Hz)</a> · <a href="p1-vla.html#vla-rl">VLA-RL / TGRPO / ConRFT (VLA 专项 RL 方法)</a></p>
 
 <h2>VLA + World Model</h2>
-<div class="card-grid">
-
-<div class="card">
-  <span class="tag">2025.11</span>
-  <span class="tag">Scaling Law</span>
-  <h4>GEN-0: Embodied Foundation Model with Scaling Laws</h4>
-  <div class="meta">Generalist AI | 270K 小时真实物理交互数据</div>
-  <p>首个在真实世界物理交互数据上确立可预测扩展定律的具身基础模型。基于 270K 小时多机器人数据训练，证明机器人领域的 scaling law 与 LLM 类似——模型性能随数据和参数量可预测提升。<strong>具身 AI 的 "GPT-3 时刻"</strong>。</p>
-  <div class="mini-diagram">
-  GEN-0 具身 Scaling Law:
-  ┌──────────────────────────────────────────────┐
-  │ 核心发现: 具身基础模型存在可预测 scaling law  │
-  │                                              │
-  │ 数据: 270K 小时真实物理交互                   │
-  │   ·多机器人平台 (臂/手/移动)                  │
-  │   ·多任务类型 (操作/导航/交互)                │
-  │                                              │
-  │ Loss                                         │
-  │  │ ·                                         │
-  │  │  ··                                       │
-  │  │    ···                                    │
-  │  │       ·····                               │
-  │  │            ···········                    │
-  │  └─────────────────────── Data/Params        │
-  │                                              │
-  │ 意义: LLM scaling law → 具身 AI scaling law  │
-  │   = 投入更多数据/算力 → 可预测的能力提升     │
-  └──────────────────────────────────────────────┘</div>
-  <div class="insight">核心 Insight: GEN-0 证明机器人基础模型不是"炼丹"——性能随规模可预测增长。这为具身 AI 的工业化投资提供了理论依据，正如 GPT-3 的 scaling law 引爆了 LLM 竞赛。</div>
-  <a href="https://generalistai.com/blog" target="_blank" class="paper-link">Generalist AI Blog →</a>
-</div>
-
-<div class="card">
-  <span class="tag">2026.03</span>
-  <span class="tag">双系统</span>
-  <h4>DIAL: System-2 World Modeling</h4>
-  <div class="meta">HKU / XPENG | Chen et al. | arXiv:2603.29844</div>
-  <p>VLM 做 System-2 慢思考（潜在世界建模），轻量网络做 System-1 快执行。意图瓶颈设计让 VLM 只需预测高层意图，保留预训练知识。详见 <a href="p2-wam.html">WAM 专题</a>。</p>
-  <div class="mini-diagram">
-  DIAL 双系统 (混合视角):
-  ┌──────────────────────────────────────────────┐
-  │ VLM (System-2)                               │
-  │   obs + lang ──► 预测潜在未来状态 z_t+k      │
-  │              (不直接输出 action!)              │
-  │                    │ latent intent            │
-  │                    ▼                          │
-  │ Motor Net (System-1)                         │
-  │   z_t+k + obs ──► action (低延迟)            │
-  │                                              │
-  │ 混合价值: VLM 语义 + World Model 物理先验    │
-  │   + 轻量执行器 → 10x 更少 demo               │
-  └──────────────────────────────────────────────┘</div>
-  <div class="insight">核心 Insight: 混合的关键在于分层——VLM 负责"想什么"(意图)，World Model 负责"会怎样"(预测)，轻量网络负责"怎么做"(执行)。各层各司其职，避免 VLM 被迫学习低层控制。</div>
-  <a href="https://arxiv.org/abs/2603.29844" target="_blank" class="paper-link">arXiv 2603.29844 →</a>
-</div>
-
-<div class="card">
-  <span class="tag">2025.11</span>
-  <span class="tag">WM+偏好</span>
-  <h4>NORA-1.5: World Model + Action Preference Reward</h4>
-  <div class="meta">NTU Singapore | Hung et al. | arXiv:2511.14659</div>
-  <p>用世界模型生成不同动作的未来预测，然后通过动作偏好奖励（对比"好动作"和"坏动作"的预测结果）来训练 VLA。世界模型不直接参与推理，而是作为训练时的奖励信号源。</p>
-  <div class="mini-diagram">
-  NORA-1.5 世界模型做奖励:
-  ┌──────────────────────────────────────────────┐
-  │ 训练时:                                      │
-  │   action_good ──► World Model ──► future_good│
-  │   action_bad  ──► World Model ──► future_bad │
-  │         │                              │     │
-  │         └── 偏好对比 ──► reward signal ─┘     │
-  │                              │               │
-  │                    VLA ◄─── RL 训练           │
-  │                                              │
-  │ 推理时:                                      │
-  │   obs + lang ──► VLA ──► action              │
-  │   (不需要世界模型! 零额外推理开销)            │
-  └──────────────────────────────────────────────┘</div>
-  <div class="insight">核心 Insight: 世界模型最有价值的角色可能不是"推理时预测未来"，而是"训练时提供奖励"——它知道哪个动作会导致好结果，这个判断力通过 RL 蒸馏进 VLA。</div>
-  <a href="https://arxiv.org/abs/2511.14659" target="_blank" class="paper-link">arXiv 2511.14659 →</a>
-</div>
-
-<div class="card">
-  <span class="tag">2026.03</span>
-  <span class="tag">潜在WM</span>
-  <h4>AtomVLA: Predictive Latent World Model Post-training</h4>
-  <div class="meta">INFIFORCE / HKU | Sun et al. | arXiv:2603.08519</div>
-  <p>在 VLA 后训练阶段注入潜在世界模型。不生成像素级视频预测，而是在 VLA 的潜在空间内预测未来状态——开销极低但物理约束有效。后训练即可完成，不需修改预训练流程。</p>
-  <div class="mini-diagram">
-  AtomVLA 潜在空间后训练:
-  ┌──────────────────────────────────────────────┐
-  │ 预训练 VLA (不修改)                          │
-  │         ▼                                    │
-  │ 后训练: 添加潜在世界预测头                    │
-  │ ┌────────────────────────────────────┐       │
-  │ │ VLA 隐层 ──► Latent Prediction Head│       │
-  │ │              ──► 预测 z_t+1, z_t+2 │       │
-  │ │              (潜在空间, 非像素!)    │       │
-  │ └────────────────────────────────────┘       │
-  │                                              │
-  │ 推理时: 潜在预测提供物理约束                  │
-  │   → 动作决策受"未来会怎样"的隐式引导          │
-  │                                              │
-  │ 优势: 后训练即可, 不改架构, 开销极低          │
-  └──────────────────────────────────────────────┘</div>
-  <div class="insight">核心 Insight: 给 VLA 注入世界模型能力不需要从头重新训练——后训练阶段添加潜在预测头即可。在潜在空间而非像素空间预测，避免了 WAM 的推理开销问题。</div>
-  <a href="https://arxiv.org/abs/2603.08519" target="_blank" class="paper-link">arXiv 2603.08519 →</a>
-</div>
-
-</div>
+<div class="card-grid" data-ids="gen0,2603.29844,2511.14659,2603.08519" data-page="p5"></div>
 
 <h2>World Model + RL</h2>
-<div class="card-grid">
-
-<div class="card">
-  <span class="tag">2026.03</span>
-  <span class="tag">WM+RL</span>
-  <h4>DreamPlan: Video World Model RL Fine-tune</h4>
-  <div class="meta">USC / TRI | Jia et al. | arXiv:2603.16860</div>
-  <p>在视频世界模型的"想象空间"中做 RL 训练，而非在真实/仿真环境中交互。世界模型生成虚拟 rollout，RL 在虚拟 rollout 上优化策略。大幅减少真机交互需求。</p>
-  <div class="mini-diagram">
-  DreamPlan 想象空间 RL:
-  ┌──────────────────────────────────────────────┐
-  │ 传统 RL: 策略 ←→ 真实环境 (昂贵/危险)       │
-  │                                              │
-  │ DreamPlan:                                   │
-  │ ┌────────────┐   ┌──────────────────────┐   │
-  │ │ Video World│   │ RL Policy            │   │
-  │ │ Model      │◄──│                      │   │
-  │ │            │──►│ 在想象中优化          │   │
-  │ │ (虚拟环境) │   │ (无需真机交互!)       │   │
-  │ └────────────┘   └──────────────────────┘   │
-  │       ▲                                      │
-  │       │ 少量真机数据校准世界模型               │
-  │                                              │
-  │ 优势: 无限虚拟 rollout + 安全 + 低成本       │
-  └──────────────────────────────────────────────┘</div>
-  <div class="insight">核心 Insight: 如果世界模型足够准确，RL 可以完全在"想象"中训练——这是 Dyna 架构在视频世界模型时代的复兴。关键挑战是世界模型的预测误差会被 RL 放大。</div>
-  <a href="https://arxiv.org/abs/2603.16860" target="_blank" class="paper-link">arXiv 2603.16860 →</a>
-</div>
-
-<div class="card">
-  <span class="tag">2026.02</span>
-  <span class="tag">WM+自适应</span>
-  <h4>AdaWorldPolicy: Online Adaptive Diffusion Policy</h4>
-  <div class="meta">HKU / Beihang | Yuan et al. | arXiv:2602.20057</div>
-  <p>部署时通过世界模型实时估计环境变化，在线自适应 Diffusion Policy。不需要重新训练——世界模型检测到环境偏移后，自动调整扩散策略的引导信号。</p>
-  <div class="mini-diagram">
-  AdaWorldPolicy 在线自适应:
-  ┌──────────────────────────────────────────────┐
-  │ 离线: 训练 Diffusion Policy + World Model    │
-  │                                              │
-  │ 在线部署:                                    │
-  │ ┌────────────────────────────────────┐       │
-  │ │ World Model 预测 vs 真实观测       │       │
-  │ │   预测误差 → 环境偏移信号          │       │
-  │ │              │                     │       │
-  │ │              ▼                     │       │
-  │ │ 自适应引导 → 调整扩散去噪方向      │       │
-  │ │              │                     │       │
-  │ │              ▼                     │       │
-  │ │ Diffusion Policy → 适应后动作      │       │
-  │ └────────────────────────────────────┘       │
-  │                                              │
-  │ 无需重训练! 世界模型检测偏移 → 在线调整      │
-  └──────────────────────────────────────────────┘</div>
-  <div class="insight">核心 Insight: 世界模型的预测-观测误差本身就是环境变化的信号。利用这个信号在线调整扩散策略的引导方向，比重新训练或微调高效几个数量级。</div>
-  <a href="https://arxiv.org/abs/2602.20057" target="_blank" class="paper-link">arXiv 2602.20057 →</a>
-</div>
-
-<div class="card">
-  <span class="tag">2026.03</span>
-  <span class="tag">分层专家</span>
-  <h4>MetaWorld-X: Hierarchical Expert + VLM Router</h4>
-  <div class="meta">USTC | Shen et al. | arXiv:2603.08572</div>
-  <p>分治原则：将复杂控制分解为专家策略集合。每个专家通过模仿约束 RL 学习，引入生物力学先验。VLM 引导的智能路由机制动态组合专家。</p>
-  <div class="mini-diagram">
-  MetaWorld-X 分层架构:
-  ┌──────────────────────────────────────────────┐
-  │ VLM Router (语义层)                           │
-  │  obs+lang ──► 任务分解 → 子目标序列            │
-  │   [走过去] → [伸手] → [抓取]                  │
-  │        ▼            ▼           ▼             │
-  │  ┌──────────┐ ┌──────────┐ ┌──────────┐      │
-  │  │Locomotion│ │ Reaching │ │ Grasping │      │
-  │  │ Expert   │ │ Expert   │ │ Expert   │      │
-  │  │(RL+Bio)  │ │(RL+Bio)  │ │(RL+Bio)  │      │
-  │  └──────────┘ └──────────┘ └──────────┘      │
-  │  模仿约束 RL + 生物力学先验                   │
-  └──────────────────────────────────────────────┘</div>
-  <div class="insight">核心 Insight: 全身控制可通过"专家分治+语义路由"降维——每个专家只解决一类运动原语，VLM 负责高层任务分解和专家调度。</div>
-  <a href="https://arxiv.org/abs/2603.08572" target="_blank" class="paper-link">arXiv 2603.08572 →</a>
-</div>
-
-</div>
+<div class="card-grid" data-ids="2603.16860,2602.20057,2603.08572" data-page="p5"></div>
 
 <section>
 <h2>你的 Multi-Objective 框架在机器人 RL 中的位置</h2>
@@ -423,5 +143,7 @@
 
 </div>
 <footer>Robot Learning Survey 2026 &mdash; 混合范式专题</footer>
+<script src="papers.js"></script>
+<script src="render.js"></script>
 </body>
 </html>

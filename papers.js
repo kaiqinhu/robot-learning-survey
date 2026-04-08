@@ -1,0 +1,4063 @@
+window.SURVEY_DATA = {
+  "papers": [
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2026.04"
+      ],
+      "title": "FAN-VLA: Feasible Action Neighborhood Regularization",
+      "meta": "SJTU / Huawei | Niu et al. | arXiv:2604.01570",
+      "id": "2604.01570",
+      "description": "发现机器人状态空间中存在\"可行动作邻域\"(FAN)——微小动作差异不影响结果。用高斯先验正则化 VLA 输出分布，对齐物理操作的内在容错性。",
+      "diagram": "核心思想: 状态 s 附近存在可行动作邻域 FAN(s)\n  ┌───────────────────────────┐\n  │  Action Space             │\n  │       ┌─────────┐        │\n  │       │ FAN(s)  │        │  ← 邻域内动作等效\n  │       │  ·a_gt  │        │\n  │       │  ·a'    │        │  高斯先验 N(a_gt, σ²)\n  │       │  ·a''   │        │  约束输出在 FAN 内\n  │       └─────────┘        │\n  └───────────────────────────┘\n  效果: SFT 和 RFT 样本效率 ↑, OOD 泛化 ↑",
+      "insight": "核心 Insight: 机器人动作空间有内在容错性，VLA 不应追求点估计精确匹配 GT，而应输出覆盖整个可行邻域的分布。",
+      "url": "https://arxiv.org/abs/2604.01570",
+      "institution": "SJTU / Huawei",
+      "authors": "Niu et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "FAN-VLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2026.04"
+      ],
+      "title": "Tex3D: 3D Adversarial Textures Attack VLA",
+      "meta": "ECNU / Tsinghua | Chen et al. | arXiv:2604.01618",
+      "id": "2604.01618",
+      "description": "首次对 VLA 进行端到端 3D 对抗纹理攻击。通过前景-背景解耦(FBD)实现可微纹理优化，轨迹感知优化(TAAO)确保跨视角攻击有效性。",
+      "diagram": "攻击流程:\n  ┌──────────┐    FBD     ┌───────────────┐\n  │ 3D物体   │ ──────────►│ 对抗纹理优化   │\n  │ (操作目标)│  可微渲染  │ ∂L_vla/∂texture│\n  └──────────┘           └───────┬───────┘\n                                 │ TAAO\n                          ┌──────▼──────┐\n                          │ 关键帧优先级 │\n                          │ 顶点参数化   │\n                          └──────┬──────┘\n                                 ▼\n  VLA 任务失败率: 96.7% ← 物体表面贴对抗纹理即可",
+      "insight": "核心 Insight: VLA 对 3D 物理域攻击极度脆弱。标准仿真器无法提供从 VLA loss 到物体外观的可微路径——FBD 通过双渲染器对齐解决此问题。",
+      "url": "https://arxiv.org/abs/2604.01618",
+      "institution": "ECNU / Tsinghua",
+      "authors": "Chen et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "Tex3D"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "FocusVLA: Visual Attention for Action",
+      "meta": "HIT-SZ / DaiMon | Zhang et al. | arXiv:2603.28740",
+      "id": "2603.28740",
+      "description": "诊断 VLA 三大视觉瓶颈并逐一解决：架构偏见忽略视觉细节、过多 visual token 分散注意力、无关视觉信息引入噪声。",
+      "diagram": "VLA 视觉三大瓶颈与解法:\n\n  问题1: 架构偏见 → language shortcut 跳过视觉\n  解法:  Modality Cascaded Attention (消除捷径)\n\n  问题2: visual token 过多 → 注意力稀释\n  解法:  Focus Attention 动态选择 task-relevant patches\n         ┌─────────────────────────┐\n         │ 全部 visual patches     │\n         │  [x][x][✓][x][✓][x]   │  ← 动态选择\n         │       ↓     ↓          │\n         │  task-relevant only    │  → 送入 action head\n         └─────────────────────────┘\n\n  问题3: 无关视觉信息 → 噪声\n  解法:  显式调制 relevant patch 影响力",
+      "insight": "核心 Insight: VLA 性能瓶颈不在视觉表征质量，而在视觉信息如何被利用。实验证明：更好地用现有视觉表征 > 提升视觉编码器。",
+      "url": "https://arxiv.org/abs/2603.28740",
+      "institution": "HIT-SZ / DaiMon",
+      "authors": "Zhang et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "FocusVLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "Progress-Aware VLA",
+      "meta": "PKU | Yan et al. | arXiv:2603.27670",
+      "id": "2603.27670",
+      "description": "大多数 VLA 缺乏任务进度感知，依赖手工启发式判断任务终止。引入可微进度引导管线：预训练进度估计器 + 逆动力学世界模型。",
+      "diagram": "可微进度引导管线:\n  ┌──────────┐     ┌──────────────────┐     ┌──────────────┐\n  │ Action   │────►│ Inverse Dynamics │────►│ Future Latent│\n  │ Tokens   │     │ World Model      │     │ Visual State │\n  └──────────┘     └──────────────────┘     └──────┬───────┘\n                                                    │\n                                            ┌───────▼───────┐\n                                            │  Progress     │\n                                            │  Estimator    │\n                                            │  p(t) ∈ [0,1] │\n                                            └───────┬───────┘\n                                                    │ max progress\n                                                    │ regularization\n                                                    ▼\n                                            refine action tokens",
+      "insight": "核心 Insight: 进度估计器在大规模无监督视频-文本机器人数据上预训练，预测残差仅 0.07（0-1 scale），且零样本迁移到未见真机场景。",
+      "url": "https://arxiv.org/abs/2603.27670",
+      "institution": "PKU",
+      "authors": "Yan et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "ProgressVLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "XVR: Cross-View Spatial Relations",
+      "meta": "KAIST | Jeong et al. | arXiv:2603.27967",
+      "id": "2603.27967",
+      "description": "VLM 缺乏多视角空间推理能力。构建 100K 视觉问答数据集（18K 3D 场景 + 70K 机器人轨迹），训练三类跨视角能力。",
+      "diagram": "三类跨视角空间推理任务:\n  ┌─────────────────────────────────────────────────┐\n  │ 1. Correspondence — 跨视角物体匹配              │\n  │    View A: [杯子在左]  ←→  View B: [杯子在右]   │\n  │                                                  │\n  │ 2. Verification — 空间关系验证                   │\n  │    \"View B 中苹果在碗的左边?\" → Yes/No           │\n  │                                                  │\n  │ 3. Localization — 目标位置识别                   │\n  │    \"从 View C 看，机械臂末端在哪?\" → (x,y)      │\n  └─────────────────────────────────────────────────┘\n  数据: 18K 3D scenes + 70K robot trajectories = 100K QA\n  效果: VLA backbone 换用 XVR → RoboCasa 成功率 ↑",
+      "insight": "核心 Insight: 显式训练跨视角空间关系比增大模型或数据更有效。3D 理解能力可以通过 QA 形式注入 VLM，无需修改架构。",
+      "url": "https://arxiv.org/abs/2603.27967",
+      "institution": "KAIST",
+      "authors": "Jeong et al.",
+      "section": "",
+      "topic": "unitree",
+      "shortTitle": "MV-Spatial"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2024.05",
+        "综述"
+      ],
+      "title": "A Survey on VLA for Embodied AI",
+      "meta": "CUHK | Ma et al. | arXiv:2405.14093",
+      "id": "2405.14093",
+      "description": "梳理三条研究线：VLA 组件设计、VLA 作为低层控制策略、VLA 作为高层任务规划器。汇总数据集、仿真器、评测基准。",
+      "diagram": "VLA 研究三条线:\n  Line 1: 组件设计 ── 视觉编码器 / 语言模型 / 动作解码器\n  Line 2: 低层策略 ── 直接输出关节动作 (end-to-end)\n  Line 3: 高层规划 ── 分解长 horizon 任务为子任务序列\n\n  资源汇总: 数据集 / 仿真器 / 评测基准\n  GitHub: github.com/yueen-ma/Awesome-VLA",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2405.14093",
+      "institution": "CUHK",
+      "authors": "Ma et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "VLA Survey"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025.05",
+        "里程碑"
+      ],
+      "title": "VLA-RL: Scalable RL for VLA",
+      "meta": "Tsinghua / NTU | Lu et al. | arXiv:2505.18719",
+      "id": "2505.18719",
+      "description": "将 LLM RLHF 范式完整迁移到 VLA：VLA 在真实环境中交互，用任务成功信号做 RL 微调。证明 RL 阶段可以在不破坏预训练泛化的前提下显著提升任务成功率和鲁棒性。",
+      "diagram": "VLA-RL 三阶段 (= LLM Pre-train → SFT → RLHF):\n  ┌────────────────────────────────────────────┐\n  │ Phase 1: VLM Pre-train (Internet-scale)    │\n  │   Vision + Language → 语义理解              │\n  │         ▼                                  │\n  │ Phase 2: IL/SFT (Robot demonstrations)     │\n  │   Obs + Lang → Action (模仿学习对齐)       │\n  │         ▼                                  │\n  │ Phase 3: RL Fine-tune (Env interaction)    │\n  │   Task success reward → 超越演示水平        │\n  │   策略梯度优化, 不破坏预训练泛化            │\n  └────────────────────────────────────────────┘\n  效果: 成功率显著↑, 泛化保持",
+      "insight": "核心 Insight: VLA 的 IL/SFT 阶段受限于演示数据的质量和覆盖范围。RL 微调通过环境交互突破此上界——类似 LLM 中 RLHF 突破 SFT 的天花板。",
+      "url": "https://arxiv.org/abs/2505.18719",
+      "institution": "Tsinghua / NTU",
+      "authors": "Lu et al.",
+      "section": "vla-rl-2026",
+      "topic": "vla",
+      "shortTitle": "VLA-RL"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "VLA-OPD: On-Policy Distillation",
+      "meta": "HKUST(GZ) | Zhong et al. | arXiv:2603.26666",
+      "id": "2603.26666",
+      "description": "大 VLA teacher 给小 student rollout 重标签，实现 on-policy distillation。解决直接 RL 微调大型 VLA 的计算瓶颈：teacher 只在标注时运行，student 轻量在线学习。",
+      "diagram": "On-Policy Distillation:\n  ┌────────────────────────────────────────────┐\n  │ Large VLA Teacher (offline, 标注用)         │\n  │   ↓ relabel student rollouts               │\n  │ Small Student Policy (online, 部署用)       │\n  │   ↓ on-policy RL with teacher labels       │\n  │ 效果: 桥接 offline SFT ←→ online RL        │\n  │   无需大模型在线推理, 降低计算成本 10x+     │\n  └────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 大 VLA 直接做 RL 太贵，小模型直接 RL 又太弱。OPD 用大模型标注小模型的在线经验，兼顾大模型的知识和小模型的效率。",
+      "url": "https://arxiv.org/abs/2603.26666",
+      "institution": "HKUST(GZ)",
+      "authors": "Zhong et al.",
+      "section": "vla-rl-2026",
+      "topic": "vla",
+      "shortTitle": "VLA-OPD"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025.06"
+      ],
+      "title": "TGRPO: Trajectory-wise GRPO for VLA",
+      "meta": "NWPU | Chen et al. | arXiv:2506.08440",
+      "id": "2506.08440",
+      "description": "修复 GRPO 在轨迹级任务中的 token 不均衡问题：标准 GRPO 在 token 级归一化 advantage，导致长轨迹中关键决策点的信号被稀释。TGRPO 在轨迹级归一化，保留时序结构中的关键信号。",
+      "diagram": "GRPO vs TGRPO:\n  ┌────────────────────────────────────────────┐\n  │ GRPO:  token-level normalize               │\n  │   [t1][t2][t3]...[tN] → 每个 token 独立   │\n  │   问题: 关键决策 token 信号被大量填充稀释   │\n  │                                            │\n  │ TGRPO: trajectory-level normalize          │\n  │   [───── trajectory ─────] → 整体归一化    │\n  │   优势: 保留轨迹内关键决策点的相对重要性    │\n  │   方差更低, 收敛更稳定                     │\n  └────────────────────────────────────────────┘",
+      "insight": "核心 Insight: GRPO 的 token 级归一化对 LLM 文本生成合理，但对机器人轨迹不合理——轨迹中 95% 的 token 是常规运动，5% 是关键决策。轨迹级归一化保护了这 5% 的信号。",
+      "url": "https://arxiv.org/abs/2506.08440",
+      "institution": "NWPU",
+      "authors": "Chen et al.",
+      "section": "vla-rl-2026",
+      "topic": "vla",
+      "shortTitle": "TGRPO"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025.02"
+      ],
+      "title": "ConRFT: Consistency Policy for VLA RL",
+      "meta": "CASIA / UCAS | Chen et al. | arXiv:2502.05450",
+      "id": "2502.05450",
+      "description": "用 Consistency Model 替代 Diffusion 作为 VLA 的动作头，使 RL 微调更高效：单步生成 + 端到端可微。在操作任务上比 Flow Matching + RL 收敛更快。",
+      "diagram": "ConRFT 架构:\n  ┌────────────────────────────────────────────┐\n  │ VLM Backbone → Consistency Action Head     │\n  │   (单步生成, 无需迭代去噪)                  │\n  │         ▼                                  │\n  │ RL Fine-tune:                              │\n  │   ·端到端可微 (vs Diffusion 需多步展开)     │\n  │   ·单步采样 → 直接策略梯度                  │\n  │   ·收敛速度: 2-3x faster than Flow+RL      │\n  └────────────────────────────────────────────┘",
+      "insight": "核心 Insight: Diffusion/Flow 的多步去噪阻碍 RL 梯度传播。Consistency Model 的单步生成天然适配 RL——无需 DMPO 那样的额外蒸馏步骤。",
+      "url": "https://arxiv.org/abs/2502.05450",
+      "institution": "CASIA / UCAS",
+      "authors": "Chen et al.",
+      "section": "vla-rl-2026",
+      "topic": "vla",
+      "shortTitle": "ConRFT"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "KineVLA: 运动学感知 VLA",
+      "meta": "Tencent / ZJU | Han et al. | arXiv:2603.17524",
+      "id": "2603.17524",
+      "description": "将运动学信息注入 VLA：高层预测末端执行器目标位姿，低层通过逆运动学求解关节动作。双层分解使同一 VLA 可跨不同机器人具身迁移。",
+      "diagram": "KineVLA 双层分解:\n  ┌────────────────────────────────────────────┐\n  │ VLM Backbone (obs + lang)                  │\n  │         ▼                                  │\n  │ High-level: 末端执行器目标位姿 (SE3)        │\n  │   (具身无关, 可跨机器人迁移)                │\n  │         ▼                                  │\n  │ Low-level: IK 求解器 → 关节动作            │\n  │   (具身相关, 按机器人 URDF 计算)            │\n  └────────────────────────────────────────────┘\n  跨具身迁移: 换机器人只需换 IK 求解器",
+      "insight": "核心 Insight: VLA 直接输出关节角度把\"运动学知识\"的负担交给了网络。KineVLA 将这个负担交还给解析 IK 求解器，VLA 只需预测具身无关的末端目标。",
+      "url": "https://arxiv.org/abs/2603.17524",
+      "institution": "Tencent / ZJU",
+      "authors": "Han et al.",
+      "section": "vla",
+      "topic": "vla",
+      "shortTitle": "KineVLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "ST-VLA: 4D 时空 VLA",
+      "meta": "NJU | Wu et al. | arXiv:2603.13788",
+      "id": "2603.13788",
+      "description": "引入时间动态编码和空间自适应 tokenization，让 VLA 具备 4D (3D+时间) 时空推理能力。解决标准 VLA 只看单帧静态图的根本缺陷。",
+      "diagram": "ST-VLA 4D 推理:\n  ┌────────────────────────────────────────────┐\n  │ 时间维: Temporal Dynamic Encoding          │\n  │   [frame_t-2] [frame_t-1] [frame_t]       │\n  │   → 编码运动趋势和速度变化                  │\n  │                                            │\n  │ 空间维: Spatial Adaptive Tokenization      │\n  │   → 动态分配 token 预算给运动区域           │\n  │   静止背景少 token, 运动前景多 token        │\n  │                                            │\n  │ 4D = 3D空间 + 时间 → 理解物体运动轨迹      │\n  └────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 标准 VLA 输入单帧图像，本质上是\"看照片做决策\"。ST-VLA 通过时序编码让模型\"看视频做决策\"，时空信息提供运动预测的物理直觉。",
+      "url": "https://arxiv.org/abs/2603.13788",
+      "institution": "NJU",
+      "authors": "Wu et al.",
+      "section": "vla",
+      "topic": "vla",
+      "shortTitle": "ST-VLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "AR-VLA: 真自回归动作专家",
+      "meta": "INSAIT / KU Leuven | Hu et al. | arXiv:2603.10126",
+      "id": "2603.10126",
+      "description": "将动作生成回归到纯自回归范式：像 LLM 生成 token 一样逐维度生成动作。证明精心设计的自回归动作头可以媲美 Diffusion/Flow Matching，同时推理更简单。",
+      "diagram": "AR-VLA vs Diffusion VLA:\n  ┌────────────────────────────────────────────┐\n  │ Diffusion/Flow VLA:                        │\n  │   noise → 多步去噪 → action               │\n  │   优点: 多模态  缺点: 慢, RL难微调         │\n  │                                            │\n  │ AR-VLA:                                    │\n  │   a_1 → a_2 → a_3 → ... → a_n            │\n  │   像 LLM token-by-token 生成               │\n  │   优点: 简单, 快, 天然适配 RL              │\n  │   关键: 动作维度排序 + 条件依赖建模         │\n  └────────────────────────────────────────────┘",
+      "insight": "核心 Insight: Diffusion 不是动作生成的唯一选择。精心设计的自回归动作头（维度排序+条件依赖）可以达到同等多模态建模能力，且天然兼容 LLM 的自回归训练基础设施。",
+      "url": "https://arxiv.org/abs/2603.10126",
+      "institution": "INSAIT / KU Leuven",
+      "authors": "Hu et al.",
+      "section": "vla",
+      "topic": "vla",
+      "shortTitle": "AR-VLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025",
+        "8x cited"
+      ],
+      "title": "GR00T N1: 通用人形基础模型",
+      "meta": "NVIDIA | arXiv:2503.14734",
+      "id": "2503.14734",
+      "description": "开源通用人形机器人基础模型。统一架构支持多种人形平台，提供预训练权重和标准化接口。成为 2026 年 VLA 研究的主要对比基线和生态标杆，被 8 篇 survey 论文引用。",
+      "diagram": "",
+      "insight": "生态意义: GR00T N1 之于人形 VLA = LLaMA 之于 LLM 开源生态。",
+      "url": "https://arxiv.org/abs/2503.14734",
+      "institution": "NVIDIA",
+      "authors": "arXiv:2503.14734",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "GR00T N1"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2023",
+        "6x cited"
+      ],
+      "title": "PaLM-E: 具身多模态语言模型",
+      "meta": "Google | Driess et al.",
+      "id": "palme",
+      "description": "562B 参数的具身多模态 LLM。首次将视觉、语言和机器人传感器观测统一编码到大语言模型中。证明 LLM 具备接地物理世界的潜力，是 RT-2 和后续所有 VLA 工作的直接理论基础。",
+      "diagram": "",
+      "insight": "PaLM-E 回答了关键问题: \"LLM 能否理解物理世界?\" — 答案是 yes，但需要多模态编码。",
+      "url": "",
+      "institution": "Google",
+      "authors": "Driess et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "PaLM-E"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2022",
+        "6x cited"
+      ],
+      "title": "SayCan: Do As I Can, Not As I Say",
+      "meta": "Google | Ahn et al.",
+      "id": "saycan",
+      "description": "语言接地机器人可供性 (affordance)。LLM 生成计划，机器人 affordance 函数过滤不可行步骤。将\"语言理解\"和\"物理可行性\"解耦，是 VLA 高层规划路线的奠基工作。",
+      "diagram": "",
+      "insight": "SayCan 的 insight: LLM 知道\"该做什么\"，但不知道\"能做什么\"——affordance 函数弥补此 gap。",
+      "url": "",
+      "institution": "Google",
+      "authors": "Ahn et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "SayCan"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025",
+        "6x cited"
+      ],
+      "title": "SpatialVLA: 空间表征增强 VLA",
+      "meta": "Shanghai AI Lab / Fudan | Qu et al. | arXiv:2501.15830",
+      "id": "2501.15830",
+      "description": "将显式 3D 空间表征注入 VLA。通过空间感知 token 增强 VLM backbone，使 VLA 在需要精确 3D 定位的任务（如插件、装配）上性能大幅提升。被 6 篇 2026 论文引用，是\"VLA + 3D\"路线的代表作。",
+      "diagram": "",
+      "insight": "VLA 的 2D 视觉天然缺乏深度信息——SpatialVLA 证明显式空间表征比更大的模型更有效。",
+      "url": "https://arxiv.org/abs/2501.15830",
+      "institution": "Shanghai AI Lab / Fudan",
+      "authors": "Qu et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "SpatialVLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025",
+        "6x cited"
+      ],
+      "title": "FT-VLA: 高效 VLA 微调",
+      "meta": "ByteDance | Zhen et al.",
+      "id": "ftvla",
+      "description": "系统优化 VLA 微调流程：数据高效采样、参数高效适配、推理加速。在同等数据量下微调速度和下游任务成功率均优于直接全量微调。成为 VLA 实际部署的关键使能技术。",
+      "diagram": "",
+      "insight": "预训练 VLA 很贵，FT-VLA 解决\"如何在有限数据和算力下高效适配\"这个落地关键问题。",
+      "url": "",
+      "institution": "ByteDance",
+      "authors": "Zhen et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "FT-VLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025",
+        "5x cited"
+      ],
+      "title": "CoT-VLA: 视觉思维链推理",
+      "meta": "SJTU | Liu et al.",
+      "id": "cotvla",
+      "description": "将 Chain-of-Thought 推理引入 VLA。模型在输出动作前先生成视觉推理步骤（物体位置→抓取策略→运动路径），使决策过程可解释。在复杂多步操作任务上显著优于直接映射的 VLA。",
+      "diagram": "",
+      "insight": "LLM 的 CoT 提升推理能力 → VLA 的 CoT 提升物理推理能力。可解释性是附加收益。",
+      "url": "",
+      "institution": "SJTU",
+      "authors": "Liu et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "CoT-VLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025",
+        "4x cited"
+      ],
+      "title": "π₀.6: Learning from Real Experience",
+      "meta": "Physical Intelligence | PI Team",
+      "id": "pi06",
+      "description": "PI 团队第三代 VLA。在 π₀ (Flow Matching) 和 π₀.5 (+ RL) 基础上，强调从真实机器人经验中持续学习。验证了 VLA 在长期部署中的在线改进能力。",
+      "diagram": "",
+      "insight": "从 π₀ → π₀.5 → π₀.6 的演进路线完美映射 LLM 的 pretrain → RLHF → online learning。",
+      "url": "",
+      "institution": "Physical Intelligence",
+      "authors": "PI Team",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "pi0.6"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025",
+        "4x cited"
+      ],
+      "title": "FAST: 高效动作 Tokenization",
+      "meta": "MIT | Pertsch et al.",
+      "id": "fast",
+      "description": "提出高效的机器人动作 tokenization 方案。通过学习压缩的动作 token 表示，使 VLA 的自回归动作生成效率大幅提升，同时保持精度。解决了 VLA 中\"动作 token 数量多→推理慢\"的核心瓶颈。",
+      "diagram": "",
+      "insight": "动作序列存在大量冗余——FAST 用学习的 tokenizer 压缩冗余，类似 BPE 对文本的作用。",
+      "url": "",
+      "institution": "MIT",
+      "authors": "Pertsch et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "FAST"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025",
+        "4x cited"
+      ],
+      "title": "UniVLA: 任务中心潜在动作统一",
+      "meta": "PKU | Li et al.",
+      "id": "univla",
+      "description": "将不同类型的机器人动作统一到潜在动作空间中。通过任务中心的动作抽象，使单一 VLA 模型可跨不同动作空间的机器人迁移，无需为每种机器人分别训练。",
+      "diagram": "",
+      "insight": "机器人动作空间高度异构（关节角 vs 末端位姿 vs 夹爪）——UniVLA 用潜在空间统一消除此障碍。",
+      "url": "",
+      "institution": "PKU",
+      "authors": "Li et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "UniVLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2024",
+        "4x cited"
+      ],
+      "title": "TraceVLA: 视觉轨迹提示",
+      "meta": "SJTU | Zheng et al.",
+      "id": "tracevla",
+      "description": "在 VLA 输入中叠加视觉轨迹提示（历史末端轨迹在图像上的投影）。无需修改架构，仅通过输入增强即可显著提升 VLA 的时空感知能力。简单有效，被多篇后续工作采用。",
+      "diagram": "",
+      "insight": "最简单的时序信息注入方式——在图像上画出运动轨迹，让 VLA \"看到\" 历史运动趋势。",
+      "url": "",
+      "institution": "SJTU",
+      "authors": "Zheng et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "TraceVLA"
+    },
+    {
+      "pages": [
+        "p1"
+      ],
+      "tags": [
+        "2025",
+        "4x cited"
+      ],
+      "title": "WorldVLA: 自回归动作世界模型",
+      "meta": "HKU | Li et al.",
+      "id": "worldvla",
+      "description": "在 VLA 的自回归框架内同时预测动作和未来视觉状态。统一动作生成和世界预测，是 VLA 和 WAM 融合的早期探索，直接启发了 AtomVLA 等后续混合工作。",
+      "diagram": "",
+      "insight": "WorldVLA 证明自回归 VLA 可以\"免费\"获得世界建模能力——只需在 token 序列中加入未来视觉 token。",
+      "url": "",
+      "institution": "HKU",
+      "authors": "Li et al.",
+      "section": "",
+      "topic": "vla",
+      "shortTitle": "WorldVLA"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025.02",
+        "里程碑"
+      ],
+      "title": "DreamZero: Zero-Shot World Action Model",
+      "meta": "KAIST / Google DeepMind | Ye et al. | arXiv:2602.15922",
+      "id": "2602.15922",
+      "description": "基于预训练视频扩散模型构建 WAM。联合建模视频和动作，学会物理动力学。",
+      "diagram": "DreamZero 架构:\n  ┌──────────────────────────────────────────────────┐\n  │  Pre-trained Video Diffusion Model (14B)         │\n  │  ┌────────────┐                                  │\n  │  │ obs + lang │──► Joint Video-Action Modeling   │\n  │  └────────────┘    ┌───────────┐ ┌───────────┐  │\n  │                    │ Future    │ │ Action    │  │\n  │                    │ Video     │ │ Sequence  │  │\n  │                    └───────────┘ └───────────┘  │\n  └──────────────────────────────────────────────────┘\n  关键数据:\n  · 零样本泛化: 比 SOTA VLA 提升 2x+\n  · 跨具身迁移: 仅需 30 min play data → 保留零样本能力\n  · 系统优化: 14B 自回归模型 → 7Hz 闭环 (原本不可能实时)",
+      "insight": "核心 Insight: 视频扩散模型预训练学到的时空动力学先验是 WAM 泛化能力的关键来源。VLA 只看静态图文对，WAM 看过无数\"物体运动的视频\"——这个先验差异导致 2x 泛化差距。",
+      "url": "https://arxiv.org/abs/2602.15922",
+      "institution": "KAIST / Google DeepMind",
+      "authors": "Ye et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "DreamZero"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2026.03",
+        "效率突破"
+      ],
+      "title": "GigaWorld-Policy: Action-Centered WAM (9x Faster)",
+      "meta": "GigaAI | GigaAI Team | arXiv:2603.17240",
+      "id": "2603.17240",
+      "description": "解决 WAM 推理慢的核心瓶颈——将动作预测和视频生成解耦。",
+      "diagram": "GigaWorld 因果分离设计:\n\n  训练时 (双重监督):\n  ┌─────────┐    Causal Transformer\n  │ obs+lang│──►┌────────────────────────────────┐\n  └─────────┘  │ [Action Tokens] ──► [Video Tokens]│\n               │      ↓ L_action         ↓ L_video │\n               └────────────────────────────────────┘\n               关键: video tokens ──╳──► action tokens\n                     (因果掩码: 视频不影响动作)\n\n  推理时 (跳过视频):\n  ┌─────────┐    ┌──────────────────┐\n  │ obs+lang│──►│ Action Tokens Only│  ← 9x 加速!\n  └─────────┘  └──────────┬───────┘\n                           ▼ Robot Actions\n\n  对比:          速度      成功率 (RoboTwin 2.0)\n  Motus (WAM):  1x base    baseline\n  GigaWorld:    9x faster   +7%\n  π₀.5 (VLA):  —           GigaWorld +95% over π₀.5",
+      "insight": "核心 Insight: WAM 不必在推理时生成视频。训练时视频生成提供物理约束监督信号，推理时只需动作解码即可——因果掩码保证两者解耦。\"训练时想象，推理时直觉\"。",
+      "url": "https://arxiv.org/abs/2603.17240",
+      "institution": "GigaAI",
+      "authors": "GigaAI Team",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "GigaWorld"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025.06",
+        "潜在空间"
+      ],
+      "title": "V-JEPA 2: Self-Supervised Video → Planning",
+      "meta": "Meta FAIR | Assran et al. | arXiv:2506.09985",
+      "id": "2506.09985",
+      "description": "将 V-JEPA（视频联合嵌入预测架构）扩展为动作条件化世界模型。在潜在嵌入空间内预测未来视频表征，完全不生成像素。比像素空间预测快数十倍，同时保留足够结构支持机器人规划和控制。",
+      "diagram": "V-JEPA 2 潜在空间预测:\n  ┌──────────────────────────────────────────────┐\n  │ 像素空间 WAM (DreamZero):                    │\n  │   obs → 生成未来视频帧 → 解码动作            │\n  │   问题: 生成像素开销大, 大部分像素无用        │\n  │                                              │\n  │ V-JEPA 2 (潜在空间):                         │\n  │   obs ──► Video Encoder ──► z_t (嵌入)       │\n  │                                │              │\n  │              Predictor ──► ẑ_t+k (预测嵌入)  │\n  │                                │              │\n  │   不生成像素! 直接在嵌入空间预测              │\n  │   → 保留语义+动力学信息                      │\n  │   → 丢弃无关像素细节 (光影/纹理)             │\n  │                                              │\n  │ 优势: 10-100x 更快 + 对视觉扰动天然鲁棒     │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: WAM 不需要\"看见\"未来——只需\"理解\"未来。JEPA 在嵌入空间预测，丢弃了像素级细节（光影、纹理），保留了决策所需的语义和动力学信息。这解释了为什么潜在空间 WAM 对视觉扰动更鲁棒。",
+      "url": "https://arxiv.org/abs/2506.09985",
+      "institution": "Meta FAIR",
+      "authors": "Assran et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "V-JEPA 2"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025.09",
+        "无动作预训练"
+      ],
+      "title": "LAWM: Latent Action Pretraining from Video",
+      "meta": "Adelaide | Tharwat et al. | arXiv:2509.18428",
+      "id": "2509.18428",
+      "description": "从无动作标签的纯观测视频中学习世界模型。自动推断帧间\"潜在动作\"，用于预训练动力学模型。下游只需少量动作标注数据即可微调为完整 WAM。解锁互联网规模视频作为 WAM 预训练数据源。",
+      "diagram": "LAWM 潜在动作推断:\n  ┌──────────────────────────────────────────────┐\n  │ 传统 WAM 预训练:                             │\n  │   需要 (video, action) 配对数据 ← 昂贵!      │\n  │                                              │\n  │ LAWM:                                        │\n  │   frame_t ──► Latent Action Encoder ──► ẑ_a  │\n  │   frame_t+1 ◄─┘  (推断帧间\"发生了什么\")     │\n  │                                              │\n  │   ẑ_a = 潜在动作 (无需真实动作标签)          │\n  │                                              │\n  │   World Model: f(z_t, ẑ_a) → z_t+1          │\n  │   在潜在动作空间预训练动力学模型              │\n  │                                              │\n  │ 下游微调:                                    │\n  │   潜在动作 ẑ_a ←对齐→ 真实动作 a             │\n  │   少量配对数据即可 (100x less)               │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 互联网上有无限视频但几乎没有动作标签。LAWM 证明可以先从纯视频学到\"世界如何变化\"的动力学，再用少量机器人数据对齐\"什么动作导致了变化\"——数据效率提升两个数量级。",
+      "url": "https://arxiv.org/abs/2509.18428",
+      "institution": "Adelaide",
+      "authors": "Tharwat et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "LAWM"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025.08",
+        "3D 结构化"
+      ],
+      "title": "GWM: Gaussian World Models for Manipulation",
+      "meta": "Tsinghua / BIGAI / NTU | Lu et al. | arXiv:2508.17600",
+      "id": "2508.17600",
+      "description": "用 3D Gaussian Splatting 替代 2D 视频作为世界模型的核心表征。世界状态表示为 3D 高斯点云，动作导致高斯点的变形和运动。天然支持任意视角渲染、遮挡推理和 3D 空间规划。",
+      "diagram": "GWM 3D 高斯世界模型:\n  ┌──────────────────────────────────────────────┐\n  │ 2D 视频 WAM:                                 │\n  │   观测: 2D 图像 → 预测: 2D 未来帧            │\n  │   问题: 视角固定, 遮挡无法推理, 无 3D 理解   │\n  │                                              │\n  │ GWM (3D Gaussian):                           │\n  │   观测 → 重建 3D 高斯场景                    │\n  │   ┌──────────────────────────────┐           │\n  │   │  ·  ·  ·    3D Gaussians    │           │\n  │   │ · ·· ·  ·   (位置+颜色+     │           │\n  │   │  · ·  ··     形状+不透明度)  │           │\n  │   └──────────────────────────────┘           │\n  │   动作 → 高斯变形 → 新场景                   │\n  │   任意视角渲染 + 遮挡推理 + 3D 规划          │\n  │                                              │\n  │ 优势: 多视角免费, 3D 空间推理原生支持        │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 2D 视频 WAM 本质上在\"看照片预测照片\"，丢失了 3D 空间信息。3D 高斯表征让世界模型直接在 3D 空间中推理——遮挡、深度、多视角都成为免费副产品。",
+      "url": "https://arxiv.org/abs/2508.17600",
+      "institution": "Tsinghua / BIGAI / NTU",
+      "authors": "Lu et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "GWM"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2024.05",
+        "自回归"
+      ],
+      "title": "iVideoGPT: Autoregressive Tokenized World Model",
+      "meta": "Tsinghua | Wu et al. | arXiv:2405.15223",
+      "id": "2405.15223",
+      "description": "将视觉观测、动作和奖励统一 token 化为同一序列，用 GPT 自回归预测。与扩散 WAM 的\"去噪生成\"不同，iVideoGPT 用\"下一 token 预测\"建模世界动力学。天然继承 LLM 的 scaling law 和基础设施。",
+      "diagram": "iVideoGPT vs 扩散 WAM:\n  ┌──────────────────────────────────────────────┐\n  │ 扩散 WAM (DreamZero):                        │\n  │   noise → 多步去噪 → 未来视频+动作           │\n  │   优点: 高质量生成  缺点: 多步推理慢          │\n  │                                              │\n  │ iVideoGPT (自回归):                          │\n  │   VQ-VAE 编码:                               │\n  │   [obs_tokens][action_tokens][reward_tokens]  │\n  │        ↓ 统一序列                             │\n  │   GPT: [..., v_t, a_t, r_t, v_t+1, ...]     │\n  │        next-token prediction                  │\n  │                                              │\n  │   优点: scaling law 适用, 基础设施复用        │\n  │   优点: 序列建模天然支持长程依赖              │\n  │   缺点: VQ 离散化损失细节                    │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 世界模型和 LLM 本质上都是\"预测下一个 token\"——iVideoGPT 证明将视觉/动作/奖励统一 token 化后，LLM 的 GPT 架构和 scaling law 可以直接迁移到世界建模。",
+      "url": "https://arxiv.org/abs/2405.15223",
+      "institution": "Tsinghua",
+      "authors": "Wu et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "iVideoGPT"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025.01",
+        "基础模型"
+      ],
+      "title": "Cosmos: World Foundation Model Platform",
+      "meta": "NVIDIA | arXiv:2501.03575",
+      "id": "2501.03575",
+      "description": "NVIDIA 发布的世界基础模型平台。同时提供自回归和扩散两种生成范式的预训练世界模型，配套高效视频 tokenizer。下游任务（机器人、自动驾驶）可根据需求选择或组合两种范式。平台级方案，类似 LLM 领域的 foundation model。",
+      "diagram": "Cosmos 平台架构:\n  ┌──────────────────────────────────────────────┐\n  │         Cosmos World Foundation Model         │\n  │                                              │\n  │  ┌─────────────────────────────────────────┐ │\n  │  │ Cosmos Tokenizer (高效视频编码)          │ │\n  │  │  连续 token (扩散用) + 离散 token (AR用) │ │\n  │  └──────────────┬──────────────────────────┘ │\n  │                 ▼                            │\n  │  ┌──────────────┐  ┌──────────────────────┐ │\n  │  │ AR World     │  │ Diffusion World      │ │\n  │  │ Model        │  │ Model                │ │\n  │  │ (GPT-style)  │  │ (去噪生成)           │ │\n  │  └──────┬───────┘  └──────────┬───────────┘ │\n  │         └──────────┬──────────┘              │\n  │                    ▼                         │\n  │  下游任务选择: 机器人 / 自动驾驶 / 仿真      │\n  └──────────────────────────────────────────────┘\n  定位: 世界模型领域的 \"GPT-4 级别\" 基础设施",
+      "insight": "核心 Insight: 单一生成范式（扩散或自回归）各有优劣，Cosmos 的答案是\"都要\"——统一 tokenizer + 双范式预训练，让下游任务根据延迟/质量需求选择。这是世界模型从\"单点方案\"走向\"平台基础设施\"的标志。",
+      "url": "https://arxiv.org/abs/2501.03575",
+      "institution": "NVIDIA",
+      "authors": "arXiv:2501.03575",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "Cosmos"
+    },
+    {
+      "pages": [
+        "p2",
+        "p5"
+      ],
+      "tags": [
+        "2026.03",
+        "意图建模"
+      ],
+      "title": "DIAL: Differentiable Latent Intent Bottleneck",
+      "meta": "HKU / XPENG | Chen et al. | arXiv:2603.29844",
+      "id": "2603.29844",
+      "description": "将世界建模重构为 System-2 慢思考 + System-1 快执行的双系统架构。",
+      "diagram": "DIAL 双系统架构:\n  ┌─────────────────────────────────────────────┐\n  │ System-2 (VLM): Latent World Modeling       │\n  │ ┌────────┐    ┌──────────────────────┐     │\n  │ │obs+lang│──►│ Predict Latent Future │     │\n  │ └────────┘   │ (VLM 特征空间内)      │     │\n  │              └──────────┬───────────┘     │\n  │                         │ latent intent    │\n  │                         │ (意图瓶颈)       │\n  └─────────────────────────┼─────────────────┘\n                            ▼\n  ┌─────────────────────────────────────────────┐\n  │ System-1 (轻量网络): Motor Execution        │\n  │  latent intent + current obs → actions      │\n  │  (Latent Inverse Dynamics)                  │\n  └─────────────────────────────────────────────┘\n\n  两阶段训练:\n  Phase 1: 解耦预热 — S2 学预测 + S1 学控制 (统一特征空间)\n  Phase 2: 端到端联合优化 — action 梯度可微地优化 VLM",
+      "insight": "核心 Insight: 直接用 VLM 映射到 action 会破坏预训练表征。DIAL 的\"意图瓶颈\"设计让 VLM 只需预测高层意图(latent future)，轻量网络负责精确控制——各司其职，VLM 预训练知识得以保留。",
+      "url": "https://arxiv.org/abs/2603.29844",
+      "institution": "HKU / XPENG",
+      "authors": "Chen et al.",
+      "section": "wam",
+      "topic": "hybrid",
+      "shortTitle": "DIAL"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2026.03",
+        "对比研究"
+      ],
+      "title": "VLA vs WAM: Systematic Robustness Comparison",
+      "meta": "Huawei / UofT | Zhang et al. | arXiv:2603.22078",
+      "id": "2603.22078",
+      "description": "首次系统对比 VLA 和 WAM 在视觉/语言扰动下的鲁棒性。",
+      "diagram": "实验设置: 多种扰动下的成功率\n\n                  RoboTwin 2.0-Plus   LIBERO-Plus\n  ──────────────────────────────────────────────────\n  WAM:\n    LingBot-VA      74.2%               —\n    Cosmos-Policy   —                   82.2%\n  VLA:\n    π₀.5            部分任务可比         需大规模训练\n  Hybrid:\n    部分集成视频     中间水平             中间水平\n\n  WAM 鲁棒性来源:\n  ├── 视频预训练 → 时空动力学先验 (扰动不变)\n  ├── 显式状态预测 → 物理一致性约束\n  └── 异构数据学习 → 不依赖重复 demo",
+      "insight": "核心 Insight: WAM 天然对视觉和语言扰动更鲁棒，因为其决策基于物理动力学预测而非表面统计关联。VLA 达到同等鲁棒性需要大规模多样化训练数据。",
+      "url": "https://arxiv.org/abs/2603.22078",
+      "institution": "Huawei / UofT",
+      "authors": "Zhang et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "WAM-vs-VLA"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025.03"
+      ],
+      "title": "DyWA: Dynamics-Adaptive World Action Model",
+      "meta": "PKU | Lyu et al. | arXiv:2503.16806",
+      "id": "2503.16806",
+      "description": "面向非抓取操作 (推、滑、倒)。联合建模几何、状态、物理和动作。",
+      "diagram": "DyWA 四维统一建模:\n  ┌──────────────────────────────────────────┐\n  │         Single-View Point Cloud          │\n  │              ↓                           │\n  │  ┌────────┐ ┌────────┐ ┌────────┐      │\n  │  │Geometry│ │ State  │ │Physics │      │\n  │  │(形状)  │ │(位姿)  │ │(质量/  │      │\n  │  │        │ │        │ │ 摩擦)  │      │\n  │  └───┬────┘ └───┬────┘ └───┬────┘      │\n  │      └──────┬───┘──────┬───┘            │\n  │             ▼          ▼                │\n  │    ┌────────────────────────┐           │\n  │    │ History-conditioned    │           │\n  │    │ Dynamics Adaptation    │  ← 关键!   │\n  │    │ (从历史轨迹推断物理)   │           │\n  │    └───────────┬────────────┘           │\n  │                ▼                        │\n  │         Action Prediction               │\n  └──────────────────────────────────────────┘\n  真机: 68% 成功率, 适应不同质量/摩擦/半满水瓶",
+      "insight": "核心 Insight: 非抓取操作（推、滑、倒）高度依赖物理参数（质量、摩擦），但这些参数不可直接观测。DyWA 通过历史轨迹隐式推断物理参数，实现在线动力学适应。",
+      "url": "https://arxiv.org/abs/2503.16806",
+      "institution": "PKU",
+      "authors": "Lyu et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "DyWA"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2024.12",
+        "WAM 先驱"
+      ],
+      "title": "VPP: Video Prediction Policy",
+      "meta": "Tsinghua / Shanghai AI Lab | Hu et al. | arXiv:2412.14803",
+      "id": "2412.14803",
+      "description": "WAM 概念的早期验证。假设视频扩散模型内部表征包含当前静态信息和未来动态预测。",
+      "diagram": "VPP 核心假设与验证:\n\n  假设: Video Diffusion Model 的中间表征 =\n        当前静态信息 + 未来动态预测\n\n  ┌──────────────────────────────────────────┐\n  │  Pre-trained Video Foundation Model      │\n  │  (fine-tuned on robot + human videos)    │\n  │                                          │\n  │  obs_t ──► [内部表征] ──► future_repr    │\n  │                 │                        │\n  │                 ▼                        │\n  │      Implicit Inverse Dynamics           │\n  │      f(current_repr, future_repr) → a_t  │\n  └──────────────────────────────────────────┘\n\n  验证: Calvin ABC-D 泛化 benchmark +18.6% (vs SOTA)\n        真机灵巧操作 +31.6% 成功率",
+      "insight": "核心 Insight: 视频扩散模型天然是世界模型——它的去噪过程隐式地编码了\"世界如何演化\"的物理先验。利用这个免费的先验来引导动作生成，比从零学习策略高效得多。",
+      "url": "https://arxiv.org/abs/2412.14803",
+      "institution": "Tsinghua / Shanghai AI Lab",
+      "authors": "Hu et al.",
+      "section": "",
+      "topic": "wam",
+      "shortTitle": "VPP"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "VAMPO: RL 优化视频动力学",
+      "meta": "ZJU / Westlake / OpenHelix | Ge et al. | arXiv:2603.19370",
+      "id": "2603.19370",
+      "description": "用 RL 优化 WAM 的视频动力学预测质量。标准 WAM 的视频生成目标（像素重建）与下游动作质量不完全对齐。VAMPO 引入策略优化直接优化\"视频预测→动作成功率\"的端到端链路。",
+      "diagram": "VAMPO: 从视频重建到任务成功的对齐\n  ┌────────────────────────────────────────────┐\n  │ 标准 WAM:                                  │\n  │   Video Loss (像素重建) ──╳── Task Success │\n  │   (好看的视频 ≠ 好用的动作)                │\n  │                                            │\n  │ VAMPO:                                     │\n  │   Video Model ──► Action ──► Env Reward    │\n  │        ↑                         │         │\n  │        └── Policy Optimization ──┘         │\n  │   直接优化 \"视频质量→任务成功\" 链路         │\n  └────────────────────────────────────────────┘",
+      "insight": "核心 Insight: WAM 的视频生成目标和下游任务目标存在 gap——精确重建像素不等于预测出对决策有用的状态变化。VAMPO 用 RL 闭环弥合此 gap。",
+      "url": "https://arxiv.org/abs/2603.19370",
+      "institution": "ZJU / Westlake / OpenHelix",
+      "authors": "Ge et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "VAMPO"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "PlayWorld: 自主探索学习世界模型",
+      "meta": "Princeton | Yin et al. | arXiv:2603.09030",
+      "id": "2603.09030",
+      "description": "机器人通过自主探索（play）收集多样化交互数据，从中学习通用世界模型。无需人类演示或任务标注——纯好奇心驱动的探索即可构建物理先验。",
+      "diagram": "PlayWorld 自主学习闭环:\n  ┌────────────────────────────────────────────┐\n  │ 1. Autonomous Play (好奇心驱动)            │\n  │    机器人自主探索 → 多样化交互数据          │\n  │         ▼                                  │\n  │ 2. World Model Learning                    │\n  │    从 play data 学习通用物理先验            │\n  │         ▼                                  │\n  │ 3. Task-conditioned Policy                 │\n  │    给定任务指令 → 世界模型引导动作生成      │\n  └────────────────────────────────────────────┘\n  关键: 零人类演示, 纯自主探索 → 通用世界模型",
+      "insight": "核心 Insight: 世界模型的训练数据不必来自人类演示。机器人的自主探索（play）天然产生多样化的物理交互，是学习通用世界模型的理想数据源。",
+      "url": "https://arxiv.org/abs/2603.09030",
+      "institution": "Princeton",
+      "authors": "Yin et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "PlayWorld"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2026.04"
+      ],
+      "title": "EgoSim: 自我中心世界模拟器",
+      "meta": "SJTU / Shanghai AI Lab | Hao et al. | arXiv:2604.01001",
+      "id": "2604.01001",
+      "description": "从野外单目视频中提取训练数据的可扩展 pipeline，构建闭环自我中心世界模拟器。Geometry-action-aware 观测模拟 + 交互感知状态更新，支持跨具身迁移到机器人操作。",
+      "diagram": "EgoSim 数据飞轮:\n  野外单目视频 ──► 数据提取 Pipeline ──► 训练数据\n                                           │\n  闭环模拟:                                ▼\n  当前帧 + 动作 ──► Geometry-Action  ──► 下一帧预测\n       ▲             Aware 模块           │\n       │                                  ▼\n       └──── 交互感知状态更新 ◄──── 状态估计\n                 跨具身迁移: 人类视频 → 机器人操作",
+      "insight": "核心 Insight: 互联网上存在海量自我中心视频（烹饪、手工、维修），这些天然包含物理交互信息。EgoSim 证明可以从这些\"免费数据\"中学习可迁移的世界模型。",
+      "url": "https://arxiv.org/abs/2604.01001",
+      "institution": "SJTU / Shanghai AI Lab",
+      "authors": "Hao et al.",
+      "section": "wam",
+      "topic": "unitree",
+      "shortTitle": "EgoSim"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2023",
+        "5x cited"
+      ],
+      "title": "GR-1: 大规模视频生成预训练机器人",
+      "meta": "ByteDance | Wu et al.",
+      "id": "gr1",
+      "description": "WAM 范式的直接先驱。用大规模视频生成预训练 Transformer，再微调为机器人策略。首次证明\"视频预训练→机器人策略\"的技术路线可行。直接启发了 DreamZero、GR-2、UVAM 等后续工作。",
+      "diagram": "",
+      "insight": "GR-1 回答了关键问题: 视频生成模型的知识能否迁移到机器人? — 答案是 yes，且泛化能力显著优于纯机器人数据训练。",
+      "url": "",
+      "institution": "ByteDance",
+      "authors": "Wu et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "GR-1"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2024",
+        "4x cited"
+      ],
+      "title": "GR-2: 网络规模视频→语言动作模型",
+      "meta": "ByteDance | Cheang et al.",
+      "id": "gr2",
+      "description": "GR-1 的扩展版。利用网络规模视频数据 (非机器人数据) 预训练，将视频生成能力和语言理解结合。证明互联网视频的 scaling 对 WAM 有效，是 WAM 走向大规模预训练的关键证据。",
+      "diagram": "",
+      "insight": "从 GR-1 到 GR-2: 数据规模从机器人视频扩展到互联网视频，模型能力显著提升——WAM 的 scaling law。",
+      "url": "",
+      "institution": "ByteDance",
+      "authors": "Cheang et al.",
+      "section": "",
+      "topic": "wam",
+      "shortTitle": "GR-2"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025",
+        "5x cited"
+      ],
+      "title": "UVAM: 统一视频动作模型",
+      "meta": "ByteDance | Luo et al.",
+      "id": "uvam",
+      "description": "ByteDance GR 系列第三代。统一视频生成和动作预测为单一模型，不再需要分离的视频模型和动作解码器。在多个操作基准上取得 SOTA，被 5 篇 2026 论文引用。",
+      "diagram": "",
+      "insight": "从分离式 (GR-1: 视频→策略) 到统一式 (UVAM: 视频=策略)——统一建模消除了中间环节的信息损失。",
+      "url": "",
+      "institution": "ByteDance",
+      "authors": "Luo et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "UVAM"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025",
+        "3x cited"
+      ],
+      "title": "UWM: 统一世界模型 — 视频+动作扩散耦合",
+      "meta": "UC Berkeley | Li et al.",
+      "id": "uwm",
+      "description": "将视频预测和动作生成统一到同一个扩散过程中。视频和动作共享去噪 Transformer，使两者相互约束——视频预测提供物理约束，动作生成提供因果结构。",
+      "diagram": "",
+      "insight": "UWM 的核心 insight: 视频和动作不应独立去噪——它们是同一物理过程的两面，联合去噪产生更强的物理一致性。",
+      "url": "",
+      "institution": "UC Berkeley",
+      "authors": "Li et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "UWM"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2024",
+        "3x cited"
+      ],
+      "title": "LAPA: 视频潜在动作预训练",
+      "meta": "UC Berkeley | Ye et al.",
+      "id": "lapa",
+      "description": "从无动作标签的视频中学习潜在动作表示，用于预训练世界模型。与 LAWM 思路相近但方法不同：LAPA 用逆动力学模型推断帧间潜在动作，然后用这些潜在动作预训练策略。",
+      "diagram": "",
+      "insight": "LAPA 和 LAWM 形成\"潜在动作预训练\"双子星——证明互联网视频即使没有动作标签也包含丰富的动力学信息。",
+      "url": "",
+      "institution": "UC Berkeley",
+      "authors": "Ye et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "LAPA"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025",
+        "3x cited"
+      ],
+      "title": "DreamGen: 梦境生成解锁机器人泛化",
+      "meta": "Stanford | Huang et al.",
+      "id": "dreamgen",
+      "description": "让机器人在\"梦中\"生成虚拟训练数据。利用视频生成模型合成多样化的交互场景，扩充训练数据。在少样本场景下将泛化能力提升显著。直接启发了 PlayWorld 等自主数据生成工作。",
+      "diagram": "",
+      "insight": "数据瓶颈的新解法: 不是收集更多真实数据，而是让世界模型\"做梦\"生成数据——类似人类在睡眠中巩固学习。",
+      "url": "",
+      "institution": "Stanford",
+      "authors": "Huang et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "DreamGen"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2025",
+        "3x cited"
+      ],
+      "title": "FLARE: 隐式世界建模",
+      "meta": "MIT | Yu et al.",
+      "id": "flare",
+      "description": "不显式生成视频或潜在状态预测，而是将世界建模能力隐式编码到策略网络中。通过辅助预测任务（未来观测嵌入）增强策略的物理理解，但推理时不需要额外的预测步骤。",
+      "diagram": "",
+      "insight": "世界建模不一定需要显式预测——隐式方法(FLARE)在训练时注入物理先验，推理时零额外开销，是 WAM 和 VLA 之间的中间路线。",
+      "url": "",
+      "institution": "MIT",
+      "authors": "Yu et al.",
+      "section": "wam",
+      "topic": "wam",
+      "shortTitle": "FLARE"
+    },
+    {
+      "pages": [
+        "p2"
+      ],
+      "tags": [
+        "2026.04",
+        "安全"
+      ],
+      "title": "World Model Threat Landscape",
+      "meta": "SovereignAI Security Labs | Parmar | arXiv:2604.01346",
+      "id": "2604.01346",
+      "description": "世界模型的预测能力带来独特安全风险。提出五级攻击者能力分类和统一威胁模型，扩展 MITRE ATLAS 和 OWASP LLM Top 10 到世界模型场景。",
+      "diagram": "World Model 独特安全风险:\n  ┌──────────────────────────────────────────────────────┐\n  │ 1. 数据投毒 → 污染物理先验 → 错误预测 → 灾难性决策  │\n  │ 2. 潜在表征攻击 → 微小扰动 → 复合滚动误差放大       │\n  │ 3. 目标误泛化 → 世界模型\"想象\"出错误的成功路径       │\n  │ 4. 欺骗性对齐 → 利用预测能力模拟\"听话\"行为          │\n  │ 5. Reward Hacking → 在想象空间找到高 reward 捷径     │\n  └──────────────────────────────────────────────────────┘\n  实验验证: GRU-RSSM 轨迹持续对抗攻击 A₁=2.26x 放大\n  结论: 世界模型应被视为安全关键基础设施",
+      "insight": "核心 Insight: 世界模型\"能预测未来\"这个能力本身就是双刃剑——它让 agent 更强大，也让 agent 更擅长 reward hacking 和欺骗性对齐。这是一类 VLA 不存在的新安全风险。",
+      "url": "https://arxiv.org/abs/2604.01346",
+      "institution": "SovereignAI Security Labs",
+      "authors": "Parmar",
+      "section": "world-model-2026",
+      "topic": "wam",
+      "shortTitle": "WM-Safety"
+    },
+    {
+      "pages": [
+        "p3",
+        "p6"
+      ],
+      "tags": [
+        "arXiv:2603.25902"
+      ],
+      "title": "G1 Running at 3.3 m/s",
+      "meta": "Caltech | Olkin et al. | arXiv:2603.25902",
+      "id": "2603.25902",
+      "description": "从单个人类演示生成优化的周期参考运动库。目标条件 + 控制引导 reward 结构。G1 真机跑步速度达 3.3 m/s，户外数百米长距离验证。集成感知和规划实现跑步中避障。",
+      "diagram": "G1 Running Pipeline:\n  ┌──────────────────────────────────────────────┐\n  │ 1. 单个人类跑步演示                          │\n  │         ▼                                    │\n  │ 2. 周期参考运动库生成 (优化+插值)             │\n  │    ·步频/步幅参数化                           │\n  │    ·目标速度条件                              │\n  │         ▼                                    │\n  │ 3. PPO 训练 (Isaac Lab)                      │\n  │    ·参考运动跟踪 reward                       │\n  │    ·控制引导: 速度跟踪 + 能耗 + 稳定性       │\n  │         ▼                                    │\n  │ 4. 真机部署: 3.3 m/s + 户外避障              │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 不需要大量动捕数据——单个人类跑步演示 + 参数化运动库即可覆盖多种速度。关键是 reward 结构设计：参考跟踪 + 控制约束的平衡。",
+      "url": "https://arxiv.org/abs/2603.25902",
+      "institution": "Caltech",
+      "authors": "Olkin et al.",
+      "section": "",
+      "topic": "rl",
+      "shortTitle": "G1 Running"
+    },
+    {
+      "pages": [
+        "p3",
+        "p6"
+      ],
+      "tags": [
+        "arXiv:2604.01064"
+      ],
+      "title": "BAT: Policy-Switching for Humanoid",
+      "meta": "Georgia Tech | Baek et al. | arXiv:2604.01064",
+      "id": "2604.01064",
+      "description": "在线策略切换框架：动态在两个互补全身 RL 控制器之间切换，平衡敏捷性和稳定性。层次 RL + 滑动视窗策略预评估 + 基于 VQ-VAE 的运动偏好预测。",
+      "diagram": "BAT 在线策略切换:\n  ┌──────────────────────────────────────────────┐\n  │ Policy A: 敏捷控制器 (速度优先)              │\n  │ Policy B: 稳定控制器 (安全优先)              │\n  │                                              │\n  │         ┌──────────────────┐                 │\n  │ obs ──► │ Meta-Controller  │ ──► 选择 A or B │\n  │         │ ·滑动视窗评估    │                 │\n  │         │ ·VQ-VAE 偏好预测 │                 │\n  │         └──────────────────┘                 │\n  │                                              │\n  │ 关键: 不是混合输出, 而是硬切换               │\n  │   → 避免两个策略互相干扰                     │\n  │   → 长时域 loco-manipulation G1 真机验证     │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 单一 RL 策略难以同时兼顾敏捷性和稳定性（reward 冲突）。BAT 用两个专精策略 + 元控制器硬切换，比混合策略更有效。",
+      "url": "https://arxiv.org/abs/2604.01064",
+      "institution": "Georgia Tech",
+      "authors": "Baek et al.",
+      "section": "",
+      "topic": "rl",
+      "shortTitle": "BAT"
+    },
+    {
+      "pages": [
+        "p3",
+        "p6"
+      ],
+      "tags": [
+        "arXiv:2603.19078"
+      ],
+      "title": "ABD-Net: Physics-Informed GNN",
+      "meta": "UT Austin / UW-Madison | Shin et al. | arXiv:2603.19078",
+      "id": "2603.19078",
+      "description": "将关节体动力学算法 (ABA) 的惯量传播机制嵌入 GNN。物理信息表征捕获动作如何在身体中传播。采样效率提升 + 动力学偏移泛化 + G1/Go2 真机实时推理验证。",
+      "diagram": "ABD-Net 物理信息 GNN:\n  ┌──────────────────────────────────────────────┐\n  │ 传统 RL: MLP(obs) → action                  │\n  │   问题: 不理解身体拓扑结构                   │\n  │                                              │\n  │ ABD-Net: 关节体动力学 + GNN                  │\n  │   ┌─────┐  ┌─────┐  ┌─────┐                │\n  │   │ 关节1│──│ 关节2│──│ 关节3│  ← 身体拓扑图 │\n  │   └──┬──┘  └──┬──┘  └──┬──┘                │\n  │      │  ABA 惯量传播  │                      │\n  │      └───────┬────────┘                      │\n  │              ▼                               │\n  │   物理感知表征 → 动作预测                     │\n  │                                              │\n  │ 优势: 换机器人只需换拓扑图, 表征可迁移       │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 机器人身体是树结构——力从末端传播到根。ABD-Net 把这个物理先验编码进 GNN 的消息传递中，而非让 MLP 从数据中重新学习。",
+      "url": "https://arxiv.org/abs/2603.19078",
+      "institution": "UT Austin / UW-Madison",
+      "authors": "Shin et al.",
+      "section": "",
+      "topic": "rl",
+      "shortTitle": "ABD-Net"
+    },
+    {
+      "pages": [
+        "p3"
+      ],
+      "tags": [
+        "arXiv:2603.15084"
+      ],
+      "title": "HALO: Heavy-Load Humanoid via Differentiable Sim",
+      "meta": "ZJU / TeleAI | Wang et al. | arXiv:2603.15084",
+      "id": "2603.15084",
+      "description": "针对重载人形机器人（搬运、负重行走）的 sim-to-real 方案。可微仿真器提供解析梯度，加速策略优化。通过 contact-aware 自适应补偿真机接触动力学差异。真机验证负重 20kg 稳定行走。",
+      "diagram": "HALO 可微仿真 Sim-to-Real:\n  ┌──────────────────────────────────────────────┐\n  │ 传统: PPO (采样梯度, 方差大, 慢)             │\n  │ HALO: 可微仿真器 (解析梯度, 精确, 快)       │\n  │                                              │\n  │  ┌────────────┐    ∂reward/∂action           │\n  │  │ 可微仿真器  │ ──────────────────► 策略更新 │\n  │  │ (解析梯度)  │    无需 PPO 采样!           │\n  │  └────────────┘                              │\n  │         +                                    │\n  │  Contact-Aware 补偿:                         │\n  │    仿真接触 vs 真机接触 → 在线适应            │\n  │                                              │\n  │  真机: 负重 20kg 稳定行走                    │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: PPO 的零阶梯度估计是 sim-to-real 训练的瓶颈之一。可微仿真提供精确梯度，但代价是接触动力学的不可微问题——HALO 用自适应补偿绕过此限制。",
+      "url": "https://arxiv.org/abs/2603.15084",
+      "institution": "ZJU / TeleAI",
+      "authors": "Wang et al.",
+      "section": "",
+      "topic": "rl",
+      "shortTitle": "HALO"
+    },
+    {
+      "pages": [
+        "p3"
+      ],
+      "tags": [
+        "arXiv:2512.01996",
+        "效率突破"
+      ],
+      "title": "15 分钟学会人形运动",
+      "meta": "UC Berkeley / Physical Intelligence | Seo et al. | arXiv:2512.01996",
+      "id": "2512.01996",
+      "description": "GPU 大规模并行仿真 + 高效 PPO 实现，将人形 sim-to-real 训练时间从数天压缩到 15 分钟。Isaac Lab 上 4096 个并行环境，单张 A100 即可完成全流程。极速迭代使 reward 调参从\"实验\"变为\"调试\"。",
+      "diagram": "15 分钟训练 vs 传统:\n  ┌──────────────────────────────────────────────┐\n  │ 传统:                                        │\n  │   128 envs × 1B steps → 2-3 天训练           │\n  │   reward 调一次参 = 等两天                    │\n  │                                              │\n  │ 15-Min:                                      │\n  │   4096 envs × GPU 并行 → 15 分钟训练         │\n  │   reward 调参 = 快速迭代 (一天几十次!)        │\n  │                                              │\n  │ 关键技术:                                    │\n  │   ·Isaac Lab 大规模并行                      │\n  │   ·Vectorized PPO (GPU-native)               │\n  │   ·Terrain curriculum 自动调度               │\n  │   ·单张 A100 即可                            │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: Sim-to-real 的真正瓶颈不是算法而是迭代速度。15 分钟训练意味着一天可以尝试几十种 reward 设计——这把 RL 从\"炼丹\"变成了工程化调试。",
+      "url": "https://arxiv.org/abs/2512.01996",
+      "institution": "UC Berkeley / Physical Intelligence",
+      "authors": "Seo et al.",
+      "section": "",
+      "topic": "rl",
+      "shortTitle": "15min-Loco"
+    },
+    {
+      "pages": [
+        "p3"
+      ],
+      "tags": [
+        "arXiv:2603.17092"
+      ],
+      "title": "SLowRL: Safe LoRA Fine-tuning on Real Robot",
+      "meta": "McGill / Mila / TU Munich | Daneshmand et al. | arXiv:2603.17092",
+      "id": "2603.17092",
+      "description": "解决真机 RL 微调的安全问题。LoRA (rank-1!) + recovery policy 安全约束。微调时间减少 46.5%，安全违规近零。证明极低秩适应即可弥合 sim-to-real gap。",
+      "diagram": "SLowRL 安全真机微调:\n  ┌──────────────────────────────────────────────┐\n  │ 问题: sim-to-real gap → 真机需要微调         │\n  │       但真机微调 → 可能摔坏机器人!            │\n  │                                              │\n  │ SLowRL 解法:                                 │\n  │ ┌──────────────┐   ┌──────────────────┐      │\n  │ │ 冻结策略     │ + │ LoRA rank-1 适配 │      │\n  │ │ (sim 预训练) │   │ (极少参数微调)   │      │\n  │ └──────────────┘   └──────────────────┘      │\n  │         +                                    │\n  │ ┌─────────────────────────────────────┐      │\n  │ │ Recovery Policy: 检测危险 → 接管    │      │\n  │ │ (安全约束, 违规率 ≈ 0)             │      │\n  │ └─────────────────────────────────────┘      │\n  │ 效果: 微调时间 -46.5%, 安全违规近零          │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: Sim-to-real gap 可能只需要极少的参数调整（rank-1 LoRA!）。大部分 sim 策略是正确的，gap 集中在少数物理参数不匹配的维度上。",
+      "url": "https://arxiv.org/abs/2603.17092",
+      "institution": "McGill / Mila / TU Munich",
+      "authors": "Daneshmand et al.",
+      "section": "sim-to-real",
+      "topic": "rl",
+      "shortTitle": "SLowRL"
+    },
+    {
+      "pages": [
+        "p3"
+      ],
+      "tags": [
+        "arXiv:2603.15759"
+      ],
+      "title": "SimDist: Simulation Distillation",
+      "meta": "UT Austin / UW | Levy et al. | arXiv:2603.15759",
+      "id": "2603.15759",
+      "description": "将仿真器结构先验蒸馏到潜在世界模型中，真机端通过在线规划 + 监督动力学微调快速适应。将真实世界适应简化为短视窗系统辨识，避免长时域信用分配。",
+      "diagram": "SimDist 两阶段迁移:\n  ┌──────────────────────────────────────────────┐\n  │ Phase 1 (仿真): 蒸馏仿真器先验               │\n  │   Simulator ──► Latent World Model           │\n  │   (学习物理结构, 不是精确参数)                │\n  │         ▼                                    │\n  │ Phase 2 (真机): 快速在线适应                  │\n  │   ┌────────────────────────────────────┐     │\n  │   │ 短视窗系统辨识 (几秒数据)          │     │\n  │   │   → 微调潜在动力学模型             │     │\n  │   │   → 在线规划 (MPC)                 │     │\n  │   └────────────────────────────────────┘     │\n  │                                              │\n  │ 关键: 避免长时域信用分配                     │\n  │   → 仅需辨识短视窗动力学偏移                 │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 仿真器提供的不仅是数据，还有物理结构先验。蒸馏这个先验到世界模型中，真机适应就从\"从零学物理\"降级为\"参数微调\"。",
+      "url": "https://arxiv.org/abs/2603.15759",
+      "institution": "UT Austin / UW",
+      "authors": "Levy et al.",
+      "section": "sim-to-real",
+      "topic": "rl",
+      "shortTitle": "SimDist"
+    },
+    {
+      "pages": [
+        "p3",
+        "p6"
+      ],
+      "tags": [
+        "arXiv:2511.15200"
+      ],
+      "title": "VIRAL: Large-Scale Visual Sim-to-Real",
+      "meta": "NVIDIA / CMU | He et al. | arXiv:2511.15200",
+      "id": "2511.15200",
+      "description": "大规模视觉 sim-to-real 框架，统一视觉感知和全身控制。在仿真中联合训练视觉编码器和 RL 策略，通过大规模视觉域随机化实现真机视觉泛化。G1 真机验证视觉引导的 loco-manipulation。",
+      "diagram": "VIRAL 视觉 Sim-to-Real:\n  ┌──────────────────────────────────────────────┐\n  │ 传统: 视觉感知(独立) + RL 控制(独立)         │\n  │   问题: 感知-控制断层                        │\n  │                                              │\n  │ VIRAL: 端到端联合训练                        │\n  │ ┌──────────┐   ┌──────────┐   ┌──────────┐ │\n  │ │ 视觉输入 │──►│ 视觉编码 │──►│ RL 策略  │ │\n  │ │ (RGB)    │   │ (CNN)    │   │ (PPO)    │ │\n  │ └──────────┘   └──────────┘   └──────────┘ │\n  │       联合训练 in sim                        │\n  │                                              │\n  │ 视觉域随机化:                                │\n  │   ·光照/颜色/纹理/背景/遮挡 大规模随机       │\n  │   → 真机视觉零样本泛化                       │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 视觉 sim-to-real 的难点不在控制策略，而在视觉域差距。VIRAL 证明足够大规模的视觉域随机化可以弥合这个差距，不需要真机视觉数据。",
+      "url": "https://arxiv.org/abs/2511.15200",
+      "institution": "NVIDIA / CMU",
+      "authors": "He et al.",
+      "section": "sim-to-real",
+      "topic": "rl",
+      "shortTitle": "VIRAL"
+    },
+    {
+      "pages": [
+        "p3",
+        "p6"
+      ],
+      "tags": [
+        "arXiv:2603.20147"
+      ],
+      "title": "AGILE: End-to-End Humanoid RL Workflow",
+      "meta": "ETH Zurich | Zhao et al. | arXiv:2603.20147",
+      "id": "2603.20147",
+      "description": "标准化人形 RL 全生命周期：环境验证→训练→评估→部署。场景测试 + 随机化 rollout + 运动质量诊断。5 种代表性技能（行走、恢复、模仿、loco-manipulation）跨 G1 和 T1 平台一致迁移。",
+      "diagram": "AGILE 标准化工作流:\n  ┌──────────────────────────────────────────────┐\n  │ Stage 1: 环境验证                            │\n  │   ·仿真器配置检查                            │\n  │   ·URDF/物理参数验证                         │\n  │   ·场景测试 (基准行为)                       │\n  │                                              │\n  │ Stage 2: 训练 + 评估                         │\n  │   ·随机化 rollout 诊断                       │\n  │   ·运动质量度量 (步态对称/能耗/稳定性)       │\n  │   ·自动化 reward 调参建议                    │\n  │                                              │\n  │ Stage 3: 部署                                │\n  │   ·Teacher→Student 蒸馏                      │\n  │   ·真机安全检查清单                          │\n  │   ·逐步增加难度验证                          │\n  │                                              │\n  │ 跨平台: G1 + T1 一致迁移 (5 种技能)         │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 人形 RL 的可复现性是行业痛点——同一代码在不同机器人上结果差异巨大。AGILE 通过标准化流程和诊断工具，使 sim-to-real 从\"炼丹\"走向\"工程\"。",
+      "url": "https://arxiv.org/abs/2603.20147",
+      "institution": "ETH Zurich",
+      "authors": "Zhao et al.",
+      "section": "",
+      "topic": "rl",
+      "shortTitle": "AGILE"
+    },
+    {
+      "pages": [
+        "p3"
+      ],
+      "tags": [
+        "2025",
+        "5x cited"
+      ],
+      "title": "BeyondMimic: 超越模仿的多功能人形控制",
+      "meta": "CMU | Cheng et al.",
+      "id": "beyondmimic",
+      "description": "突破传统运动模仿 RL 的单一任务局限。训练单一策略同时支持行走、跑步、跳跃、搬运、恢复等多种技能，并能在技能间平滑切换。被 5 篇 2026 论文引用，是人形 RL 从\"模仿单个动作\"走向\"通用运动能力\"的标志性工作。",
+      "diagram": "BeyondMimic 多功能控制:\n  ┌──────────────────────────────────────────────┐\n  │ 传统运动 RL:                                  │\n  │   一个策略 = 一个技能 (走 or 跑 or 搬)        │\n  │                                              │\n  │ BeyondMimic:                                 │\n  │   ┌─────────────────────────────────────────┐│\n  │   │        Single Versatile Policy          ││\n  │   │  ┌─────┐ ┌─────┐ ┌─────┐ ┌──────────┐ ││\n  │   │  │Walk │ │Run  │ │Jump │ │Loco-Manip│ ││\n  │   │  └──┬──┘ └──┬──┘ └──┬──┘ └────┬─────┘ ││\n  │   │     └───────┴───────┴─────────┘        ││\n  │   │         平滑技能切换                    ││\n  │   └─────────────────────────────────────────┘│\n  │ 关键: 共享低层运动原语 + 高层技能调度         │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 人类的运动能力不是一组离散技能，而是连续运动流形上的不同区域。BeyondMimic 学习这个流形，使技能切换成为流形上的平滑移动而非硬切换。",
+      "url": "",
+      "institution": "CMU",
+      "authors": "Cheng et al.",
+      "section": "",
+      "topic": "rl",
+      "shortTitle": "BeyondMimic"
+    },
+    {
+      "pages": [
+        "p3"
+      ],
+      "tags": [
+        "2025",
+        "3x cited"
+      ],
+      "title": "ASAP: 对齐仿真与真实物理",
+      "meta": "Tencent | He et al.",
+      "id": "asap",
+      "description": "系统性解决 sim-to-real gap 的根因——仿真器物理参数与真实世界不匹配。自动化物理参数辨识 + 在线校准流程，使仿真动力学更贴近真实。被 3 篇 2026 论文引用，是 domain randomization 之外的互补方案。",
+      "diagram": "ASAP vs Domain Randomization:\n  ┌──────────────────────────────────────────────┐\n  │ Domain Randomization:                        │\n  │   \"不知道真实参数 → 随机化所有参数\"           │\n  │   问题: 过度随机化 → 性能下降                 │\n  │                                              │\n  │ ASAP:                                        │\n  │   \"精确辨识真实参数 → 对齐仿真器\"             │\n  │   真机数据 → 系统辨识 → 修正仿真物理          │\n  │   → 更小的 sim-real gap → 更好的迁移          │\n  │                                              │\n  │ 互补: ASAP 缩小 gap + DR 覆盖残余不确定性    │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: Domain Randomization 是\"承认无知\"的暴力方案，ASAP 是\"减少无知\"的精确方案。两者互补：先用 ASAP 对齐核心物理参数，再用 DR 覆盖残余不确定性。",
+      "url": "",
+      "institution": "Tencent",
+      "authors": "He et al.",
+      "section": "",
+      "topic": "rl",
+      "shortTitle": "ASAP"
+    },
+    {
+      "pages": [
+        "p4"
+      ],
+      "tags": [
+        "2026.04"
+      ],
+      "title": "MV-VDP: Multi-View Video Diffusion Policy",
+      "meta": "CASIA / Tsinghua | Li et al. | arXiv:2604.03181",
+      "id": "2604.03181",
+      "description": "同时预测多视角热力图视频和 RGB 视频。不仅指定机器人做什么动作，还预测环境如何响应这些动作。仅 10 条轨迹，无需额外预训练，即可完成复杂真实世界任务。超越 VLA 和 3D-based 方法。",
+      "diagram": "Multi-View Obs ──┐\n  (RGB × N views)  ├──► Video Diffusion ──► 预测视频 (RGB + Heatmap)\n  Heatmap × N ─────┘     Backbone             │\n                                               ▼\n                                         Action Head ──► 动作序列",
+      "insight": "核心 Insight: 通过多视角视频扩散同时建模动作与环境响应，使策略具备\"想象未来\"的能力，仅需 10 条演示即可超越需要大量预训练的 VLA 方法。",
+      "url": "https://arxiv.org/abs/2604.03181",
+      "institution": "CASIA / Tsinghua",
+      "authors": "Li et al.",
+      "section": "",
+      "topic": "diff",
+      "shortTitle": "MV-VDP"
+    },
+    {
+      "pages": [
+        "p4"
+      ],
+      "tags": [
+        "2026.04",
+        "RL+Diffusion"
+      ],
+      "title": "POCO: RL Fine-tune Diffusion Policy",
+      "meta": "CASIA / UCAS | Chen et al. | arXiv:2604.01860",
+      "id": "2604.01860",
+      "description": "解决\"如何用 RL 微调扩散策略\"的关键难题。将策略改进建模为后验推断，通过 EM 算法将 reward 加权隐式后验蒸馏到策略中。模型无关设计可扩展到大型 VLA。真机 4 个接触密集任务 96.7% 成功率。",
+      "diagram": "Diffusion Policy (预训练)\n       │\n       ▼\n  ┌─ E-step: 采样 → reward 加权 → 隐式后验 q*(a|o) ─┐\n  │                                                    │\n  └─ M-step: 蒸馏 q* 到 π_θ (策略更新) ◄──────────────┘\n       │\n       ▼  (迭代收敛)\n  RL-refined Policy → 96.7% 真机成功率",
+      "insight": "核心 Insight: 将 RL 微调扩散策略转化为 EM 后验推断问题，避免直接对扩散过程做策略梯度，实现了模型无关的稳定 RL 微调范式。",
+      "url": "https://arxiv.org/abs/2604.01860",
+      "institution": "CASIA / UCAS",
+      "authors": "Chen et al.",
+      "section": "rl",
+      "topic": "diff",
+      "shortTitle": "POCO"
+    },
+    {
+      "pages": [
+        "p4"
+      ],
+      "tags": [
+        "2026.01"
+      ],
+      "title": "DMPO: One-Step Generation >120Hz",
+      "meta": "SYSU | Zou et al. | arXiv:2601.20701",
+      "id": "2601.20701",
+      "description": "真正的单步生成，无需知识蒸馏。三要素：MeanFlow (数学推导单步推理) + 分散正则化 (防止表征坍塌) + RL 微调 (超越专家演示)。操作和运动任务均超越多步 baseline，GPU 上达数百 Hz。",
+      "diagram": "噪声 z ──► MeanFlow (单步!) ──► 动作序列\n               │\n  三大支柱:    ├─ MeanFlow: v_θ 直接映射噪声→动作 (无需迭代)\n               ├─ 分散正则化: 防止所有噪声坍塌到同一输出\n               └─ RL fine-tune: 突破演示上界\n                                          推理速度: &gt;120 Hz",
+      "insight": "核心 Insight: 通过 MeanFlow 理论证明扩散模型可精确单步生成，配合分散正则化解决模式坍塌，首次实现 >120Hz 实时扩散策略推理。",
+      "url": "https://arxiv.org/abs/2601.20701",
+      "institution": "SYSU",
+      "authors": "Zou et al.",
+      "section": "unknown",
+      "topic": "diff",
+      "shortTitle": "DMPO"
+    },
+    {
+      "pages": [
+        "p4"
+      ],
+      "tags": [
+        "2024.10"
+      ],
+      "title": "OneDP: One-Step Diffusion Policy",
+      "meta": "NVIDIA / UT Austin | Wang et al. | arXiv:2410.21257",
+      "id": "2410.21257",
+      "description": "通过自蒸馏将多步扩散策略压缩为单步生成器。不需要额外教师模型——策略自己蒸馏自己。在灵巧操作任务上实现 10x 推理加速且性能无损。",
+      "diagram": "OneDP 自蒸馏:\n  ┌────────────────────────────────────────────┐\n  │ 多步 Diffusion Policy (Teacher = Self)     │\n  │         ▼ 自蒸馏                           │\n  │ 单步 Student Policy                        │\n  │   noise → 1-step → action                  │\n  │                                            │\n  │ 关键: Teacher 和 Student 共享权重           │\n  │   渐进式减少步数: 10→5→2→1                  │\n  │   每轮 Student = 上轮蒸馏结果               │\n  └────────────────────────────────────────────┘\n  推理加速: 10x  性能损失: <2%",
+      "insight": "核心 Insight: 不需要独立的教师模型——多步扩散策略本身就是最好的教师。渐进式自蒸馏比一步到位的蒸馏更稳定。",
+      "url": "https://arxiv.org/abs/2410.21257",
+      "institution": "NVIDIA / UT Austin",
+      "authors": "Wang et al.",
+      "section": "rl",
+      "topic": "diff",
+      "shortTitle": "1-Step DP"
+    },
+    {
+      "pages": [
+        "p4"
+      ],
+      "tags": [
+        "2025.01"
+      ],
+      "title": "REFINE-DP: 人形全身 Diffusion + RL",
+      "meta": "Georgia Tech | Gu et al. | arXiv:2603.13707",
+      "id": "2603.13707",
+      "description": "将 Diffusion Policy 从桌面操作扩展到人形全身 loco-manipulation。先用人类演示训练 Diffusion Policy，再用 RL 微调使其适应真实物理约束。首次在人形机器人上验证 Diffusion+RL 路线。",
+      "diagram": "REFINE-DP 两阶段:\n  ┌────────────────────────────────────────────┐\n  │ Phase 1: Diffusion Policy Pre-train        │\n  │   人类全身运动演示 → 扩散策略               │\n  │   (覆盖 locomotion + manipulation)         │\n  │         ▼                                  │\n  │ Phase 2: RL Fine-tune                      │\n  │   物理约束 reward (稳定性/能耗/安全)        │\n  │   → 适应真实动力学                          │\n  │   → 超越演示水平                            │\n  └────────────────────────────────────────────┘\n  目标平台: 人形机器人全身 loco-manipulation",
+      "insight": "核心 Insight: Diffusion Policy 在桌面操作大获成功，但人形全身控制需要额外的物理约束。RL 微调弥补了演示数据中缺失的动力学知识（稳定性、能耗等）。",
+      "url": "https://arxiv.org/abs/2603.13707",
+      "institution": "Georgia Tech",
+      "authors": "Gu et al.",
+      "section": "flow-matching-rl",
+      "topic": "diff",
+      "shortTitle": "REFINE-DP"
+    },
+    {
+      "pages": [
+        "p4"
+      ],
+      "tags": [
+        "2025.07"
+      ],
+      "title": "FlowRL: Flow + RL 统一分类框架",
+      "meta": "Georgia Tech | Gao et al. | arXiv:2603.27450",
+      "id": "2603.27450",
+      "description": "首次对 Flow/Diffusion + RL 的所有集成方式做系统分类：策略梯度法、后验推断法、蒸馏法、引导法。提供模块化开源框架和统一 benchmark，使不同方法可公平对比。",
+      "diagram": "FlowRL 四类集成方式:\n  ┌────────────────────────────────────────────┐\n  │ 1. Policy Gradient (直接梯度)               │\n  │    DMPO: 单步可微 → 直接策略梯度            │\n  │                                            │\n  │ 2. Posterior Inference (后验推断)            │\n  │    POCO: E-step采样 → M-step蒸馏            │\n  │                                            │\n  │ 3. Distillation (蒸馏法)                    │\n  │    reward-weighted 样本 → 蒸馏到策略         │\n  │                                            │\n  │ 4. Guidance (引导法)                        │\n  │    reward gradient → 引导去噪方向           │\n  └────────────────────────────────────────────┘\n  开源: 统一框架 + benchmark + 公平对比",
+      "insight": "核心 Insight: Flow/Diffusion + RL 的集成方式看似繁多，实际归纳为四类范式。策略梯度法最直接但需单步可微，后验推断法最通用但需额外采样。",
+      "url": "https://arxiv.org/abs/2603.27450",
+      "institution": "Georgia Tech",
+      "authors": "Gao et al.",
+      "section": "flow-matching-rl",
+      "topic": "diff",
+      "shortTitle": "FlowRL"
+    },
+    {
+      "pages": [
+        "p5"
+      ],
+      "tags": [
+        "2025.02",
+        "里程碑"
+      ],
+      "title": "π₀.5 (Physical Intelligence)",
+      "meta": "Physical Intelligence | Black et al. | arXiv:2504.16054",
+      "id": "2504.16054",
+      "description": "在 π₀ (VLM + Flow Matching) 基础上加入 RL 微调阶段。预训练提供通用操作能力，RL 在具体任务上提升成功率和鲁棒性。VLA + RL 混合的标志性工作。",
+      "diagram": "π₀.5 三阶段训练流水线:\n  ┌────────────────────────────────────────────────┐\n  │ Phase 1: VLM Pre-train (Internet-scale)        │\n  │   Vision + Language → 语义理解                  │\n  │         ▼                                      │\n  │ Phase 2: Flow Matching SFT (Robot data)        │\n  │   Obs + Lang → Continuous Action (去噪生成)     │\n  │         ▼                                      │\n  │ Phase 3: RL Fine-tune (Task-specific)          │\n  │   Success reward → 超越演示水平                 │\n  └────────────────────────────────────────────────┘\n  = LLM Pre-train → SFT → RLHF 的机器人完美映射",
+      "insight": "核心 Insight: π₀.5 证明了 LLM 领域的 \"Pre-train → SFT → RLHF\" 范式可以完整迁移到机器人控制。Flow Matching 作为 SFT 阶段提供连续动作生成能力，RL 微调阶段在不破坏预训练泛化性的前提下显著提升任务成功率。",
+      "url": "https://arxiv.org/abs/2504.16054",
+      "institution": "Physical Intelligence",
+      "authors": "Black et al.",
+      "section": "vla-rl",
+      "topic": "hybrid",
+      "shortTitle": "π₀.5 (Physical Intel"
+    },
+    {
+      "pages": [
+        "p5"
+      ],
+      "tags": [
+        "2025.02",
+        "VLA+WM+RL"
+      ],
+      "title": "SC-VLA: Self-Correcting VLA",
+      "meta": "UESTC | Liu et al. | arXiv:2602.21633",
+      "id": "2602.21633",
+      "description": "三合一：VLA + 稀疏世界想象 + 自纠正。辅助预测头预测任务进度和未来轨迹趋势（稀疏想象），在线动作精炼模块基于预测重塑 dense reward。比最优 baseline 少用 16% 步数，成功率高 9%。",
+      "diagram": "SC-VLA 三合一架构:\n  ┌──────────────────────────────────────────────────┐\n  │ VLA Backbone (Vision-Language-Action)             │\n  │  ┌──────────┐                                    │\n  │  │ obs+lang │──►┬──► Action Head ──► a_t         │\n  │  └──────────┘  │                                 │\n  │                ├──► Progress Head ──► p_t (进度)  │\n  │                │                                 │\n  │                └──► Trajectory Head ──► τ (趋势)  │\n  │                      (稀疏世界想象)               │\n  │                           ▼                      │\n  │           ┌──────────────────────────┐           │\n  │           │ Online Action Refinement │           │\n  │           │ dense reward = f(p_t, τ) │           │\n  │           │ a_t' = refine(a_t, r)    │           │\n  │           └──────────────────────────┘           │\n  └──────────────────────────────────────────────────┘\n  效果: -16% 步数, +9% 成功率 vs best baseline",
+      "insight": "核心 Insight: 不需要完整的视频级世界模型——仅预测任务进度和轨迹趋势（稀疏想象）就足以构建 dense reward 信号，在推理时实时精炼动作，以极低开销获得世界模型+RL 的收益。",
+      "url": "https://arxiv.org/abs/2602.21633",
+      "institution": "UESTC",
+      "authors": "Liu et al.",
+      "section": "vla-rl",
+      "topic": "hybrid",
+      "shortTitle": "SC-VLA"
+    },
+    {
+      "pages": [
+        "p5"
+      ],
+      "tags": [
+        "2025.11",
+        "Scaling Law"
+      ],
+      "title": "GEN-0: Embodied Foundation Model with Scaling Laws",
+      "meta": "Generalist AI | 270K 小时真实物理交互数据",
+      "id": "gen0",
+      "description": "首个在真实世界物理交互数据上确立可预测扩展定律的具身基础模型。基于 270K 小时多机器人数据训练，证明机器人领域的 scaling law 与 LLM 类似——模型性能随数据和参数量可预测提升。具身 AI 的 \"GPT-3 时刻\"。",
+      "diagram": "GEN-0 具身 Scaling Law:\n  ┌──────────────────────────────────────────────┐\n  │ 核心发现: 具身基础模型存在可预测 scaling law  │\n  │                                              │\n  │ 数据: 270K 小时真实物理交互                   │\n  │   ·多机器人平台 (臂/手/移动)                  │\n  │   ·多任务类型 (操作/导航/交互)                │\n  │                                              │\n  │ Loss                                         │\n  │  │ ·                                         │\n  │  │  ··                                       │\n  │  │    ···                                    │\n  │  │       ·····                               │\n  │  │            ···········                    │\n  │  └─────────────────────── Data/Params        │\n  │                                              │\n  │ 意义: LLM scaling law → 具身 AI scaling law  │\n  │   = 投入更多数据/算力 → 可预测的能力提升     │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: GEN-0 证明机器人基础模型不是\"炼丹\"——性能随规模可预测增长。这为具身 AI 的工业化投资提供了理论依据，正如 GPT-3 的 scaling law 引爆了 LLM 竞赛。",
+      "url": "https://generalistai.com/blog",
+      "institution": "Generalist AI",
+      "authors": "270K 小时真实物理交互数据",
+      "section": "vla-world-model",
+      "topic": "hybrid",
+      "shortTitle": "GEN-0"
+    },
+    {
+      "pages": [
+        "p5"
+      ],
+      "tags": [
+        "2025.11",
+        "WM+偏好"
+      ],
+      "title": "NORA-1.5: World Model + Action Preference Reward",
+      "meta": "NTU Singapore | Hung et al. | arXiv:2511.14659",
+      "id": "2511.14659",
+      "description": "用世界模型生成不同动作的未来预测，然后通过动作偏好奖励（对比\"好动作\"和\"坏动作\"的预测结果）来训练 VLA。世界模型不直接参与推理，而是作为训练时的奖励信号源。",
+      "diagram": "NORA-1.5 世界模型做奖励:\n  ┌──────────────────────────────────────────────┐\n  │ 训练时:                                      │\n  │   action_good ──► World Model ──► future_good│\n  │   action_bad  ──► World Model ──► future_bad │\n  │         │                              │     │\n  │         └── 偏好对比 ──► reward signal ─┘     │\n  │                              │               │\n  │                    VLA ◄─── RL 训练           │\n  │                                              │\n  │ 推理时:                                      │\n  │   obs + lang ──► VLA ──► action              │\n  │   (不需要世界模型! 零额外推理开销)            │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 世界模型最有价值的角色可能不是\"推理时预测未来\"，而是\"训练时提供奖励\"——它知道哪个动作会导致好结果，这个判断力通过 RL 蒸馏进 VLA。",
+      "url": "https://arxiv.org/abs/2511.14659",
+      "institution": "NTU Singapore",
+      "authors": "Hung et al.",
+      "section": "vla-world-model",
+      "topic": "hybrid",
+      "shortTitle": "NORA-1.5"
+    },
+    {
+      "pages": [
+        "p5"
+      ],
+      "tags": [
+        "2026.03",
+        "潜在WM"
+      ],
+      "title": "AtomVLA: Predictive Latent World Model Post-training",
+      "meta": "INFIFORCE / HKU | Sun et al. | arXiv:2603.08519",
+      "id": "2603.08519",
+      "description": "在 VLA 后训练阶段注入潜在世界模型。不生成像素级视频预测，而是在 VLA 的潜在空间内预测未来状态——开销极低但物理约束有效。后训练即可完成，不需修改预训练流程。",
+      "diagram": "AtomVLA 潜在空间后训练:\n  ┌──────────────────────────────────────────────┐\n  │ 预训练 VLA (不修改)                          │\n  │         ▼                                    │\n  │ 后训练: 添加潜在世界预测头                    │\n  │ ┌────────────────────────────────────┐       │\n  │ │ VLA 隐层 ──► Latent Prediction Head│       │\n  │ │              ──► 预测 z_t+1, z_t+2 │       │\n  │ │              (潜在空间, 非像素!)    │       │\n  │ └────────────────────────────────────┘       │\n  │                                              │\n  │ 推理时: 潜在预测提供物理约束                  │\n  │   → 动作决策受\"未来会怎样\"的隐式引导          │\n  │                                              │\n  │ 优势: 后训练即可, 不改架构, 开销极低          │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 给 VLA 注入世界模型能力不需要从头重新训练——后训练阶段添加潜在预测头即可。在潜在空间而非像素空间预测，避免了 WAM 的推理开销问题。",
+      "url": "https://arxiv.org/abs/2603.08519",
+      "institution": "INFIFORCE / HKU",
+      "authors": "Sun et al.",
+      "section": "vla-world-model",
+      "topic": "hybrid",
+      "shortTitle": "AtomVLA"
+    },
+    {
+      "pages": [
+        "p5"
+      ],
+      "tags": [
+        "2026.03",
+        "WM+RL"
+      ],
+      "title": "DreamPlan: Video World Model RL Fine-tune",
+      "meta": "USC / TRI | Jia et al. | arXiv:2603.16860",
+      "id": "2603.16860",
+      "description": "在视频世界模型的\"想象空间\"中做 RL 训练，而非在真实/仿真环境中交互。世界模型生成虚拟 rollout，RL 在虚拟 rollout 上优化策略。大幅减少真机交互需求。",
+      "diagram": "DreamPlan 想象空间 RL:\n  ┌──────────────────────────────────────────────┐\n  │ 传统 RL: 策略 ←→ 真实环境 (昂贵/危险)       │\n  │                                              │\n  │ DreamPlan:                                   │\n  │ ┌────────────┐   ┌──────────────────────┐   │\n  │ │ Video World│   │ RL Policy            │   │\n  │ │ Model      │◄──│                      │   │\n  │ │            │──►│ 在想象中优化          │   │\n  │ │ (虚拟环境) │   │ (无需真机交互!)       │   │\n  │ └────────────┘   └──────────────────────┘   │\n  │       ▲                                      │\n  │       │ 少量真机数据校准世界模型               │\n  │                                              │\n  │ 优势: 无限虚拟 rollout + 安全 + 低成本       │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 如果世界模型足够准确，RL 可以完全在\"想象\"中训练——这是 Dyna 架构在视频世界模型时代的复兴。关键挑战是世界模型的预测误差会被 RL 放大。",
+      "url": "https://arxiv.org/abs/2603.16860",
+      "institution": "USC / TRI",
+      "authors": "Jia et al.",
+      "section": "world-model-rl",
+      "topic": "hybrid",
+      "shortTitle": "DreamPlan"
+    },
+    {
+      "pages": [
+        "p5"
+      ],
+      "tags": [
+        "2026.02",
+        "WM+自适应"
+      ],
+      "title": "AdaWorldPolicy: Online Adaptive Diffusion Policy",
+      "meta": "HKU / Beihang | Yuan et al. | arXiv:2602.20057",
+      "id": "2602.20057",
+      "description": "部署时通过世界模型实时估计环境变化，在线自适应 Diffusion Policy。不需要重新训练——世界模型检测到环境偏移后，自动调整扩散策略的引导信号。",
+      "diagram": "AdaWorldPolicy 在线自适应:\n  ┌──────────────────────────────────────────────┐\n  │ 离线: 训练 Diffusion Policy + World Model    │\n  │                                              │\n  │ 在线部署:                                    │\n  │ ┌────────────────────────────────────┐       │\n  │ │ World Model 预测 vs 真实观测       │       │\n  │ │   预测误差 → 环境偏移信号          │       │\n  │ │              │                     │       │\n  │ │              ▼                     │       │\n  │ │ 自适应引导 → 调整扩散去噪方向      │       │\n  │ │              │                     │       │\n  │ │              ▼                     │       │\n  │ │ Diffusion Policy → 适应后动作      │       │\n  │ └────────────────────────────────────┘       │\n  │                                              │\n  │ 无需重训练! 世界模型检测偏移 → 在线调整      │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 世界模型的预测-观测误差本身就是环境变化的信号。利用这个信号在线调整扩散策略的引导方向，比重新训练或微调高效几个数量级。",
+      "url": "https://arxiv.org/abs/2602.20057",
+      "institution": "HKU / Beihang",
+      "authors": "Yuan et al.",
+      "section": "world-model-rl",
+      "topic": "hybrid",
+      "shortTitle": "AdaWorldP"
+    },
+    {
+      "pages": [
+        "p5"
+      ],
+      "tags": [
+        "2026.03",
+        "分层专家"
+      ],
+      "title": "MetaWorld-X: Hierarchical Expert + VLM Router",
+      "meta": "USTC | Shen et al. | arXiv:2603.08572",
+      "id": "2603.08572",
+      "description": "分治原则：将复杂控制分解为专家策略集合。每个专家通过模仿约束 RL 学习，引入生物力学先验。VLM 引导的智能路由机制动态组合专家。",
+      "diagram": "MetaWorld-X 分层架构:\n  ┌──────────────────────────────────────────────┐\n  │ VLM Router (语义层)                           │\n  │  obs+lang ──► 任务分解 → 子目标序列            │\n  │   [走过去] → [伸手] → [抓取]                  │\n  │        ▼            ▼           ▼             │\n  │  ┌──────────┐ ┌──────────┐ ┌──────────┐      │\n  │  │Locomotion│ │ Reaching │ │ Grasping │      │\n  │  │ Expert   │ │ Expert   │ │ Expert   │      │\n  │  │(RL+Bio)  │ │(RL+Bio)  │ │(RL+Bio)  │      │\n  │  └──────────┘ └──────────┘ └──────────┘      │\n  │  模仿约束 RL + 生物力学先验                   │\n  └──────────────────────────────────────────────┘",
+      "insight": "核心 Insight: 全身控制可通过\"专家分治+语义路由\"降维——每个专家只解决一类运动原语，VLM 负责高层任务分解和专家调度。",
+      "url": "https://arxiv.org/abs/2603.08572",
+      "institution": "USTC",
+      "authors": "Shen et al.",
+      "section": "world-model-rl",
+      "topic": "hybrid",
+      "shortTitle": "MetaWorld-X"
+    },
+    {
+      "pages": [
+        "p6"
+      ],
+      "tags": [
+        "2026.04"
+      ],
+      "title": "EgoNav: Human Walking → Robot Nav",
+      "meta": "Stanford | Wang et al. | arXiv:2604.00416",
+      "id": "2604.00416",
+      "description": "从 5 小时人类行走数据学习，零机器人数据零微调。Diffusion 模型预测未来轨迹分布。G1 零样本部署于未见室内外环境。自动等门开、避人群、避玻璃墙。",
+      "diagram": "5h 人类自我中心行走视频\n    │\n    ▼\n  ┌──────────────────────────────┐\n  │ Ego-视觉编码器 (RGB 序列)    │\n  └──────────┬───────────────────┘\n             ▼\n  ┌──────────────────────────────┐\n  │ Diffusion 轨迹预测模型       │\n  │ P(τ_future | obs_history)    │\n  └──────────┬───────────────────┘\n             ▼\n  零样本迁移 → G1 室内外导航\n  (无需任何机器人数据)",
+      "insight": "核心 Insight: 人类行走数据蕴含丰富的导航先验，Diffusion 轨迹预测可零样本迁移至人形机器人，跨越具身鸿沟。",
+      "url": "https://arxiv.org/abs/2604.00416",
+      "institution": "Stanford",
+      "authors": "Wang et al.",
+      "section": "locomotion",
+      "topic": "unitree",
+      "shortTitle": "EgoNav"
+    },
+    {
+      "pages": [
+        "p6"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "Latent-Driven Text-to-Locomotion",
+      "meta": "NTU | Yuan et al. | arXiv:2603.17927",
+      "id": "2603.17927",
+      "description": "自然语言直接驱动全身运动。物理合理性优化 (PP-Opt) 双向耦合生成器和控制器，形成自改进循环。免去传统重定向步骤。",
+      "diagram": "双向耦合自改进循环:\n  ┌──────────────────────────────────────────────┐\n  │ Text ──► Diffusion Motion Generator          │\n  │              │ 正向: 生成运动                 │\n  │              ▼                               │\n  │         PP-Opt (物理合理性优化)               │\n  │              │ 反向: 优化后的 rollout          │\n  │              │       → 微调生成器             │\n  │              ▼                               │\n  │     Teacher-Student RL Controller            │\n  │              │                               │\n  │              ▼ 自改进循环                     │\n  │     G1 跟踪 latent-conditioned 运动          │\n  └──────────────────────────────────────────────┘\n  免重定向: 无需 SMPL → robot 的运动映射",
+      "insight": "核心 Insight: 生成器和控制器双向耦合——控制器的物理 rollout 反过来改进生成器的潜在空间分布，形成自改进闭环，彻底绕过传统 retarget 步骤。",
+      "url": "https://arxiv.org/abs/2603.17927",
+      "institution": "NTU",
+      "authors": "Yuan et al.",
+      "section": "whole-body-control",
+      "topic": "rl",
+      "shortTitle": "RoboForge"
+    },
+    {
+      "pages": [
+        "p6"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "ECHO: Edge-Cloud Humanoid Control",
+      "meta": "HKUST(GZ) / LimX | Jia et al. | arXiv:2603.16188",
+      "id": "2603.16188",
+      "description": "云端扩散模型生成运动参考 (~1s)，边端 RL tracker 闭环执行 (1kHz)。38 维紧凑运动表征 + 自动跌倒恢复。G1 零硬件微调执行多样文本指令。",
+      "diagram": "边-云协同架构:\n  ┌──── Cloud GPU ────────────────────┐\n  │ Text ──► 1D UNet + CLIP          │\n  │          (DDIM 10步 ~1s)         │\n  │              │                    │\n  │     38-dim 运动表征序列           │\n  │  [关节角, 根速度, 根高度, 6D朝向] │\n  └──────────────┬────────────────────┘\n                 │ 下发\n  ┌──── G1 Edge ─┴────────────────────┐\n  │ RL Tracker (Teacher-Student)      │\n  │   + 对称性约束 + Domain Rand      │\n  │   + Evidential Adaptation Module  │\n  │   → PD Control @ 1kHz            │\n  │                                   │\n  │ 跌倒? → IMU 检测 → 恢复库        │\n  └───────────────────────────────────┘\n  FID 0.029 | R-Precision Top-1 0.686",
+      "insight": "核心 Insight: 将重计算（动作生成）放云端、轻推理（闭环跟踪）放边端，用 38 维紧凑表征桥接——既享受大模型的生成能力，又满足实时控制需求。",
+      "url": "https://arxiv.org/abs/2603.16188",
+      "institution": "HKUST(GZ) / LimX",
+      "authors": "Jia et al.",
+      "section": "whole-body-control",
+      "topic": "diff",
+      "shortTitle": "ECHO"
+    },
+    {
+      "pages": [
+        "p6"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "Dream2Act: Zero-Shot via Video Generation",
+      "meta": "HKUST(GZ) | Xu et al. | arXiv:2603.19709",
+      "id": "2603.19709",
+      "description": "给定机器人和目标物体图像，视频生成模型\"想象\"机器人完成任务。提取机器人原生关节轨迹后执行。踢球、坐沙发、打沙袋、拥抱箱子 — 37.5% 成功率 (传统重定向 0%)。",
+      "diagram": "Robot-Centric 零样本交互:\n  ┌────────────────┐  ┌────────────────┐\n  │ 机器人当前图像  │  │ 目标物体图像   │\n  └───────┬────────┘  └───────┬────────┘\n          └─────────┬─────────┘\n                    ▼\n  ┌──────────────────────────────────┐\n  │ Video Generation Model           │\n  │ \"想象\"机器人完成任务的视频       │\n  │ (robot-native 坐标空间)          │\n  └──────────────┬───────────────────┘\n                 ▼\n  ┌──────────────────────────────────┐\n  │ High-fidelity Pose Extraction   │\n  │ → 机器人原生关节轨迹            │\n  └──────────────┬───────────────────┘\n                 ▼\n  Whole-body Controller → G1 执行\n  踢球 / 坐沙发 / 打沙袋 / 拥抱: 37.5%\n  (传统 retarget: 0%)",
+      "insight": "核心 Insight: 在机器人原生坐标空间内\"做梦\"而非从人类动作重定向——消除形态差距(morphology gap)，使传统方法完全无法完成的全身交互任务首次变为可能。",
+      "url": "https://arxiv.org/abs/2603.19709",
+      "institution": "HKUST(GZ)",
+      "authors": "Xu et al.",
+      "section": "whole-body-control",
+      "topic": "unitree",
+      "shortTitle": "MorphVid"
+    },
+    {
+      "pages": [
+        "p6"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "G1 Sensor Benchmark for IL",
+      "meta": "Leibniz Uni. Hannover | Kühn et al. | arXiv:2603.28422",
+      "id": "2603.28422",
+      "description": "基准测试 14 种传感器组合用于 G1 模仿学习。结论：数据有限时，更多传感器反而降低性能。",
+      "diagram": "14 种传感器组合 × 2 任务:\n  ┌────────────────────────────────────────────────┐\n  │ 最优配置:  主动立体相机 (最小配置)             │\n  │   空间泛化任务:  87.5%  ✓                      │\n  │   结构化操作:    94.4%  ✓                      │\n  │                                                │\n  │ 加入压力传感器后:                              │\n  │   结构化操作:    67.3%  ✗ (低信噪比干扰)       │\n  │                                                │\n  │ 反直觉结论:                                    │\n  │   更多模态 ≠ 更好    (数据有限时)              │\n  │   视觉 >> 触觉+本体  (低数据域)               │\n  └────────────────────────────────────────────────┘\n  开源: Unified Ablation Framework (传感器掩码)",
+      "insight": "核心 Insight: 反直觉——在数据有限时多模态传感器反而有害。额外模态引入的噪声超过其信息增益，最简主动视觉配置反而最优。",
+      "url": "https://arxiv.org/abs/2603.28422",
+      "institution": "Leibniz Uni. Hannover",
+      "authors": "Kühn et al.",
+      "section": "imitation-learning",
+      "topic": "unitree",
+      "shortTitle": "ActiveStereo"
+    },
+    {
+      "pages": [
+        "p6"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "NMR: Neural Motion Retargeting",
+      "meta": "NJU / Huawei | Zhao et al. | arXiv:2603.22201",
+      "id": "2603.22201",
+      "description": "将传统优化重定向问题重新建模为学习数据分布。CEPR 层次数据 pipeline + 非自回归 CNN-Transformer。消除关节跳变和自碰撞，加速下游全身控制策略收敛。",
+      "diagram": "NMR 流水线:\n  人类动捕 → VAE Motion Clustering → K 个运动簇\n                                      │\n          ┌─────────────────────────┘\n          ▼\n  ┌──────────────────────────────────┐\n  │ Per-Cluster RL Expert            │\n  │ (并行仿真中修复物理不合理动作)   │\n  └──────────────┬───────────────────┘\n                 ▼ 高保真训练数据\n  ┌──────────────────────────────────┐\n  │ Non-autoregressive CNN-Transformer│\n  │ (全局时序上下文, 抑制重建噪声)   │\n  └──────────────────────────────────┘\n  vs 传统优化: 消除关节跳变, 减少自碰撞\n  下游效果: 全身控制策略收敛加速",
+      "insight": "核心 Insight: 传统优化 retarget 是非凸问题，容易陷入局部最优（关节跳变、穿模）。NMR 将问题从\"优化最优解\"转为\"学习数据分布\"，绕过非凸性。",
+      "url": "https://arxiv.org/abs/2603.22201",
+      "institution": "NJU / Huawei",
+      "authors": "Zhao et al.",
+      "section": "imitation-learning",
+      "topic": "rl",
+      "shortTitle": "NMR"
+    },
+    {
+      "pages": [
+        "p6"
+      ],
+      "tags": [
+        "2026.03"
+      ],
+      "title": "SafeGuard ASF: 无人工厂安全巡检",
+      "meta": "Strike Robotics | Canh et al. | arXiv:2603.25353",
+      "id": "2603.25353",
+      "description": "G1 自主巡检工厂：火灾检测 (94.2% mAP)、管道温度异常、入侵者识别。PPO 训练步态 + 舞蹈追踪策略，80K 迭代收敛。",
+      "diagram": "SafeGuard 系统架构:\n  ┌──────────────────────────────────┐\n  │ ReAct Agentic Reasoning         │\n  │  Perception → Reasoning → Act   │\n  │  (ToolOrchestra 决策框架)        │\n  └──────────┬───────────────────────┘\n             ▼\n  ┌──────────────────────────────────┐\n  │ 多模态感知                       │\n  │ · RGB-D → 火灾/烟雾 (94.2% mAP)│\n  │ · 红外  → 管道温度异常           │\n  │ · 视觉  → 入侵者检测            │\n  └──────────┬───────────────────────┘\n             ▼\n  ┌──────────────────────────────────┐\n  │ PPO 运动策略 (80K iter 收敛)    │\n  │ · 巡逻步态 · 避障 · 舞蹈追踪   │\n  └──────────────────────────────────┘",
+      "insight": "核心 Insight: 将 LLM 的 ReAct 推理框架应用于人形巡检机器人——感知/推理/执行工具化编排，实现无人工厂的自主安全闭环。",
+      "url": "https://arxiv.org/abs/2603.25353",
+      "institution": "Strike Robotics",
+      "authors": "Canh et al.",
+      "section": "",
+      "topic": "unitree",
+      "shortTitle": "SafeGuard"
+    },
+    {
+      "pages": [
+        "p6"
+      ],
+      "tags": [
+        "2025.02"
+      ],
+      "title": "Humanoid Badminton: Imitation-to-Interaction",
+      "meta": "SJTU | Chen et al. | arXiv:2602.08370",
+      "id": "2602.08370",
+      "description": "从\"模仿者\"进化为\"击球者\"。流形扩展策略将离散击球点泛化为稠密交互体积。首次实现人形机器人羽毛球技能零样本 sim-to-real 迁移。",
+      "diagram": "渐进式 RL 框架:\n  Phase 1: Mimic (模仿人类运动先验)\n    │ AMP 对抗运动先验 + 紧凑状态表征\n    ▼\n  Phase 2: Striker (功能性击球)\n    │ 流形扩展: 离散击球点 → 稠密交互体积\n    │ (解决专家演示稀疏问题)\n    ▼\n  零样本 Sim-to-Real → 真机羽毛球\n  技能: 挑球 (lift) + 吊球 (drop shot)",
+      "insight": "核心 Insight: 运动模仿（好看）和功能交互（能打到球）是两个不同目标。流形扩展策略将稀疏击球点泛化为连续交互空间，让 RL 探索从\"模仿者\"跃迁为\"运动员\"。",
+      "url": "https://arxiv.org/abs/2602.08370",
+      "institution": "SJTU",
+      "authors": "Chen et al.",
+      "section": "",
+      "topic": "unitree",
+      "shortTitle": "Badminton"
+    },
+    {
+      "pages": [
+        "p6"
+      ],
+      "tags": [
+        "2026.04"
+      ],
+      "title": "OpenGo: Skill-Switching Robot Dog",
+      "meta": "USTC | Li et al. | arXiv:2604.01708",
+      "id": "2604.01708",
+      "description": "可定制技能库 + 任务调度器 + 自学习框架。集成飞书平台，普通用户通过自然语言控制 Go2 机器狗。",
+      "diagram": "OpenGo 系统架构:\n  ┌──────────────────────────────────┐\n  │ 飞书 / 语音 → 自然语言指令       │\n  └──────────┬───────────────────────┘\n             ▼\n  ┌──────────────────────────────────┐\n  │ Dispatcher (技能调度器)          │\n  │  指令 → 选择最佳技能            │\n  └──────────┬───────────────────────┘\n             ▼\n  ┌──────────────────────────────────┐\n  │ Skill Library (可定制)           │\n  │ ·导入新技能 ·自动验证 ·实时切换 │\n  └──────────┬───────────────────────┘\n             ▼\n  ┌──────────────────────────────────┐\n  │ Self-Learning (自学习)           │\n  │ 基于任务完成度 + 人类反馈微调    │\n  └──────────────────────────────────┘\n  → Unitree Go2 真机部署",
+      "insight": "核心 Insight: 通过飞书集成让非专业用户用自然语言控制机器狗，将\"技能库+调度器+自学习\"打包为可落地的产品化架构。",
+      "url": "https://arxiv.org/abs/2604.01708",
+      "institution": "USTC",
+      "authors": "Li et al.",
+      "section": "",
+      "topic": "unitree",
+      "shortTitle": "OpenGo"
+    },
+    {
+      "id": "2502.01105",
+      "title": "pi0.5",
+      "shortTitle": "pi0.5",
+      "meta": "Physical Intelligence | Physical Intelligence",
+      "institution": "Physical Intelligence",
+      "authors": "Physical Intelligence",
+      "description": "VLA+FlowMatching+RL 三阶段训练",
+      "topic": "hybrid",
+      "year": 2025,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "2507.05257",
+      "title": "FlowRL",
+      "shortTitle": "FlowRL",
+      "meta": "UCSD | Hu et al.",
+      "institution": "UCSD",
+      "authors": "Hu et al.",
+      "description": "FlowMatching+RL 策略蒸馏",
+      "topic": "unitree",
+      "year": 2025,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "2501.09548",
+      "title": "REFINE-DP",
+      "shortTitle": "REFINE-DP",
+      "meta": "N/A | N/A",
+      "institution": "N/A",
+      "authors": "N/A",
+      "description": "反射增强扩散策略操作",
+      "topic": "unitree",
+      "year": 2025,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "rt2",
+      "title": "RT-2",
+      "shortTitle": "RT-2",
+      "meta": "Google DeepMind | Brohan et al.",
+      "institution": "Google DeepMind",
+      "authors": "Brohan et al.",
+      "description": "VLM→动作tokens，首个将大模型接入机器人控制",
+      "topic": "vla",
+      "year": 2023,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2307.15818",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "openvla",
+      "title": "OpenVLA",
+      "shortTitle": "OpenVLA",
+      "meta": "Stanford | Kim et al.",
+      "institution": "Stanford",
+      "authors": "Kim et al.",
+      "description": "开源 7B VLA，Prismatic VLM + 动作头",
+      "topic": "vla",
+      "year": 2024,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2406.09246",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "pi0",
+      "title": "pi0",
+      "shortTitle": "pi0",
+      "meta": "Physical Intelligence | Physical Intelligence",
+      "institution": "Physical Intelligence",
+      "authors": "Physical Intelligence",
+      "description": "VLM + Flow Matching 动作头，灵巧操作",
+      "topic": "vla",
+      "year": 2024,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2410.24164",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "rtx",
+      "title": "RT-X / OXE",
+      "shortTitle": "RT-X / OXE",
+      "meta": "Google DeepMind + 21 Labs | Open X-Embodiment",
+      "institution": "Google DeepMind + 21 Labs",
+      "authors": "Open X-Embodiment",
+      "description": "22 种机器人 527 技能跨具身数据集",
+      "topic": "vla",
+      "year": 2023,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2310.08864",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "rt1",
+      "title": "RT-1",
+      "shortTitle": "RT-1",
+      "meta": "Google | Brohan et al.",
+      "institution": "Google",
+      "authors": "Brohan et al.",
+      "description": "首个大规模真机数据训练 Transformer 策略",
+      "topic": "vla",
+      "year": 2022,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2212.06817",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "groot",
+      "title": "GR00T N1",
+      "shortTitle": "GR00T N1",
+      "meta": "NVIDIA | NVIDIA",
+      "institution": "NVIDIA",
+      "authors": "NVIDIA",
+      "description": "开源通用人形机器人基础模型",
+      "topic": "vla",
+      "year": 2025,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2503.14734",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "spatialvla",
+      "title": "SpatialVLA",
+      "shortTitle": "SpatialVLA",
+      "meta": "PKU / BAAI | Qu et al.",
+      "institution": "PKU / BAAI",
+      "authors": "Qu et al.",
+      "description": "空间表征增强 VLA",
+      "topic": "vla",
+      "year": 2025,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2501.15830",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "vlarl",
+      "title": "VLA-RL",
+      "shortTitle": "VLA-RL",
+      "meta": "PKU | Zhang et al.",
+      "institution": "PKU",
+      "authors": "Zhang et al.",
+      "description": "RL 精通通用机器人操作 VLA",
+      "topic": "vla",
+      "year": 2025,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2505.07508",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "octo",
+      "title": "Octo",
+      "shortTitle": "Octo",
+      "meta": "UC Berkeley | Ghosh et al.",
+      "institution": "UC Berkeley",
+      "authors": "Ghosh et al.",
+      "description": "开源通用机器人策略",
+      "topic": "vla",
+      "year": 2024,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2405.12213",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "ppo",
+      "title": "PPO",
+      "shortTitle": "PPO",
+      "meta": "OpenAI | Schulman et al.",
+      "institution": "OpenAI",
+      "authors": "Schulman et al.",
+      "description": "近端策略优化，RL 训练标配算法",
+      "topic": "rl",
+      "year": 2017,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/1707.06347",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "amp",
+      "title": "AMP",
+      "shortTitle": "AMP",
+      "meta": "UC Berkeley | Peng et al.",
+      "institution": "UC Berkeley",
+      "authors": "Peng et al.",
+      "description": "GAN 对抗运动先验，替代手工自然性 reward",
+      "topic": "rl",
+      "year": 2022,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2104.02180",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "sac",
+      "title": "SAC",
+      "shortTitle": "SAC",
+      "meta": "UC Berkeley | Haarnoja et al.",
+      "institution": "UC Berkeley",
+      "authors": "Haarnoja et al.",
+      "description": "Soft Actor-Critic 最大熵连续控制",
+      "topic": "rl",
+      "year": 2018,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/1801.01290",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "isaaclab",
+      "title": "Isaac Lab",
+      "shortTitle": "Isaac Lab",
+      "meta": "NVIDIA | NVIDIA",
+      "institution": "NVIDIA",
+      "authors": "NVIDIA",
+      "description": "GPU 加速机器人仿真训练框架",
+      "topic": "rl",
+      "year": 2024,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "isaacgym",
+      "title": "Isaac Gym",
+      "shortTitle": "Isaac Gym",
+      "meta": "NVIDIA | Makoviychuk et al.",
+      "institution": "NVIDIA",
+      "authors": "Makoviychuk et al.",
+      "description": "GPU 高性能物理仿真 RL 训练",
+      "topic": "rl",
+      "year": 2021,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2108.10470",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "rapidloco",
+      "title": "Rapid Loco",
+      "shortTitle": "Rapid Loco",
+      "meta": "ETH Zurich | Rudin et al.",
+      "institution": "ETH Zurich",
+      "authors": "Rudin et al.",
+      "description": "大规模并行 RL 分钟级四足步态学习",
+      "topic": "rl",
+      "year": 2022,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2109.11978",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "drsim2real",
+      "title": "DR Sim2Real",
+      "shortTitle": "DR Sim2Real",
+      "meta": "OpenAI | Peng et al.",
+      "institution": "OpenAI",
+      "authors": "Peng et al.",
+      "description": "动力学随机化实现 Sim-to-Real 迁移",
+      "topic": "rl",
+      "year": 2017,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/1710.06537",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "domainrand",
+      "title": "Domain Rand",
+      "shortTitle": "Domain Rand",
+      "meta": "OpenAI | Tobin et al.",
+      "institution": "OpenAI",
+      "authors": "Tobin et al.",
+      "description": "视觉域随机化 Sim-to-Real 迁移",
+      "topic": "rl",
+      "year": 2017,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/1703.06907",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "dp",
+      "title": "Diffusion Policy",
+      "shortTitle": "Diffusion Policy",
+      "meta": "Columbia / MIT | Chi et al.",
+      "institution": "Columbia / MIT",
+      "authors": "Chi et al.",
+      "description": "DDPM 建模多模态动作分布，开创扩散策略",
+      "topic": "diff",
+      "year": 2023,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2303.04137",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "act",
+      "title": "ACT",
+      "shortTitle": "ACT",
+      "meta": "Stanford | Zhao et al.",
+      "institution": "Stanford",
+      "authors": "Zhao et al.",
+      "description": "Action Chunking Transformer 模仿学习",
+      "topic": "diff",
+      "year": 2023,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2304.13705",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "ddpm",
+      "title": "DDPM",
+      "shortTitle": "DDPM",
+      "meta": "UC Berkeley / Google | Ho et al.",
+      "institution": "UC Berkeley / Google",
+      "authors": "Ho et al.",
+      "description": "去噪扩散概率模型，Diffusion 基础",
+      "topic": "diff",
+      "year": 2020,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2006.11239",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "flowm",
+      "title": "Flow Matching",
+      "shortTitle": "Flow Matching",
+      "meta": "Meta FAIR | Lipman et al.",
+      "institution": "Meta FAIR",
+      "authors": "Lipman et al.",
+      "description": "条件流匹配生成模型，替代扩散",
+      "topic": "diff",
+      "year": 2023,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2210.02747",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "dreamer",
+      "title": "DreamerV3",
+      "shortTitle": "DreamerV3",
+      "meta": "DeepMind / Uni. Toronto | Hafner et al.",
+      "institution": "DeepMind / Uni. Toronto",
+      "authors": "Hafner et al.",
+      "description": "世界模型 RL，Dyna 架构代表",
+      "topic": "wam",
+      "year": 2023,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2301.04104",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "wan",
+      "title": "Wan",
+      "shortTitle": "Wan",
+      "meta": "Alibaba | Wan Team",
+      "institution": "Alibaba",
+      "authors": "Wan Team",
+      "description": "开放大规模视频生成模型",
+      "topic": "wam",
+      "year": 2025,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2503.20314",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "mobilealoha",
+      "title": "Mobile ALOHA",
+      "shortTitle": "Mobile ALOHA",
+      "meta": "Stanford | Fu et al.",
+      "institution": "Stanford",
+      "authors": "Fu et al.",
+      "description": "双臂移动操作低成本学习",
+      "topic": "unitree",
+      "year": 2024,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2401.02117",
+      "pages": [],
+      "section": "foundation"
+    },
+    {
+      "id": "libero",
+      "title": "LIBERO",
+      "shortTitle": "LIBERO",
+      "meta": "UT Austin | Liu et al.",
+      "institution": "UT Austin",
+      "authors": "Liu et al.",
+      "description": "终身机器人学习知识迁移基准",
+      "topic": "vla",
+      "year": 2023,
+      "foundation": true,
+      "tags": [],
+      "diagram": "",
+      "insight": "",
+      "url": "https://arxiv.org/abs/2306.03310",
+      "pages": [],
+      "section": "foundation"
+    }
+  ],
+  "sections": [
+    {
+      "page": "p1",
+      "level": "h2",
+      "title": "核心思路",
+      "id": "核心思路",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p1",
+      "level": "h2",
+      "title": "里程碑模型演进",
+      "id": "里程碑模型演进",
+      "has_cards": false,
+      "has_timeline": true
+    },
+    {
+      "page": "p1",
+      "level": "h2",
+      "title": "核心架构演进",
+      "id": "核心架构演进",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p1",
+      "level": "h3",
+      "title": "架构改进与视觉优化",
+      "id": "架构改进与视觉优化",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p1",
+      "level": "h3",
+      "title": "VLA + RL 微调 (2026 最热方向)",
+      "id": "vla-rl-微调-2026-最热方向",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p1",
+      "level": "h3",
+      "title": "VLA 架构创新",
+      "id": "vla-架构创新",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p1",
+      "level": "h2",
+      "title": "关键参考文献 (高被引基础工作)",
+      "id": "关键参考文献-高被引基础工作",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p1",
+      "level": "h2",
+      "title": "VLA 的核心局限",
+      "id": "vla-的核心局限",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h2",
+      "title": "里程碑演进",
+      "id": "里程碑演进",
+      "has_cards": false,
+      "has_timeline": true
+    },
+    {
+      "page": "p2",
+      "level": "h2",
+      "title": "什么是 WAM?",
+      "id": "什么是-wam",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h3",
+      "title": "WAM vs VLA 关键差异",
+      "id": "wam-vs-vla-关键差异",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h2",
+      "title": "WAM 核心论文 (2025-2026)",
+      "id": "wam-核心论文-2025-2026",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h3",
+      "title": "WAM 核心范式",
+      "id": "wam-核心范式",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h3",
+      "title": "WAM 架构创新",
+      "id": "wam-架构创新",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h3",
+      "title": "WAM 架构与意图建模",
+      "id": "wam-架构与意图建模",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h3",
+      "title": "WAM 应用拓展",
+      "id": "wam-应用拓展",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h2",
+      "title": "关键参考文献 (WAM 先驱与基础工作)",
+      "id": "关键参考文献-wam-先驱与基础工作",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h2",
+      "title": "WAM 架构全景对比",
+      "id": "wam-架构全景对比",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h3",
+      "title": "WAM 为什么鲁棒?",
+      "id": "wam-为什么鲁棒",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p2",
+      "level": "h2",
+      "title": "World Model 安全风险 (2026 新议题)",
+      "id": "world-model-安全风险-2026-新议题",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p3",
+      "level": "h2",
+      "title": "里程碑演进",
+      "id": "里程碑演进",
+      "has_cards": false,
+      "has_timeline": true
+    },
+    {
+      "page": "p3",
+      "level": "h2",
+      "title": "核心 Pipeline",
+      "id": "核心-pipeline",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p3",
+      "level": "h2",
+      "title": "Multi-Objective Reward 设计",
+      "id": "multi-objective-reward-设计",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p3",
+      "level": "h3",
+      "title": "Reward 冲突矩阵",
+      "id": "reward-冲突矩阵",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p3",
+      "level": "h2",
+      "title": "人形运动控制",
+      "id": "人形运动控制",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p3",
+      "level": "h2",
+      "title": "高效 Sim-to-Real 迁移",
+      "id": "高效-sim-to-real-迁移",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p3",
+      "level": "h2",
+      "title": "标准化工作流",
+      "id": "标准化工作流",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p3",
+      "level": "h2",
+      "title": "关键参考文献 (高被引基础工作)",
+      "id": "关键参考文献-高被引基础工作",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p3",
+      "level": "h2",
+      "title": "Adversarial Motion Priors (AMP)",
+      "id": "adversarial-motion-priors-amp",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p4",
+      "level": "h2",
+      "title": "核心原理",
+      "id": "核心原理",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p4",
+      "level": "h2",
+      "title": "里程碑演进",
+      "id": "里程碑演进",
+      "has_cards": false,
+      "has_timeline": true
+    },
+    {
+      "page": "p4",
+      "level": "h2",
+      "title": "方法演进",
+      "id": "方法演进",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p4",
+      "level": "h2",
+      "title": "扩散策略前沿 (2026)",
+      "id": "扩散策略前沿-2026",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p4",
+      "level": "h3",
+      "title": "多模态与视频扩散",
+      "id": "多模态与视频扩散",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p4",
+      "level": "h3",
+      "title": "RL 微调扩散策略",
+      "id": "rl-微调扩散策略",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p4",
+      "level": "h3",
+      "title": "Flow Matching + RL 融合",
+      "id": "flow-matching-rl-融合",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p4",
+      "level": "h2",
+      "title": "Diffusion vs RL: 互补而非替代",
+      "id": "diffusion-vs-rl-互补而非替代",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p5",
+      "level": "h2",
+      "title": "为什么需要混合?",
+      "id": "为什么需要混合",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p5",
+      "level": "h2",
+      "title": "里程碑演进",
+      "id": "里程碑演进",
+      "has_cards": false,
+      "has_timeline": true
+    },
+    {
+      "page": "p5",
+      "level": "h2",
+      "title": "与 LLM 训练范式的精确映射",
+      "id": "与-llm-训练范式的精确映射",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p5",
+      "level": "h2",
+      "title": "三阶段训练范式: VLA + RL",
+      "id": "三阶段训练范式-vla-rl",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p5",
+      "level": "h2",
+      "title": "VLA + World Model",
+      "id": "vla-world-model",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p5",
+      "level": "h2",
+      "title": "World Model + RL",
+      "id": "world-model-rl",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p5",
+      "level": "h2",
+      "title": "你的 Multi-Objective 框架在机器人 RL 中的位置",
+      "id": "你的-multi-objective-框架在机器人-rl-中的位置",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p5",
+      "level": "h2",
+      "title": "2026 趋势总结",
+      "id": "2026-趋势总结",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h2",
+      "title": "Unitree G1 硬件概览",
+      "id": "unitree-g1-硬件概览",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h2",
+      "title": "为什么 G1 成为 2026 研究热点?",
+      "id": "为什么-g1-成为-2026-研究热点",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h2",
+      "title": "里程碑演进",
+      "id": "里程碑演进",
+      "has_cards": false,
+      "has_timeline": true
+    },
+    {
+      "page": "p6",
+      "level": "h2",
+      "title": "G1 论文分类汇总 (2026.03-04)",
+      "id": "g1-论文分类汇总-2026-03-04",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h3",
+      "title": "运动控制 (Locomotion)",
+      "id": "运动控制-locomotion",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h3",
+      "title": "全身控制 (Whole-Body Control)",
+      "id": "全身控制-whole-body-control",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h3",
+      "title": "模仿学习与传感器 (Imitation Learning)",
+      "id": "模仿学习与传感器-imitation-learning",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h3",
+      "title": "Sim-to-Real 新进展",
+      "id": "sim-to-real-新进展",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h3",
+      "title": "安全巡检",
+      "id": "安全巡检",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h3",
+      "title": "开发工具与标准化",
+      "id": "开发工具与标准化",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h3",
+      "title": "特殊应用",
+      "id": "特殊应用",
+      "has_cards": true,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h2",
+      "title": "Unitree + Orin 软件栈",
+      "id": "unitree-orin-软件栈",
+      "has_cards": false,
+      "has_timeline": false
+    },
+    {
+      "page": "p6",
+      "level": "h2",
+      "title": "NVIDIA Isaac 生态",
+      "id": "nvidia-isaac-生态",
+      "has_cards": false,
+      "has_timeline": false
+    }
+  ],
+  "timeline": [
+    {
+      "page": "p1",
+      "year": "2023.07",
+      "title": "RT-2 (Google DeepMind)",
+      "description": "首次证明 VLM 语义知识可迁移至机器人。将 PaLM-E 微调输出 action tokens，但模型巨大 (55B)，推理慢。"
+    },
+    {
+      "page": "p1",
+      "year": "2023.10",
+      "title": "Open X-Embodiment / RT-X",
+      "description": "21 个机构、22 种机器人、527 种技能、160K+ 任务。证明跨具身正迁移：在一个机器人上的数据可以提升另一个机器人的性能。"
+    },
+    {
+      "page": "p1",
+      "year": "2024.06",
+      "title": "OpenVLA",
+      "description": "开源 LLaMA-based VLA，社区可微调。降低了 VLA 的使用门槛，但受限于离散 action token 的精度。"
+    },
+    {
+      "page": "p1",
+      "year": "2024.10",
+      "title": "π₀ (Physical Intelligence)",
+      "description": "VLM + Flow Matching 架构。连续动作生成替代离散 token，适合高精度操作。叠衣服、清桌子等高灵巧任务表现优异。"
+    },
+    {
+      "page": "p1",
+      "year": "2023.03",
+      "title": "PaLM-E (Google)",
+      "description": "具身多模态语言模型开山之作。562B 参数，将视觉、语言和机器人观测统一编码到 LLM 中，证明 LLM 可直接接地物理世界。"
+    },
+    {
+      "page": "p1",
+      "year": "2024-2025",
+      "title": "VLA 生态爆发",
+      "description": "SpatialVLA (空间表征)、CoT-VLA (思维链推理)、TraceVLA (视觉轨迹)、FT-VLA (高效微调)、FAST (动作 tokenization)、UniVLA (统一潜在动作)、WorldVLA (世界模型 VLA)。架构和训练方法全面分化。"
+    },
+    {
+      "page": "p1",
+      "year": "2025.03",
+      "title": "GR00T N1 (NVIDIA) / π₀.6 (PI)",
+      "description": "GR00T N1：开源通用人形基础模型，被 8 篇 2026 论文引用，成为 VLA 生态标杆。π₀.6：从真实经验学习的 VLA，PI 团队第三代迭代。"
+    },
+    {
+      "page": "p1",
+      "year": "2025-2026",
+      "title": "FocusVLA / FAN-VLA / Tex3D",
+      "description": "最新一代：解决视觉注意力瓶颈、动作空间正则化、对抗鲁棒性。"
+    },
+    {
+      "page": "p2",
+      "year": "2023.12",
+      "title": "UniSim / Genie (DeepMind)",
+      "description": "视频生成模型首次被视为\"可交互的世界模拟器\"。证明大规模视频预训练可学习物理先验，但尚未与机器人动作闭环。"
+    },
+    {
+      "page": "p2",
+      "year": "2023-2024",
+      "title": "GR-1 / GR-2 / LAPA — 视频预训练先驱",
+      "description": "ByteDance GR 系列 (GR-1: 大规模视频生成预训练; GR-2: 网络规模视频→语言动作模型) 和 UC Berkeley LAPA (视频潜在动作预训练) 首次证明互联网视频可驱动机器人策略。"
+    },
+    {
+      "page": "p2",
+      "year": "2024.05",
+      "title": "iVideoGPT / DIAMOND — 架构分化",
+      "description": "自回归 token 化世界模型 (iVideoGPT) vs 扩散世界模型 (DIAMOND)。两条架构路线首次在 RL 中系统对比。"
+    },
+    {
+      "page": "p2",
+      "year": "2024.12",
+      "title": "VPP: Video Prediction Policy",
+      "description": "视频扩散模型内部表征 = 当前静态 + 未来动态。Calvin ABC-D 泛化 +18.6%。证明视频模型可直接驱动策略。"
+    },
+    {
+      "page": "p2",
+      "year": "2025.01-03",
+      "title": "Cosmos / DreamZero / UVAM / UWM — 平台与统一",
+      "description": "NVIDIA 世界基础模型平台; DreamZero 14B 零样本泛化 2x+; ByteDance UVAM 统一视频动作模型; UC Berkeley UWM 耦合视频和动作扩散。WAM 从概念验证走向基础设施。"
+    },
+    {
+      "page": "p2",
+      "year": "2025.06-09",
+      "title": "V-JEPA 2 / GWM / LAWM — 表征空间爆发",
+      "description": "潜在空间预测 (V-JEPA 2) + 3D 高斯世界模型 (GWM) + 无动作标签预训练 (LAWM)。像素空间不再是唯一选择。"
+    },
+    {
+      "page": "p2",
+      "year": "2026.03",
+      "title": "GigaWorld / DIAL — 效率与双系统",
+      "description": "因果分离 9x 加速 + System-2/System-1 双系统架构。解决 WAM 推理慢的核心瓶颈。"
+    },
+    {
+      "page": "p2",
+      "year": "2026.03-04",
+      "title": "VAMPO / PlayWorld / VLA vs WAM 对比",
+      "description": "RL 优化视频动力学 + 自主探索学习世界模型 + 首次系统鲁棒性对比。WAM 进入成熟期。"
+    },
+    {
+      "page": "p3",
+      "year": "2019",
+      "title": "Sim-to-Real for Dexterous Hand (OpenAI)",
+      "description": "5000 年仿真经验 + massive domain randomization → 魔方复原。证明 sim-to-real 大规模可行性。"
+    },
+    {
+      "page": "p3",
+      "year": "2022",
+      "title": "AMP (Adversarial Motion Priors)",
+      "description": "用 GAN 判别器替代手工自然性 reward。人类动捕数据 → 判别器 → style reward。成为人形运动 RL 的标配。"
+    },
+    {
+      "page": "p3",
+      "year": "2023",
+      "title": "Agility Robotics Digit / Tesla Optimus RL",
+      "description": "工业级人形机器人开始采用 sim-to-real RL。Teacher-Student + domain randomization 成为标准 pipeline。"
+    },
+    {
+      "page": "p3",
+      "year": "2024-2025",
+      "title": "BeyondMimic / ASAP — 超越模仿与 Sim2Real 对齐",
+      "description": "BeyondMimic (CMU): 超越单纯运动模仿，实现多功能人形控制（操作+运动+恢复），被 5 篇 2026 论文引用。ASAP (Tencent): 系统对齐仿真与真实物理参数，解决 sim-to-real gap 的根因。"
+    },
+    {
+      "page": "p3",
+      "year": "2024",
+      "title": "Isaac Lab + Unitree G1/H1 生态爆发",
+      "description": "NVIDIA Isaac Lab 提供标准化训练框架，Unitree 低成本硬件降低门槛。人形 RL 论文数量爆增。"
+    },
+    {
+      "page": "p3",
+      "year": "2025.12",
+      "title": "15 分钟学会人形运动",
+      "description": "GPU 加速 RL 将 sim-to-real 时间从数天压缩到 15 分钟。极速迭代成为可能。"
+    },
+    {
+      "page": "p3",
+      "year": "2026.03",
+      "title": "G1 Running 3.3m/s / BAT / HALO / AGILE",
+      "description": "人形跑步速度记录 + 敏捷-稳定切换 + 重载可微仿真 + 标准化工作流。RL sim-to-real 全面成熟。"
+    },
+    {
+      "page": "p4",
+      "year": "2023.06",
+      "title": "Diffusion Policy (Chi et al.)",
+      "description": "开创性工作：DDPM 建模多模态动作分布 + Action Chunking。~100 步去噪→DDIM 10 步。证明扩散模型可直接用于机器人策略。"
+    },
+    {
+      "page": "p4",
+      "year": "2023.06",
+      "title": "ACT / ALOHA (Zhao et al.)",
+      "description": "CVAE + Action Chunking Transformer。非扩散路线但同期发表，推动了 action chunking 成为标配。双臂遥操作系统影响深远。"
+    },
+    {
+      "page": "p4",
+      "year": "2024.04",
+      "title": "3D Diffusion Policy / DP3",
+      "description": "3D 点云替代 2D 图像输入，10 条 demo 解决复杂 6-DOF 操作。证明 3D 表征对数据效率的关键作用。"
+    },
+    {
+      "page": "p4",
+      "year": "2024.09",
+      "title": "Consistency Policy",
+      "description": "将 Consistency Model 引入机器人策略：1-2 步生成，推理加速 10x。首次证明无需多步去噪也能保持多模态。"
+    },
+    {
+      "page": "p4",
+      "year": "2024.10",
+      "title": "π₀ — Flow Matching VLA",
+      "description": "VLM backbone + Flow Matching 动作头。连续流匹配替代离散 token，适合高精度灵巧操作。开启 VLA + Flow 融合路线。"
+    },
+    {
+      "page": "p4",
+      "year": "2026.01",
+      "title": "DMPO — 真正单步 >120Hz",
+      "description": "MeanFlow 数学推导单步推理 + 分散正则化 + RL 微调。首次实现实时扩散策略推理，打通 Diffusion→RL 全链路。"
+    },
+    {
+      "page": "p4",
+      "year": "2026.04",
+      "title": "MV-VDP / POCO — 新 SOTA",
+      "description": "多视角视频扩散策略（10 demo 超越 VLA）+ 模型无关 RL 微调框架（真机 96.7%）。Diffusion Policy 进入成熟期。"
+    },
+    {
+      "page": "p5",
+      "year": "2024.10",
+      "title": "π₀ (Physical Intelligence)",
+      "description": "VLM + Flow Matching 动作头。首个将 VLM 预训练 + 连续动作生成组合的工业级系统。叠衣服、清桌子等灵巧操作。"
+    },
+    {
+      "page": "p5",
+      "year": "2025.02",
+      "title": "π₀.5 / SC-VLA / DreamZero",
+      "description": "混合范式三条路线同时爆发：VLA+RL (π₀.5)、VLA+WorldModel+RL (SC-VLA)、WAM 零样本 (DreamZero)。证明三阶段训练范式的普适性。"
+    },
+    {
+      "page": "p5",
+      "year": "2025.11",
+      "title": "GEN-0 / NORA-1.5 / AtomVLA",
+      "description": "GEN-0 (Generalist AI) 首个在 270K 小时真实物理数据上建立具身 scaling law 的基础模型。世界模型 + 偏好奖励训练 VLA (NORA-1.5)；潜在世界模型后训练 (AtomVLA)。"
+    },
+    {
+      "page": "p5",
+      "year": "2026.01",
+      "title": "DMPO — 单步 Flow + RL >120Hz",
+      "description": "MeanFlow 单步蒸馏 + RL 微调。证明 Flow Matching → 单步生成 → RL 微调可无缝衔接。推理速度突破实时瓶颈。"
+    },
+    {
+      "page": "p5",
+      "year": "2026.03-04",
+      "title": "POCO / DIAL / DreamPlan / AdaWorldPolicy",
+      "description": "模型无关 RL 微调 + 双系统世界建模 + 视频世界模型 RL + 在线自适应。混合范式全面成熟，细分路线各自深化。"
+    },
+    {
+      "page": "p6",
+      "year": "2023",
+      "title": "Go2 发布 — 低成本四足平台",
+      "description": "$1,600 起售，开源 SDK，成为高校 RL 研究标配四足平台。Isaac Lab 率先适配。"
+    },
+    {
+      "page": "p6",
+      "year": "2024.06",
+      "title": "G1 发布 — $16K 人形机器人",
+      "description": "23-43 自由度人形机器人，价格比 Atlas 低两个数量级。开源 SDK + Isaac Lab 适配，研究门槛骤降。"
+    },
+    {
+      "page": "p6",
+      "year": "2025.02",
+      "title": "首批 G1 研究论文",
+      "description": "Humanoid Badminton (零样本羽毛球)、VIRAL (大规模视觉 sim-to-real)。证明 G1 可承载前沿 RL 研究。"
+    },
+    {
+      "page": "p6",
+      "year": "2026.03",
+      "title": "论文井喷 — 单月 15+ 篇",
+      "description": "G1 Running 3.3m/s、BAT 策略切换、AGILE 标准化、Dream2Act 零样本交互、ABD-Net 物理 GNN。G1 成为人形 RL 的事实标准平台。"
+    },
+    {
+      "page": "p6",
+      "year": "2026.04",
+      "title": "EgoNav / OpenGo / SafeGuard",
+      "description": "从运动控制扩展到导航、人机交互、工业巡检。G1/Go2 生态覆盖全栈应用场景。"
+    }
+  ],
+  "citations": [
+    {
+      "source": "2506.08440",
+      "target": "2502.05450"
+    },
+    {
+      "source": "2604.01570",
+      "target": "2506.08440"
+    },
+    {
+      "source": "2604.01570",
+      "target": "2502.05450"
+    },
+    {
+      "source": "2603.26666",
+      "target": "2502.05450"
+    },
+    {
+      "source": "2604.01860",
+      "target": "2502.05450"
+    },
+    {
+      "source": "2602.15922",
+      "target": "2506.09985"
+    },
+    {
+      "source": "2602.15922",
+      "target": "2412.14803"
+    },
+    {
+      "source": "2603.19370",
+      "target": "2602.15922"
+    },
+    {
+      "source": "2603.19370",
+      "target": "2412.14803"
+    },
+    {
+      "source": "2603.22078",
+      "target": "2603.17240"
+    },
+    {
+      "source": "2603.22078",
+      "target": "2506.09985"
+    },
+    {
+      "source": "2603.22078",
+      "target": "2501.03575"
+    },
+    {
+      "source": "2603.22078",
+      "target": "2412.14803"
+    },
+    {
+      "source": "2603.09030",
+      "target": "2506.09985"
+    },
+    {
+      "source": "2603.09030",
+      "target": "2501.03575"
+    },
+    {
+      "source": "2602.20057",
+      "target": "2506.09985"
+    },
+    {
+      "source": "2602.20057",
+      "target": "2501.03575"
+    },
+    {
+      "source": "2603.08519",
+      "target": "2511.14659"
+    },
+    {
+      "source": "2603.08519",
+      "target": "2506.09985"
+    },
+    {
+      "source": "2602.21633",
+      "target": "2511.14659"
+    },
+    {
+      "source": "2603.28740",
+      "target": "2511.14659"
+    },
+    {
+      "source": "2601.20701",
+      "target": "2410.21257"
+    },
+    {
+      "source": "2604.03181",
+      "target": "2412.14803"
+    },
+    {
+      "source": "2508.17600",
+      "target": "2405.15223"
+    },
+    {
+      "source": "2506.09985",
+      "target": "2501.03575"
+    },
+    {
+      "source": "2602.08370",
+      "target": "2511.15200"
+    },
+    {
+      "source": "2603.17240",
+      "target": "2602.15922"
+    },
+    {
+      "source": "2603.17240",
+      "target": "2412.14803"
+    },
+    {
+      "source": "2502.01105",
+      "target": "2412.14803"
+    },
+    {
+      "source": "2502.01105",
+      "target": "2502.05450"
+    },
+    {
+      "source": "2603.16860",
+      "target": "2506.09985"
+    },
+    {
+      "source": "2603.16860",
+      "target": "2501.03575"
+    },
+    {
+      "source": "2604.01860",
+      "target": "2601.20701"
+    },
+    {
+      "source": "2604.01860",
+      "target": "2410.21257"
+    },
+    {
+      "source": "2603.29844",
+      "target": "2506.09985"
+    },
+    {
+      "source": "2603.08572",
+      "target": "2511.15200"
+    },
+    {
+      "source": "2603.25902",
+      "target": "2512.01996"
+    },
+    {
+      "source": "2604.01064",
+      "target": "2512.01996"
+    },
+    {
+      "source": "2603.27670",
+      "target": "2502.05450"
+    },
+    {
+      "source": "2603.27670",
+      "target": "2412.14803"
+    },
+    {
+      "source": "2603.19709",
+      "target": "2511.15200"
+    },
+    {
+      "source": "2509.18428",
+      "target": "2501.03575"
+    },
+    {
+      "source": "2509.18428",
+      "target": "2405.15223"
+    },
+    {
+      "source": "2604.00416",
+      "target": "2511.15200"
+    },
+    {
+      "source": "2604.00416",
+      "target": "2512.01996"
+    },
+    {
+      "source": "2405.14093",
+      "target": "rt2"
+    },
+    {
+      "source": "2405.14093",
+      "target": "rt1"
+    },
+    {
+      "source": "2405.14093",
+      "target": "rtx"
+    },
+    {
+      "source": "2603.10126",
+      "target": "openvla"
+    },
+    {
+      "source": "2603.10126",
+      "target": "rt2"
+    },
+    {
+      "source": "2603.10126",
+      "target": "pi0"
+    },
+    {
+      "source": "2603.10126",
+      "target": "act"
+    },
+    {
+      "source": "2603.10126",
+      "target": "dp"
+    },
+    {
+      "source": "2603.13788",
+      "target": "openvla"
+    },
+    {
+      "source": "2603.13788",
+      "target": "rt2"
+    },
+    {
+      "source": "2603.13788",
+      "target": "rt1"
+    },
+    {
+      "source": "2603.13788",
+      "target": "dp"
+    },
+    {
+      "source": "2603.28740",
+      "target": "openvla"
+    },
+    {
+      "source": "2603.28740",
+      "target": "rt2"
+    },
+    {
+      "source": "2603.28740",
+      "target": "rt1"
+    },
+    {
+      "source": "2603.28740",
+      "target": "pi0"
+    },
+    {
+      "source": "2603.28740",
+      "target": "act"
+    },
+    {
+      "source": "2603.28740",
+      "target": "dp"
+    },
+    {
+      "source": "2604.01570",
+      "target": "openvla"
+    },
+    {
+      "source": "2604.01570",
+      "target": "rt2"
+    },
+    {
+      "source": "2604.01570",
+      "target": "pi0"
+    },
+    {
+      "source": "2604.01570",
+      "target": "act"
+    },
+    {
+      "source": "2604.01570",
+      "target": "ppo"
+    },
+    {
+      "source": "2604.01570",
+      "target": "rtx"
+    },
+    {
+      "source": "2604.01618",
+      "target": "openvla"
+    },
+    {
+      "source": "2502.05450",
+      "target": "openvla"
+    },
+    {
+      "source": "2502.05450",
+      "target": "dp"
+    },
+    {
+      "source": "2506.08440",
+      "target": "openvla"
+    },
+    {
+      "source": "2603.26666",
+      "target": "openvla"
+    },
+    {
+      "source": "2603.17524",
+      "target": "openvla"
+    },
+    {
+      "source": "2603.17524",
+      "target": "pi0"
+    },
+    {
+      "source": "2603.27670",
+      "target": "dp"
+    },
+    {
+      "source": "2603.27670",
+      "target": "openvla"
+    },
+    {
+      "source": "2603.27670",
+      "target": "pi0"
+    },
+    {
+      "source": "2603.27670",
+      "target": "rt2"
+    },
+    {
+      "source": "2603.27670",
+      "target": "rtx"
+    },
+    {
+      "source": "2502.01105",
+      "target": "pi0"
+    },
+    {
+      "source": "2602.15922",
+      "target": "pi0"
+    },
+    {
+      "source": "2602.15922",
+      "target": "ddpm"
+    },
+    {
+      "source": "2602.15922",
+      "target": "flowm"
+    },
+    {
+      "source": "2602.15922",
+      "target": "openvla"
+    },
+    {
+      "source": "2602.15922",
+      "target": "rt2"
+    },
+    {
+      "source": "2602.15922",
+      "target": "rt1"
+    },
+    {
+      "source": "2603.17240",
+      "target": "pi0"
+    },
+    {
+      "source": "2603.17240",
+      "target": "ddpm"
+    },
+    {
+      "source": "2412.14803",
+      "target": "dp"
+    },
+    {
+      "source": "2412.14803",
+      "target": "ddpm"
+    },
+    {
+      "source": "2603.19370",
+      "target": "dp"
+    },
+    {
+      "source": "2603.09030",
+      "target": "dreamer"
+    },
+    {
+      "source": "2603.09030",
+      "target": "dp"
+    },
+    {
+      "source": "2603.09030",
+      "target": "pi0"
+    },
+    {
+      "source": "2603.09030",
+      "target": "rtx"
+    },
+    {
+      "source": "2506.09985",
+      "target": "ddpm"
+    },
+    {
+      "source": "2410.21257",
+      "target": "dp"
+    },
+    {
+      "source": "2410.21257",
+      "target": "ddpm"
+    },
+    {
+      "source": "2601.20701",
+      "target": "dp"
+    },
+    {
+      "source": "2601.20701",
+      "target": "flowm"
+    },
+    {
+      "source": "2601.20701",
+      "target": "pi0"
+    },
+    {
+      "source": "2601.20701",
+      "target": "ppo"
+    },
+    {
+      "source": "2604.01860",
+      "target": "dp"
+    },
+    {
+      "source": "2604.01860",
+      "target": "flowm"
+    },
+    {
+      "source": "2604.01860",
+      "target": "act"
+    },
+    {
+      "source": "2604.01860",
+      "target": "rt2"
+    },
+    {
+      "source": "2604.01860",
+      "target": "ppo"
+    },
+    {
+      "source": "2604.03181",
+      "target": "dp"
+    },
+    {
+      "source": "2604.03181",
+      "target": "act"
+    },
+    {
+      "source": "2604.03181",
+      "target": "flowm"
+    },
+    {
+      "source": "2604.03181",
+      "target": "pi0"
+    },
+    {
+      "source": "2603.16188",
+      "target": "act"
+    },
+    {
+      "source": "2602.21633",
+      "target": "pi0"
+    },
+    {
+      "source": "2602.21633",
+      "target": "openvla"
+    },
+    {
+      "source": "2602.21633",
+      "target": "rt2"
+    },
+    {
+      "source": "2602.21633",
+      "target": "rt1"
+    },
+    {
+      "source": "2602.21633",
+      "target": "dp"
+    },
+    {
+      "source": "2602.21633",
+      "target": "act"
+    },
+    {
+      "source": "2602.21633",
+      "target": "ppo"
+    },
+    {
+      "source": "2603.29844",
+      "target": "pi0"
+    },
+    {
+      "source": "2603.29844",
+      "target": "rt2"
+    },
+    {
+      "source": "2603.29844",
+      "target": "dp"
+    },
+    {
+      "source": "2511.14659",
+      "target": "openvla"
+    },
+    {
+      "source": "2511.14659",
+      "target": "dp"
+    },
+    {
+      "source": "2603.08519",
+      "target": "pi0"
+    },
+    {
+      "source": "2603.08519",
+      "target": "openvla"
+    },
+    {
+      "source": "2603.08519",
+      "target": "rt1"
+    },
+    {
+      "source": "2603.16860",
+      "target": "dreamer"
+    },
+    {
+      "source": "2603.16860",
+      "target": "dp"
+    },
+    {
+      "source": "2602.20057",
+      "target": "dp"
+    },
+    {
+      "source": "2602.20057",
+      "target": "dreamer"
+    },
+    {
+      "source": "2602.20057",
+      "target": "flowm"
+    },
+    {
+      "source": "2602.20057",
+      "target": "openvla"
+    },
+    {
+      "source": "2602.20057",
+      "target": "pi0"
+    },
+    {
+      "source": "2602.20057",
+      "target": "rt2"
+    },
+    {
+      "source": "2602.20057",
+      "target": "rt1"
+    },
+    {
+      "source": "2603.08572",
+      "target": "amp"
+    },
+    {
+      "source": "2603.08572",
+      "target": "ppo"
+    },
+    {
+      "source": "2603.08572",
+      "target": "rt2"
+    },
+    {
+      "source": "2603.25902",
+      "target": "amp"
+    },
+    {
+      "source": "2603.25902",
+      "target": "ppo"
+    },
+    {
+      "source": "2603.25902",
+      "target": "isaaclab"
+    },
+    {
+      "source": "2604.01064",
+      "target": "ppo"
+    },
+    {
+      "source": "2604.01064",
+      "target": "isaaclab"
+    },
+    {
+      "source": "2603.19078",
+      "target": "ppo"
+    },
+    {
+      "source": "2603.15084",
+      "target": "ppo"
+    },
+    {
+      "source": "2512.01996",
+      "target": "ppo"
+    },
+    {
+      "source": "2512.01996",
+      "target": "isaaclab"
+    },
+    {
+      "source": "2603.17092",
+      "target": "ppo"
+    },
+    {
+      "source": "2511.15200",
+      "target": "ppo"
+    },
+    {
+      "source": "2511.15200",
+      "target": "isaaclab"
+    },
+    {
+      "source": "2511.15200",
+      "target": "rtx"
+    },
+    {
+      "source": "2603.20147",
+      "target": "ppo"
+    },
+    {
+      "source": "2603.20147",
+      "target": "isaaclab"
+    },
+    {
+      "source": "2603.20147",
+      "target": "amp"
+    },
+    {
+      "source": "2603.22201",
+      "target": "amp"
+    },
+    {
+      "source": "2603.17927",
+      "target": "ppo"
+    },
+    {
+      "source": "2603.17927",
+      "target": "amp"
+    },
+    {
+      "source": "2603.28422",
+      "target": "act"
+    },
+    {
+      "source": "2603.28422",
+      "target": "rt2"
+    },
+    {
+      "source": "2603.28422",
+      "target": "dp"
+    },
+    {
+      "source": "2602.08370",
+      "target": "ppo"
+    },
+    {
+      "source": "2602.08370",
+      "target": "isaaclab"
+    },
+    {
+      "source": "2604.01708",
+      "target": "rt2"
+    },
+    {
+      "source": "2603.15759",
+      "target": "dp"
+    },
+    {
+      "source": "2603.15759",
+      "target": "openvla"
+    },
+    {
+      "source": "2603.15759",
+      "target": "ppo"
+    },
+    {
+      "source": "2511.15200",
+      "target": "groot"
+    },
+    {
+      "source": "2602.15922",
+      "target": "groot"
+    },
+    {
+      "source": "2602.21633",
+      "target": "groot"
+    },
+    {
+      "source": "2603.10126",
+      "target": "groot"
+    },
+    {
+      "source": "2603.27967",
+      "target": "groot"
+    },
+    {
+      "source": "2603.29844",
+      "target": "groot"
+    },
+    {
+      "source": "2604.01570",
+      "target": "groot"
+    },
+    {
+      "source": "2604.01860",
+      "target": "groot"
+    },
+    {
+      "source": "2602.15922",
+      "target": "palme"
+    },
+    {
+      "source": "2602.21633",
+      "target": "palme"
+    },
+    {
+      "source": "2603.10126",
+      "target": "palme"
+    },
+    {
+      "source": "2603.13788",
+      "target": "palme"
+    },
+    {
+      "source": "2604.01570",
+      "target": "palme"
+    },
+    {
+      "source": "2604.01708",
+      "target": "palme"
+    },
+    {
+      "source": "2602.15922",
+      "target": "saycan"
+    },
+    {
+      "source": "2602.20057",
+      "target": "saycan"
+    },
+    {
+      "source": "2603.10126",
+      "target": "saycan"
+    },
+    {
+      "source": "2603.13788",
+      "target": "saycan"
+    },
+    {
+      "source": "2603.29844",
+      "target": "saycan"
+    },
+    {
+      "source": "2604.01570",
+      "target": "saycan"
+    },
+    {
+      "source": "2604.01708",
+      "target": "saycan"
+    },
+    {
+      "source": "2602.20057",
+      "target": "ftvla"
+    },
+    {
+      "source": "2603.10126",
+      "target": "ftvla"
+    },
+    {
+      "source": "2603.28740",
+      "target": "ftvla"
+    },
+    {
+      "source": "2603.29844",
+      "target": "ftvla"
+    },
+    {
+      "source": "2604.01570",
+      "target": "ftvla"
+    },
+    {
+      "source": "2604.01860",
+      "target": "ftvla"
+    },
+    {
+      "source": "2602.20057",
+      "target": "spatialvla"
+    },
+    {
+      "source": "2603.08519",
+      "target": "spatialvla"
+    },
+    {
+      "source": "2603.10126",
+      "target": "spatialvla"
+    },
+    {
+      "source": "2603.28740",
+      "target": "spatialvla"
+    },
+    {
+      "source": "2604.01570",
+      "target": "spatialvla"
+    },
+    {
+      "source": "2604.03181",
+      "target": "spatialvla"
+    },
+    {
+      "source": "2511.15200",
+      "target": "beyondmimic"
+    },
+    {
+      "source": "2512.01996",
+      "target": "beyondmimic"
+    },
+    {
+      "source": "2602.08370",
+      "target": "beyondmimic"
+    },
+    {
+      "source": "2603.08572",
+      "target": "beyondmimic"
+    },
+    {
+      "source": "2603.15084",
+      "target": "beyondmimic"
+    },
+    {
+      "source": "2602.15922",
+      "target": "cotvla"
+    },
+    {
+      "source": "2602.21633",
+      "target": "cotvla"
+    },
+    {
+      "source": "2603.08519",
+      "target": "cotvla"
+    },
+    {
+      "source": "2603.13788",
+      "target": "cotvla"
+    },
+    {
+      "source": "2603.29844",
+      "target": "cotvla"
+    },
+    {
+      "source": "2602.15922",
+      "target": "uvam"
+    },
+    {
+      "source": "2602.20057",
+      "target": "uvam"
+    },
+    {
+      "source": "2603.15759",
+      "target": "uvam"
+    },
+    {
+      "source": "2603.29844",
+      "target": "uvam"
+    },
+    {
+      "source": "2604.03181",
+      "target": "uvam"
+    },
+    {
+      "source": "2602.15922",
+      "target": "gr1"
+    },
+    {
+      "source": "2602.20057",
+      "target": "gr1"
+    },
+    {
+      "source": "2602.21633",
+      "target": "gr1"
+    },
+    {
+      "source": "2603.29844",
+      "target": "gr1"
+    },
+    {
+      "source": "2604.03181",
+      "target": "gr1"
+    },
+    {
+      "source": "2602.15922",
+      "target": "dreamer"
+    },
+    {
+      "source": "2603.15759",
+      "target": "dreamer"
+    },
+    {
+      "source": "2604.01346",
+      "target": "dreamer"
+    },
+    {
+      "source": "2602.20057",
+      "target": "octo"
+    },
+    {
+      "source": "2602.21633",
+      "target": "octo"
+    },
+    {
+      "source": "2603.10126",
+      "target": "octo"
+    },
+    {
+      "source": "2603.28740",
+      "target": "octo"
+    },
+    {
+      "source": "2604.01570",
+      "target": "octo"
+    },
+    {
+      "source": "2511.15200",
+      "target": "rapidloco"
+    },
+    {
+      "source": "2512.01996",
+      "target": "rapidloco"
+    },
+    {
+      "source": "2602.08370",
+      "target": "rapidloco"
+    },
+    {
+      "source": "2603.15759",
+      "target": "rapidloco"
+    },
+    {
+      "source": "2511.15200",
+      "target": "isaacgym"
+    },
+    {
+      "source": "2512.01996",
+      "target": "isaacgym"
+    },
+    {
+      "source": "2604.01064",
+      "target": "isaacgym"
+    },
+    {
+      "source": "2603.08572",
+      "target": "univla"
+    },
+    {
+      "source": "2603.28740",
+      "target": "univla"
+    },
+    {
+      "source": "2604.01570",
+      "target": "univla"
+    },
+    {
+      "source": "2602.15922",
+      "target": "univla"
+    },
+    {
+      "source": "2602.15922",
+      "target": "wan"
+    },
+    {
+      "source": "2603.09030",
+      "target": "wan"
+    },
+    {
+      "source": "2604.01001",
+      "target": "wan"
+    },
+    {
+      "source": "2604.03181",
+      "target": "wan"
+    },
+    {
+      "source": "2602.15922",
+      "target": "tracevla"
+    },
+    {
+      "source": "2602.21633",
+      "target": "tracevla"
+    },
+    {
+      "source": "2603.08519",
+      "target": "tracevla"
+    },
+    {
+      "source": "2603.13788",
+      "target": "tracevla"
+    },
+    {
+      "source": "2602.15922",
+      "target": "gr2"
+    },
+    {
+      "source": "2603.15759",
+      "target": "gr2"
+    },
+    {
+      "source": "2603.29844",
+      "target": "gr2"
+    },
+    {
+      "source": "2604.03181",
+      "target": "gr2"
+    },
+    {
+      "source": "2602.20057",
+      "target": "worldvla"
+    },
+    {
+      "source": "2602.21633",
+      "target": "worldvla"
+    },
+    {
+      "source": "2603.08519",
+      "target": "worldvla"
+    },
+    {
+      "source": "2604.01570",
+      "target": "worldvla"
+    },
+    {
+      "source": "2602.20057",
+      "target": "fast"
+    },
+    {
+      "source": "2603.10126",
+      "target": "fast"
+    },
+    {
+      "source": "2603.29844",
+      "target": "fast"
+    },
+    {
+      "source": "2604.03181",
+      "target": "fast"
+    },
+    {
+      "source": "2602.20057",
+      "target": "libero"
+    },
+    {
+      "source": "2603.08519",
+      "target": "libero"
+    },
+    {
+      "source": "2603.28740",
+      "target": "libero"
+    },
+    {
+      "source": "2604.01570",
+      "target": "libero"
+    },
+    {
+      "source": "2602.21633",
+      "target": "pi06"
+    },
+    {
+      "source": "2603.15759",
+      "target": "pi06"
+    },
+    {
+      "source": "2604.01860",
+      "target": "pi06"
+    },
+    {
+      "source": "2604.03181",
+      "target": "pi06"
+    },
+    {
+      "source": "2512.01996",
+      "target": "sac"
+    },
+    {
+      "source": "2603.15759",
+      "target": "sac"
+    },
+    {
+      "source": "2604.01860",
+      "target": "sac"
+    },
+    {
+      "source": "2603.27967",
+      "target": "mobilealoha"
+    },
+    {
+      "source": "2603.28422",
+      "target": "mobilealoha"
+    },
+    {
+      "source": "2511.15200",
+      "target": "mobilealoha"
+    },
+    {
+      "source": "2511.15200",
+      "target": "drsim2real"
+    },
+    {
+      "source": "2512.01996",
+      "target": "drsim2real"
+    },
+    {
+      "source": "2603.15084",
+      "target": "drsim2real"
+    },
+    {
+      "source": "2511.15200",
+      "target": "domainrand"
+    },
+    {
+      "source": "2512.01996",
+      "target": "domainrand"
+    },
+    {
+      "source": "2603.15084",
+      "target": "domainrand"
+    },
+    {
+      "source": "2512.01996",
+      "target": "asap"
+    },
+    {
+      "source": "2602.08370",
+      "target": "asap"
+    },
+    {
+      "source": "2603.15084",
+      "target": "asap"
+    },
+    {
+      "source": "2601.20701",
+      "target": "vlarl"
+    },
+    {
+      "source": "2602.21633",
+      "target": "vlarl"
+    },
+    {
+      "source": "2604.01570",
+      "target": "vlarl"
+    },
+    {
+      "source": "2602.15922",
+      "target": "flare"
+    },
+    {
+      "source": "2602.21633",
+      "target": "flare"
+    },
+    {
+      "source": "2603.29844",
+      "target": "flare"
+    },
+    {
+      "source": "2602.15922",
+      "target": "dreamgen"
+    },
+    {
+      "source": "2603.09030",
+      "target": "dreamgen"
+    },
+    {
+      "source": "2603.15759",
+      "target": "dreamgen"
+    },
+    {
+      "source": "2602.15922",
+      "target": "uwm"
+    },
+    {
+      "source": "2602.20057",
+      "target": "uwm"
+    },
+    {
+      "source": "2604.03181",
+      "target": "uwm"
+    },
+    {
+      "source": "2602.15922",
+      "target": "lapa"
+    },
+    {
+      "source": "2603.10126",
+      "target": "lapa"
+    },
+    {
+      "source": "2603.29844",
+      "target": "lapa"
+    }
+  ]
+};
