@@ -262,6 +262,21 @@ h2 { border-bottom-color: var(--survey-accent); }
   line-height: 1.55;
 }
 
+/* References */
+.references {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  padding-left: 2em;
+}
+.references li {
+  margin: 0.4rem 0;
+  color: var(--text-secondary);
+}
+.references li a {
+  color: var(--survey-accent-light);
+}
+a.cite-link { color: var(--survey-accent-light); text-decoration: none; border-bottom: 1px dotted; }
+
 /* Responsive: tablet */
 @media (max-width: 900px) {
   .survey-layout {
@@ -421,6 +436,7 @@ h2 { border-bottom-color: var(--survey-accent); }
 <a href="#s-61" class="toc-h3">从实验室到家庭：技术差距分析</a>
 <a href="#s-62" class="toc-h3">本文局限</a>
 <a href="#s-63" class="toc-h3">结论</a>
+<a href="#s-ref" class="toc-h2">References</a>
   </aside>
 
   <article class="survey-article">
@@ -1197,6 +1213,99 @@ h2 { border-bottom-color: var(--survey-accent); }
 <p>(2) <strong>基础设施化</strong>：PPO 和 Diffusion Policy 已从独立技术路线升级为跨路线基础设施，世界模型正在从研究课题转变为训练管线中的标准组件。</p>
 <p>(3) <strong>效率革命</strong>：从推理（Diffusion 100 步→DMPO 单步）到训练（15 分钟完成人形运动训练）到数据（LAWM 1/100 配对数据），全链路效率突破正在使机器人学习从少数顶级实验室的专属领域变为可广泛参与的研究方向。</p>
 <p>对于希望进入该领域的研究者，建议的阅读路径为：首先理解 Diffusion Policy [Chi et al., 2023] 和 PPO [Schulman et al., 2017] 两个基础设施节点；然后沿 VLA 主线阅读 RT-2 → OpenVLA → π₀ → π₀.5 的演进；在此基础上阅读 DreamZero 了解 WAM 的核心范式；最后通过 POCO 或 ConRFT 理解 Diffusion + RL 融合的技术前沿。</p>
+
+<h2 id="s-ref">References</h2>
+<ol class="references">
+<li id="ref-1">Schulman, J., Wolski, F., Dhariwal, P., Radford, A., &amp; Klimov, O. (2017). Proximal Policy Optimization Algorithms. <a href="https://arxiv.org/abs/1707.06347" target="_blank">arXiv:1707.06347</a></li>
+<li id="ref-2">Ho, J., Jain, A., &amp; Abbeel, P. (2020). Denoising Diffusion Probabilistic Models. <a href="https://arxiv.org/abs/2006.11239" target="_blank">arXiv:2006.11239</a></li>
+<li id="ref-3">Peng, X. B., Ma, Z., Abbeel, P., Levine, S., &amp; Kanazawa, A. (2022). AMP: Adversarial Motion Priors for Stylized Physics-Based Character Control. <a href="https://arxiv.org/abs/2104.02180" target="_blank">arXiv:2104.02180</a></li>
+<li id="ref-4">Brohan, A., Brown, N., Carbajal, J., et al. (2022). RT-1: Robotics Transformer for Real-World Control at Scale. Google. <a href="https://arxiv.org/abs/2212.06817" target="_blank">arXiv:2212.06817</a></li>
+<li id="ref-5">Ahn, M., Brohan, A., Brown, N., et al. (2022). Do As I Can, Not As I Say: Grounding Language in Robotic Affordances (SayCan). Google.</li>
+<li id="ref-6">Firoozi, R., Tucker, J., Tian, S., et al. (2023). Foundation Models in Robotics: Applications, Challenges, and the Future.</li>
+<li id="ref-7">Xiao, L., et al. (2023). Large Language Models for Robotic Manipulation: A Survey.</li>
+<li id="ref-8">Zeng, F., et al. (2023). A Survey on Sim-to-Real Transfer Methods for Robotics.</li>
+<li id="ref-9">Brohan, A., Brown, N., Carbajal, J., et al. (2023). RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control. Google DeepMind. <a href="https://arxiv.org/abs/2307.15818" target="_blank">arXiv:2307.15818</a></li>
+<li id="ref-10">Driess, D., Xia, F., Sajjadi, M. S. M., et al. (2023). PaLM-E: An Embodied Multimodal Language Model. Google.</li>
+<li id="ref-11">Chi, C., Feng, S., Du, Y., Xu, Z., Cousineau, E., Burchfiel, B., &amp; Song, S. (2023). Diffusion Policy: Visuomotor Policy Learning via Action Diffusion. Columbia / MIT. <a href="https://arxiv.org/abs/2303.04137" target="_blank">arXiv:2303.04137</a></li>
+<li id="ref-12">Zhao, T. Z., Kumar, V., Levine, S., &amp; Finn, C. (2023). Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware (ACT/ALOHA). Stanford. <a href="https://arxiv.org/abs/2304.13705" target="_blank">arXiv:2304.13705</a></li>
+<li id="ref-13">Open X-Embodiment Collaboration. (2023). Open X-Embodiment: Robotic Learning Datasets and RT-X Models. <a href="https://arxiv.org/abs/2310.08864" target="_blank">arXiv:2310.08864</a></li>
+<li id="ref-14">Wu, H., et al. (2023). GR-1: Robot Video Pre-training for Embodied Manipulation. ByteDance.</li>
+<li id="ref-15">Kim, M. J., Pertsch, K., Karamcheti, S., et al. (2024). OpenVLA: An Open-Source Vision-Language-Action Model. Stanford. <a href="https://arxiv.org/abs/2406.09246" target="_blank">arXiv:2406.09246</a></li>
+<li id="ref-16">Physical Intelligence. (2024). π₀: A Vision-Language-Action Flow Model for General Robot Control. <a href="https://arxiv.org/abs/2410.24164" target="_blank">arXiv:2410.24164</a></li>
+<li id="ref-17">Hu, J., et al. (2024). VPP: Video Prediction as Implicit Policy. Tsinghua / Shanghai AI Lab. <a href="https://arxiv.org/abs/2412.14803" target="_blank">arXiv:2412.14803</a></li>
+<li id="ref-18">Cheang, C. H., et al. (2024). GR-2: Generative Video-Language-Action Model. ByteDance.</li>
+<li id="ref-19">Ye, S., et al. (2024). LAPA: Latent Action Pretraining from Videos. UC Berkeley.</li>
+<li id="ref-20">Wang, Y., et al. (2024). OneDP: Unifying Diffusion Policy with Single Conditional Noise. Columbia / NVIDIA. <a href="https://arxiv.org/abs/2410.21257" target="_blank">arXiv:2410.21257</a></li>
+<li id="ref-21">Wu, J., et al. (2024). iVideoGPT: Interactive VideoGPT. Tsinghua. <a href="https://arxiv.org/abs/2405.15223" target="_blank">arXiv:2405.15223</a></li>
+<li id="ref-22">Zheng, K., et al. (2024). TraceVLA: Visual Trace Prompting for Spatial-Temporal Awareness. SJTU.</li>
+<li>Physical Intelligence. (2025). π₀.5: VLA + Flow Matching + RL Three-Stage Training. <a href="https://arxiv.org/abs/2504.16054" target="_blank">arXiv:2504.16054</a></li>
+<li>Physical Intelligence. (2025). π₀.6: Continuous Learning from Real Experience.</li>
+<li>NVIDIA. (2025). GR00T N1: Open Foundation Model for Generalist Humanoid Robots. <a href="https://arxiv.org/abs/2503.14734" target="_blank">arXiv:2503.14734</a></li>
+<li>Assran, M., et al. (2025). V-JEPA 2: Self-Supervised Video Representations Enable Versatile Robotic Manipulation. Meta FAIR. <a href="https://arxiv.org/abs/2506.09985" target="_blank">arXiv:2506.09985</a></li>
+<li>NVIDIA. (2025). Cosmos World Foundation Models. <a href="https://arxiv.org/abs/2501.03575" target="_blank">arXiv:2501.03575</a></li>
+<li>Chen, R., et al. (2025). ConRFT: Consistency Reinforcement Fine-Tuning for VLA. NJU / CASIA. <a href="https://arxiv.org/abs/2502.05450" target="_blank">arXiv:2502.05450</a></li>
+<li>Chen, Z., et al. (2025). TGRPO: Token-Group Relative Policy Optimization. NWPU. <a href="https://arxiv.org/abs/2506.08440" target="_blank">arXiv:2506.08440</a></li>
+<li>Zhang, Y., et al. (2025). VLA-RL: Reinforcement Learning for Vision-Language-Action Models. PKU. <a href="https://arxiv.org/abs/2505.18719" target="_blank">arXiv:2505.18719</a></li>
+<li>Liu, H., et al. (2025). SC-VLA: Sparse World Imagination for VLA Reinforcement. UESTC. <a href="https://arxiv.org/abs/2602.21633" target="_blank">arXiv:2602.21633</a></li>
+<li>Generalist AI. (2025). GEN-0: Scaling Robot Foundation Models with Predictable Performance.</li>
+<li>Qu, Y., et al. (2025). SpatialVLA: Exploring Spatial Representations for VLA. PKU / BAAI. <a href="https://arxiv.org/abs/2501.15830" target="_blank">arXiv:2501.15830</a></li>
+<li>Liu, Z., et al. (2025). CoT-VLA: Visual Chain-of-Thought Reasoning for VLA. SJTU.</li>
+<li>Li, J., et al. (2025). WorldVLA: VLA with World Model Integration. HKU.</li>
+<li>Pertsch, K., et al. (2025). FAST: Efficient Action Tokenization for VLA. MIT.</li>
+<li>Zhen, H., et al. (2025). FT-VLA: Fine-Tuning Vision-Language-Action Models. ByteDance.</li>
+<li>Li, J., et al. (2025). UniVLA: Unified Latent Action Space for Cross-Embodiment Transfer. PKU.</li>
+<li>Tharwat, K., et al. (2025). LAWM: Label-Free Action World Model from Videos. Adelaide. <a href="https://arxiv.org/abs/2509.18428" target="_blank">arXiv:2509.18428</a></li>
+<li>Lu, Y., et al. (2025). GWM: 3D Gaussian World Model for Robotic Manipulation. PKU / Tsinghua. <a href="https://arxiv.org/abs/2508.17600" target="_blank">arXiv:2508.17600</a></li>
+<li>Huang, J., et al. (2025). DreamGen: Generating Training Data with World Models. Stanford.</li>
+<li>Hung, C., et al. (2025). NORA-1.5: World Model as Reward for VLA. NTU Singapore. <a href="https://arxiv.org/abs/2511.14659" target="_blank">arXiv:2511.14659</a></li>
+<li>Li, Y., et al. (2025). UWM: Unified World Model for Robot Learning. UC Berkeley.</li>
+<li>Tan, J., et al. (2025). LingBot-Depth: Masked Depth Modeling for Robot Perception. Ant Group.</li>
+<li>Li, Z., et al. (2025). LingBot-VA: Visual-Action Pretraining. Ant Group.</li>
+<li>Wu, S., et al. (2025). LingBot-VLA: Vision-Language-Action Model. Ant Group.</li>
+<li>Gao, X., et al. (2025). LingBot-World: World Model for Robotic Manipulation. Ant Group.</li>
+<li>Yu, Z., et al. (2025). FLARE: Foundation Learning for Agile Robot Exploration. MIT.</li>
+<li>Cheng, X., et al. (2025). BeyondMimic: Going Beyond Motion Imitation for Humanoid RL. CMU.</li>
+<li>Seo, Y., et al. (2025). 15-Minute Locomotion: Massively Parallel PPO for Humanoid Control. UC Berkeley / PI. <a href="https://arxiv.org/abs/2512.01996" target="_blank">arXiv:2512.01996</a></li>
+<li>Lyu, M., et al. (2025). DyWA: Dynamic World Abstraction. PKU. <a href="https://arxiv.org/abs/2503.16806" target="_blank">arXiv:2503.16806</a></li>
+<li>He, S., et al. (2025). ASAP: Adversarial Skill Acquisition Program. Tencent.</li>
+<li>Luo, Y., et al. (2025). UVAM: Unifying Video and Action Models. ByteDance.</li>
+<li>REFINE-DP. (2025). Diffusion Policy for Full-Body Humanoid Locomotion. Georgia Tech. <a href="https://arxiv.org/abs/2603.13707" target="_blank">arXiv:2603.13707</a></li>
+<li>FlowRL. (2025). Integrating Flow Matching and RL for Robotic Control. UCSD. <a href="https://arxiv.org/abs/2507.05257" target="_blank">arXiv:2507.05257</a></li>
+<li>Ye, Y., et al. (2026). DreamZero: Zero-Shot Robot Manipulation via World Model. KAIST / Google DeepMind. <a href="https://arxiv.org/abs/2602.15922" target="_blank">arXiv:2602.15922</a></li>
+<li>Ye, Y., et al. (2026). GigaWorld: Causal Action DiT for Scalable World Models. PKU / Shanghai AI Lab. <a href="https://arxiv.org/abs/2603.17240" target="_blank">arXiv:2603.17240</a></li>
+<li>Zhang, S., et al. (2026). FocusVLA: Cascaded and Focus Attention for VLA. CUHK-SZ / Shanghai AI Lab. <a href="https://arxiv.org/abs/2603.28740" target="_blank">arXiv:2603.28740</a></li>
+<li>Wu, C., et al. (2026). ST-VLA: 4D Spatio-Temporal Awareness for VLA. HUST / Tencent. <a href="https://arxiv.org/abs/2603.13788" target="_blank">arXiv:2603.13788</a></li>
+<li>Han, Y., et al. (2026). KineVLA: Kinematic Decomposition for Cross-Embodiment VLA. Tencent / ZJU. <a href="https://arxiv.org/abs/2603.17524" target="_blank">arXiv:2603.17524</a></li>
+<li>Chen, Z., et al. (2026). DIAL: Dual-System Intent-Action Learning. Tencent / CUHK-SZ. <a href="https://arxiv.org/abs/2603.29844" target="_blank">arXiv:2603.29844</a></li>
+<li>Zhong, Y., et al. (2026). VLA-OPD: Online Policy Distillation for VLA. CASIA. <a href="https://arxiv.org/abs/2603.26666" target="_blank">arXiv:2603.26666</a></li>
+<li>Hu, M., et al. (2026). AR-VLA: Autoregressive Action Head for VLA. ETH Zurich / Huawei. <a href="https://arxiv.org/abs/2603.10126" target="_blank">arXiv:2603.10126</a></li>
+<li>Sun, Y., et al. (2026). AtomVLA: Atom-Level Tokenization for VLA. Tsinghua / ByteDance. <a href="https://arxiv.org/abs/2603.08519" target="_blank">arXiv:2603.08519</a></li>
+<li>Chen, Z., et al. (2026). Tex3D: 3D Adversarial Textures Attack VLA. NYU / NUS. <a href="https://arxiv.org/abs/2604.01618" target="_blank">arXiv:2604.01618</a></li>
+<li>Yuan, Z., et al. (2026). AdaWorldPolicy: Online Adaptation via World Model Guidance. U. of Sydney. <a href="https://arxiv.org/abs/2602.20057" target="_blank">arXiv:2602.20057</a></li>
+<li>Yin, H., et al. (2026). PlayWorld: Curiosity-Driven World Model from Autonomous Exploration. Stanford. <a href="https://arxiv.org/abs/2603.09030" target="_blank">arXiv:2603.09030</a></li>
+<li>Hao, Z., et al. (2026). EgoSim: Egocentric World Simulation from In-the-Wild Videos. PKU / SJTU. <a href="https://arxiv.org/abs/2604.01001" target="_blank">arXiv:2604.01001</a></li>
+<li>Jia, X., et al. (2026). DreamPlan: RL in World Model Imagination. NVIDIA / UT Austin. <a href="https://arxiv.org/abs/2603.16860" target="_blank">arXiv:2603.16860</a></li>
+<li>Parmar, V. (2026). WM-Safety: Safety Risks in World Action Models. SovereignAI. <a href="https://arxiv.org/abs/2604.01346" target="_blank">arXiv:2604.01346</a></li>
+<li>Zou, K., et al. (2026). DMPO: Diffusion Model Policy Optimization via MeanFlow. SYSU. <a href="https://arxiv.org/abs/2601.20701" target="_blank">arXiv:2601.20701</a></li>
+<li>Chen, R., et al. (2026). POCO: Policy Composition from and for Heterogeneous Robot Learning. NJU / CASIA. <a href="https://arxiv.org/abs/2604.01860" target="_blank">arXiv:2604.01860</a></li>
+<li>Li, X., et al. (2026). MV-VDP: Multi-View Video-Driven Policy. HFUT / CASIA. <a href="https://arxiv.org/abs/2604.03181" target="_blank">arXiv:2604.03181</a></li>
+<li>He, Z., et al. (2026). VIRAL: Vision-Reward-Action Learning. CMU / UC San Diego. <a href="https://arxiv.org/abs/2511.15200" target="_blank">arXiv:2511.15200</a></li>
+<li>Wang, X., et al. (2026). HALO: Differentiable Simulation for Humanoid Locomotion. BUAA. <a href="https://arxiv.org/abs/2603.15084" target="_blank">arXiv:2603.15084</a></li>
+<li>Shin, J., et al. (2026). ABD-Net: Articulated Body Dynamics GNN. UT Austin / UW-Madison. <a href="https://arxiv.org/abs/2603.19078" target="_blank">arXiv:2603.19078</a></li>
+<li>Levy, A., et al. (2026). SimDist: Simulator Structure Distillation. MIT / Georgia Tech. <a href="https://arxiv.org/abs/2603.15759" target="_blank">arXiv:2603.15759</a></li>
+<li>Daneshmand, A., et al. (2026). SLowRL: Safe Low-Rank RL for Deployment. U. de Montreal / TU Darmstadt. <a href="https://arxiv.org/abs/2603.17092" target="_blank">arXiv:2603.17092</a></li>
+<li>Zhao, Y., et al. (2026). NMR: Neural Motion Representation. ZJU. <a href="https://arxiv.org/abs/2603.22201" target="_blank">arXiv:2603.22201</a></li>
+<li>Zhao, H., et al. (2026). AGILE: Standardized Humanoid RL Lifecycle. ETH Zurich. <a href="https://arxiv.org/abs/2603.20147" target="_blank">arXiv:2603.20147</a></li>
+<li>Olkin, J., et al. (2026). G1 Running: Bipedal Running on Unitree G1. Caltech. <a href="https://arxiv.org/abs/2603.25902" target="_blank">arXiv:2603.25902</a></li>
+<li>Wang, Z., et al. (2026). EgoNav: Egocentric Navigation for Humanoid Robots. Stanford. <a href="https://arxiv.org/abs/2604.00416" target="_blank">arXiv:2604.00416</a></li>
+<li>Baek, S., et al. (2026). BAT: Bimanual Agile Throwing on Humanoid. Georgia Tech. <a href="https://arxiv.org/abs/2604.01064" target="_blank">arXiv:2604.01064</a></li>
+<li>Jia, Z., et al. (2026). ECHO: Cloud-Edge Collaborative Diffusion for Humanoid. Alibaba / ZJU. <a href="https://arxiv.org/abs/2603.16188" target="_blank">arXiv:2603.16188</a></li>
+<li>Xu, Y., et al. (2026). Dream2Act: World Model Guided VLA for Dexterous Manipulation. Tsinghua. <a href="https://arxiv.org/abs/2603.19709" target="_blank">arXiv:2603.19709</a></li>
+<li>Kuhn, F., et al. (2026). G1 Sensor Benchmark: Evaluating Sensor Modalities for Humanoid. Leibniz Uni. Hannover. <a href="https://arxiv.org/abs/2603.28422" target="_blank">arXiv:2603.28422</a></li>
+<li>Canh, T. N., et al. (2026). SafeGuard ASF: Adaptive Safety Framework. Strike Robotics. <a href="https://arxiv.org/abs/2603.25353" target="_blank">arXiv:2603.25353</a></li>
+<li>Shen, Z., et al. (2026). MetaWorld-X: Divide-and-Conquer Humanoid Control. USTC. <a href="https://arxiv.org/abs/2603.08572" target="_blank">arXiv:2603.08572</a></li>
+<li>Zhang, W., et al. (2026). WAM vs. VLA: Systematic Comparison. Ant Group / ZJU. <a href="https://arxiv.org/abs/2603.22078" target="_blank">arXiv:2603.22078</a></li>
+</ol>
   </article>
 </div>
 
