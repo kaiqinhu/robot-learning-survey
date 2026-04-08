@@ -181,13 +181,12 @@ h3 {
 
 /* mini diagram inside card */
 .card .mini-diagram {
-  background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
-  color: #334155; border-radius: 8px;
-  padding: 0.8rem 1rem;
+  background: #1e293b; color: #94a3b8; border-radius: 8px;
+  padding: 0.6rem 0.8rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem; line-height: 1.5; overflow-x: auto;
+  font-size: 0.62rem; line-height: 1.4; overflow-x: auto;
   margin-top: 0.7rem; white-space: pre;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #334155;
 }
 
 /* --- per-topic color variants (applied via page <style>) --- */
@@ -226,14 +225,14 @@ tr:hover td { background: #faf8f5; }
 
 /* --- DIAGRAM BOX --- */
 .diagram {
-  background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
-  color: #334155;
+  background: #1e293b; color: #94a3b8;
   border-radius: var(--radius);
-  padding: 1.2rem 1.5rem;
+  padding: 1rem 1.5rem;
   font-family: var(--font-mono);
-  font-size: 0.82rem; line-height: 1.6; overflow-x: auto;
+  font-size: 0.75rem; line-height: 1.5; overflow-x: auto;
   margin: 1rem 0; white-space: pre;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #334155;
+  width: fit-content; max-width: 100%;
 }
 
 /* --- TIMELINE --- */
@@ -312,6 +311,14 @@ tr:hover td { background: #faf8f5; }
 .pill-card p { font-size: 0.82rem; color: var(--text-secondary); }
 
 /* --- FOOTER --- */
+/* --- COMMENTS SECTION --- */
+.comments-section {
+  max-width: 900px; margin: 2rem auto; padding: 0 2rem;
+}
+.comments-section h3 {
+  font-size: 1.1rem; margin-bottom: 1rem; color: var(--text);
+}
+
 footer {
   text-align: center; padding: 2rem; font-size: 0.75rem;
   color: var(--text-secondary); border-top: 1px solid var(--border);
