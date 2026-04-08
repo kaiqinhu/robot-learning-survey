@@ -232,7 +232,7 @@ window.SURVEY_DATA = {
       "title": "ST-VLA: 4D 时空 VLA",
       "meta": "NJU | Wu et al. | arXiv:2603.13788",
       "id": "2603.13788",
-      "description": "引入时间动态编码和空间自适应 tokenization，让 VLA 具备 4D (3D+时间) 时空推理能力。解决标准 VLA 只看单帧静态图的根本缺陷。",
+      "description": "引入时间动态编码和空间自适应 tokenization，让 VLA 具备 4D (3D+时间) 时空推理能力。缓解标准 VLA 只看单帧静态图的信息损失问题。",
       "diagram": "ST-VLA 4D 推理:\n  ┌────────────────────────────────────────────┐\n  │ 时间维: Temporal Dynamic Encoding          │\n  │   [frame_t-2] [frame_t-1] [frame_t]       │\n  │   → 编码运动趋势和速度变化                  │\n  │                                            │\n  │ 空间维: Spatial Adaptive Tokenization      │\n  │   → 动态分配 token 预算给运动区域           │\n  │   静止背景少 token, 运动前景多 token        │\n  │                                            │\n  │ 4D = 3D空间 + 时间 → 理解物体运动轨迹      │\n  └────────────────────────────────────────────┘",
       "insight": "核心 Insight: 标准 VLA 输入单帧图像，本质上是\"看照片做决策\"。ST-VLA 通过时序编码让模型\"看视频做决策\"，时空信息提供运动预测的物理直觉。",
       "url": "https://arxiv.org/abs/2603.13788",
@@ -278,7 +278,7 @@ window.SURVEY_DATA = {
       "insight": "生态意义: GR00T N1 之于人形 VLA = LLaMA 之于 LLM 开源生态。",
       "url": "https://arxiv.org/abs/2503.14734",
       "institution": "NVIDIA",
-      "authors": "arXiv:2503.14734",
+      "authors": "NVIDIA GR00T Team",
       "section": "",
       "topic": "vla",
       "shortTitle": "GR00T N1"
@@ -401,7 +401,7 @@ window.SURVEY_DATA = {
       "id": "pi06",
       "description": "PI 团队第三代 VLA。在 π₀ (Flow Matching) 和 π₀.5 (+ RL) 基础上，强调从真实机器人经验中持续学习。验证了 VLA 在长期部署中的在线改进能力。",
       "diagram": "",
-      "insight": "从 π₀ → π₀.5 → π₀.6 的演进路线完美映射 LLM 的 pretrain → RLHF → online learning。",
+      "insight": "从 π₀ → π₀.5 → π₀.6 的演进路线高度类似 LLM 的 pretrain → RLHF → online learning。",
       "url": "",
       "institution": "Physical Intelligence",
       "authors": "PI Team",
@@ -420,7 +420,7 @@ window.SURVEY_DATA = {
       "title": "FAST: 高效动作 Tokenization",
       "meta": "MIT | Pertsch et al.",
       "id": "fast",
-      "description": "提出高效的机器人动作 tokenization 方案。通过学习压缩的动作 token 表示，使 VLA 的自回归动作生成效率大幅提升，同时保持精度。解决了 VLA 中\"动作 token 数量多→推理慢\"的核心瓶颈。",
+      "description": "提出高效的机器人动作 tokenization 方案。通过学习压缩的动作 token 表示，使 VLA 的自回归动作生成效率大幅提升，同时保持精度。显著缓解了 VLA 中\"动作 token 数量多→推理慢\"的效率问题。",
       "diagram": "",
       "insight": "动作序列存在大量冗余——FAST 用学习的 tokenizer 压缩冗余，类似 BPE 对文本的作用。",
       "url": "",
@@ -628,14 +628,14 @@ window.SURVEY_DATA = {
         "基础模型"
       ],
       "title": "Cosmos: World Foundation Model Platform",
-      "meta": "NVIDIA | arXiv:2501.03575",
+      "meta": "NVIDIA | NVIDIA Cosmos Team | arXiv:2501.03575",
       "id": "2501.03575",
       "description": "NVIDIA 发布的世界基础模型平台。同时提供自回归和扩散两种生成范式的预训练世界模型，配套高效视频 tokenizer。下游任务（机器人、自动驾驶）可根据需求选择或组合两种范式。平台级方案，类似 LLM 领域的 foundation model。",
-      "diagram": "Cosmos 平台架构:\n  ┌──────────────────────────────────────────────┐\n  │         Cosmos World Foundation Model         │\n  │                                              │\n  │  ┌─────────────────────────────────────────┐ │\n  │  │ Cosmos Tokenizer (高效视频编码)          │ │\n  │  │  连续 token (扩散用) + 离散 token (AR用) │ │\n  │  └──────────────┬──────────────────────────┘ │\n  │                 ▼                            │\n  │  ┌──────────────┐  ┌──────────────────────┐ │\n  │  │ AR World     │  │ Diffusion World      │ │\n  │  │ Model        │  │ Model                │ │\n  │  │ (GPT-style)  │  │ (去噪生成)           │ │\n  │  └──────┬───────┘  └──────────┬───────────┘ │\n  │         └──────────┬──────────┘              │\n  │                    ▼                         │\n  │  下游任务选择: 机器人 / 自动驾驶 / 仿真      │\n  └──────────────────────────────────────────────┘\n  定位: 世界模型领域的 \"GPT-4 级别\" 基础设施",
+      "diagram": "Cosmos 平台架构:\n  ┌──────────────────────────────────────────────┐\n  │         Cosmos World Foundation Model         │\n  │                                              │\n  │  ┌─────────────────────────────────────────┐ │\n  │  │ Cosmos Tokenizer (高效视频编码)          │ │\n  │  │  连续 token (扩散用) + 离散 token (AR用) │ │\n  │  └──────────────┬──────────────────────────┘ │\n  │                 ▼                            │\n  │  ┌──────────────┐  ┌──────────────────────┐ │\n  │  │ AR World     │  │ Diffusion World      │ │\n  │  │ Model        │  │ Model                │ │\n  │  │ (GPT-style)  │  │ (去噪生成)           │ │\n  │  └──────┬───────┘  └──────────┬───────────┘ │\n  │         └──────────┬──────────┘              │\n  │                    ▼                         │\n  │  下游任务选择: 机器人 / 自动驾驶 / 仿真      │\n  └──────────────────────────────────────────────┘\n  定位: 世界模型领域的大规模基础设施平台",
       "insight": "核心 Insight: 单一生成范式（扩散或自回归）各有优劣，Cosmos 的答案是\"都要\"——统一 tokenizer + 双范式预训练，让下游任务根据延迟/质量需求选择。这是世界模型从\"单点方案\"走向\"平台基础设施\"的标志。",
       "url": "https://arxiv.org/abs/2501.03575",
       "institution": "NVIDIA",
-      "authors": "arXiv:2501.03575",
+      "authors": "NVIDIA Cosmos Team",
       "section": "wam",
       "topic": "wam",
       "shortTitle": "Cosmos"
@@ -795,7 +795,7 @@ window.SURVEY_DATA = {
       "title": "GR-1: 大规模视频生成预训练机器人",
       "meta": "ByteDance | Wu et al.",
       "id": "gr1",
-      "description": "WAM 范式的直接先驱。用大规模视频生成预训练 Transformer，再微调为机器人策略。首次证明\"视频预训练→机器人策略\"的技术路线可行。直接启发了 DreamZero、GR-2、UVAM 等后续工作。",
+      "description": "WAM 范式的直接先驱。用大规模视频生成预训练 Transformer，再微调为机器人策略。较早验证了\"视频预训练→机器人策略\"的技术路线可行性。直接启发了 DreamZero、GR-2、UVAM 等后续工作。",
       "diagram": "",
       "insight": "GR-1 回答了关键问题: 视频生成模型的知识能否迁移到机器人? — 答案是 yes，且泛化能力显著优于纯机器人数据训练。",
       "url": "",
@@ -1266,12 +1266,12 @@ window.SURVEY_DATA = {
         "p4"
       ],
       "tags": [
-        "2025.01"
+        "2026.03"
       ],
       "title": "REFINE-DP: 人形全身 Diffusion + RL",
       "meta": "Georgia Tech | Gu et al. | arXiv:2603.13707",
       "id": "2603.13707",
-      "description": "将 Diffusion Policy 从桌面操作扩展到人形全身 loco-manipulation。先用人类演示训练 Diffusion Policy，再用 RL 微调使其适应真实物理约束。首次在人形机器人上验证 Diffusion+RL 路线。",
+      "description": "将 Diffusion Policy 从桌面操作扩展到人形全身 loco-manipulation。先用人类演示训练 Diffusion Policy，再用 RL 微调使其适应真实物理约束。率先在人形机器人上验证 Diffusion+RL 路线。",
       "diagram": "REFINE-DP 两阶段:\n  ┌────────────────────────────────────────────┐\n  │ Phase 1: Diffusion Policy Pre-train        │\n  │   人类全身运动演示 → 扩散策略               │\n  │   (覆盖 locomotion + manipulation)         │\n  │         ▼                                  │\n  │ Phase 2: RL Fine-tune                      │\n  │   物理约束 reward (稳定性/能耗/安全)        │\n  │   → 适应真实动力学                          │\n  │   → 超越演示水平                            │\n  └────────────────────────────────────────────┘\n  目标平台: 人形机器人全身 loco-manipulation",
       "insight": "核心 Insight: Diffusion Policy 在桌面操作大获成功，但人形全身控制需要额外的物理约束。RL 微调弥补了演示数据中缺失的动力学知识（稳定性、能耗等）。",
       "url": "https://arxiv.org/abs/2603.13707",
@@ -1286,12 +1286,12 @@ window.SURVEY_DATA = {
         "p4"
       ],
       "tags": [
-        "2025.07"
+        "2026.03"
       ],
       "title": "FlowRL: Flow + RL 统一分类框架",
       "meta": "Georgia Tech | Gao et al. | arXiv:2603.27450",
       "id": "2603.27450",
-      "description": "首次对 Flow/Diffusion + RL 的所有集成方式做系统分类：策略梯度法、后验推断法、蒸馏法、引导法。提供模块化开源框架和统一 benchmark，使不同方法可公平对比。",
+      "description": "系统地对 Flow/Diffusion + RL 的所有集成方式做分类：策略梯度法、后验推断法、蒸馏法、引导法。提供模块化开源框架和统一 benchmark，使不同方法可公平对比。",
       "diagram": "FlowRL 四类集成方式:\n  ┌────────────────────────────────────────────┐\n  │ 1. Policy Gradient (直接梯度)               │\n  │    DMPO: 单步可微 → 直接策略梯度            │\n  │                                            │\n  │ 2. Posterior Inference (后验推断)            │\n  │    POCO: E-step采样 → M-step蒸馏            │\n  │                                            │\n  │ 3. Distillation (蒸馏法)                    │\n  │    reward-weighted 样本 → 蒸馏到策略         │\n  │                                            │\n  │ 4. Guidance (引导法)                        │\n  │    reward gradient → 引导去噪方向           │\n  └────────────────────────────────────────────┘\n  开源: 统一框架 + benchmark + 公平对比",
       "insight": "核心 Insight: Flow/Diffusion + RL 的集成方式看似繁多，实际归纳为四类范式。策略梯度法最直接但需单步可微，后验推断法最通用但需额外采样。",
       "url": "https://arxiv.org/abs/2603.27450",
@@ -1313,7 +1313,7 @@ window.SURVEY_DATA = {
       "meta": "Physical Intelligence | Black et al. | arXiv:2504.16054",
       "id": "2504.16054",
       "description": "在 π₀ (VLM + Flow Matching) 基础上加入 RL 微调阶段。预训练提供通用操作能力，RL 在具体任务上提升成功率和鲁棒性。VLA + RL 混合的标志性工作。",
-      "diagram": "π₀.5 三阶段训练流水线:\n  ┌────────────────────────────────────────────────┐\n  │ Phase 1: VLM Pre-train (Internet-scale)        │\n  │   Vision + Language → 语义理解                  │\n  │         ▼                                      │\n  │ Phase 2: Flow Matching SFT (Robot data)        │\n  │   Obs + Lang → Continuous Action (去噪生成)     │\n  │         ▼                                      │\n  │ Phase 3: RL Fine-tune (Task-specific)          │\n  │   Success reward → 超越演示水平                 │\n  └────────────────────────────────────────────────┘\n  = LLM Pre-train → SFT → RLHF 的机器人完美映射",
+      "diagram": "π₀.5 三阶段训练流水线:\n  ┌────────────────────────────────────────────────┐\n  │ Phase 1: VLM Pre-train (Internet-scale)        │\n  │   Vision + Language → 语义理解                  │\n  │         ▼                                      │\n  │ Phase 2: Flow Matching SFT (Robot data)        │\n  │   Obs + Lang → Continuous Action (去噪生成)     │\n  │         ▼                                      │\n  │ Phase 3: RL Fine-tune (Task-specific)          │\n  │   Success reward → 超越演示水平                 │\n  └────────────────────────────────────────────────┘\n  = LLM Pre-train → SFT → RLHF 的机器人版本",
       "insight": "核心 Insight: π₀.5 证明了 LLM 领域的 \"Pre-train → SFT → RLHF\" 范式可以完整迁移到机器人控制。Flow Matching 作为 SFT 阶段提供连续动作生成能力，RL 微调阶段在不破坏预训练泛化性的前提下显著提升任务成功率。",
       "url": "https://arxiv.org/abs/2504.16054",
       "institution": "Physical Intelligence",
@@ -1354,12 +1354,12 @@ window.SURVEY_DATA = {
       "title": "GEN-0: Embodied Foundation Model with Scaling Laws",
       "meta": "Generalist AI | 270K 小时真实物理交互数据",
       "id": "gen0",
-      "description": "首个在真实世界物理交互数据上确立可预测扩展定律的具身基础模型。基于 270K 小时多机器人数据训练，证明机器人领域的 scaling law 与 LLM 类似——模型性能随数据和参数量可预测提升。具身 AI 的 \"GPT-3 时刻\"。",
+      "description": "在真实世界物理交互数据上报告了可预测 scaling 关系的具身基础模型。基于 270K 小时多机器人数据训练，观察到模型性能随数据和参数量可预测提升的趋势，是具身 AI 领域 scaling law 的早期证据。",
       "diagram": "GEN-0 具身 Scaling Law:\n  ┌──────────────────────────────────────────────┐\n  │ 核心发现: 具身基础模型存在可预测 scaling law  │\n  │                                              │\n  │ 数据: 270K 小时真实物理交互                   │\n  │   ·多机器人平台 (臂/手/移动)                  │\n  │   ·多任务类型 (操作/导航/交互)                │\n  │                                              │\n  │ Loss                                         │\n  │  │ ·                                         │\n  │  │  ··                                       │\n  │  │    ···                                    │\n  │  │       ·····                               │\n  │  │            ···········                    │\n  │  └─────────────────────── Data/Params        │\n  │                                              │\n  │ 意义: LLM scaling law → 具身 AI scaling law  │\n  │   = 投入更多数据/算力 → 可预测的能力提升     │\n  └──────────────────────────────────────────────┘",
       "insight": "核心 Insight: GEN-0 证明机器人基础模型不是\"炼丹\"——性能随规模可预测增长。这为具身 AI 的工业化投资提供了理论依据，正如 GPT-3 的 scaling law 引爆了 LLM 竞赛。",
       "url": "https://generalistai.com/blog",
       "institution": "Generalist AI",
-      "authors": "270K 小时真实物理交互数据",
+      "authors": "Generalist AI Team",
       "section": "vla-world-model",
       "topic": "hybrid",
       "shortTitle": "GEN-0"
@@ -1501,7 +1501,7 @@ window.SURVEY_DATA = {
       "id": "2603.17927",
       "description": "自然语言直接驱动全身运动。物理合理性优化 (PP-Opt) 双向耦合生成器和控制器，形成自改进循环。免去传统重定向步骤。",
       "diagram": "双向耦合自改进循环:\n  ┌──────────────────────────────────────────────┐\n  │ Text ──► Diffusion Motion Generator          │\n  │              │ 正向: 生成运动                 │\n  │              ▼                               │\n  │         PP-Opt (物理合理性优化)               │\n  │              │ 反向: 优化后的 rollout          │\n  │              │       → 微调生成器             │\n  │              ▼                               │\n  │     Teacher-Student RL Controller            │\n  │              │                               │\n  │              ▼ 自改进循环                     │\n  │     G1 跟踪 latent-conditioned 运动          │\n  └──────────────────────────────────────────────┘\n  免重定向: 无需 SMPL → robot 的运动映射",
-      "insight": "核心 Insight: 生成器和控制器双向耦合——控制器的物理 rollout 反过来改进生成器的潜在空间分布，形成自改进闭环，彻底绕过传统 retarget 步骤。",
+      "insight": "核心 Insight: 生成器和控制器双向耦合——控制器的物理 rollout 反过来改进生成器的潜在空间分布，形成自改进闭环，绕过传统 retarget 步骤。",
       "url": "https://arxiv.org/abs/2603.17927",
       "institution": "NTU",
       "authors": "Yuan et al.",
@@ -1689,9 +1689,9 @@ window.SURVEY_DATA = {
       "id": "2501.09548",
       "title": "REFINE-DP",
       "shortTitle": "REFINE-DP",
-      "meta": "N/A | N/A",
-      "institution": "N/A",
-      "authors": "N/A",
+      "meta": "Georgia Tech | Gu et al.",
+      "institution": "Georgia Tech",
+      "authors": "Gu et al.",
       "description": "反射增强扩散策略操作",
       "topic": "unitree",
       "year": 2025,
@@ -1815,8 +1815,8 @@ window.SURVEY_DATA = {
       "id": "spatialvla",
       "title": "SpatialVLA",
       "shortTitle": "SpatialVLA",
-      "meta": "PKU / BAAI | Qu et al.",
-      "institution": "PKU / BAAI",
+      "meta": "Shanghai AI Lab / Fudan | Qu et al.",
+      "institution": "Shanghai AI Lab / Fudan",
       "authors": "Qu et al.",
       "description": "空间表征增强 VLA",
       "topic": "vla",
@@ -2625,7 +2625,7 @@ window.SURVEY_DATA = {
       "page": "p1",
       "year": "2023.07",
       "title": "RT-2 (Google DeepMind)",
-      "description": "首次证明 VLM 语义知识可迁移至机器人。将 PaLM-E 微调输出 action tokens，但模型巨大 (55B)，推理慢。"
+      "description": "以端到端方式展示 VLM 语义知识可迁移至机器人控制。将 PaLM-E 微调输出 action tokens，但最大模型达 55B，推理延迟较高。"
     },
     {
       "page": "p1",
@@ -2679,7 +2679,7 @@ window.SURVEY_DATA = {
       "page": "p2",
       "year": "2023-2024",
       "title": "GR-1 / GR-2 / LAPA — 视频预训练先驱",
-      "description": "ByteDance GR 系列 (GR-1: 大规模视频生成预训练; GR-2: 网络规模视频→语言动作模型) 和 UC Berkeley LAPA (视频潜在动作预训练) 首次证明互联网视频可驱动机器人策略。"
+      "description": "ByteDance GR 系列 (GR-1: 大规模视频生成预训练; GR-2: 网络规模视频→语言动作模型) 和 UC Berkeley LAPA (视频潜在动作预训练) 较早验证互联网视频可驱动机器人策略。"
     },
     {
       "page": "p2",
@@ -2781,7 +2781,7 @@ window.SURVEY_DATA = {
       "page": "p4",
       "year": "2024.09",
       "title": "Consistency Policy",
-      "description": "将 Consistency Model 引入机器人策略：1-2 步生成，推理加速 10x。首次证明无需多步去噪也能保持多模态。"
+      "description": "将 Consistency Model 引入机器人策略：1-2 步生成，推理加速 10x。验证了无需多步去噪也能保持多模态。"
     },
     {
       "page": "p4",
