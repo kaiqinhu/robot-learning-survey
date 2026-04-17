@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test-Time Training (TTT) | Tactile & Embodied AI 2026</title>
+<link rel="stylesheet" href="../shared.css">
+<style>h2{border-bottom-color:#8b5cf6} .card{border-top-color:#8b5cf6} table{font-size:0.85rem} td,th{padding:6px 8px}</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<div class="container">
+
+<h1 style="font-size:1.8rem;margin-bottom:0.3rem">Test-Time Training: 前向传播中学习</h1>
+<p style="color:var(--text-secondary);margin-bottom:1rem">快权重理论 / 方法谱系 / 2025-2026 关键突破 / 杀手级应用 / 机器人机会</p>
+
+<div class="card" style="margin-bottom:2rem">
+<p><strong>摘要</strong>: 当前大模型在部署后权重冻结，所有适应局限于上下文窗口内的 In-Context Learning。Test-Time Training (TTT) 提出将学习折叠进前向传播——隐状态不再是固定规则更新的向量，而是一个可通过梯度下降更新的模型（快权重）。本综述从 Schmidhuber 1992 快权重到 2026 年 TTT/TTC 前沿，梳理 41 篇论文的方法谱系。核心结论：TTT 在长上下文（>8K）场景下困惑度持续改善（Mamba ~16K 饱和），3D 重建已成为杀手级应用（2026 初 6+ 篇），而 <strong>TTT × 机器人持续适应</strong>（涌现纠错）是最有潜力的蓝海方向。</p>
+</div>
+
+<!-- §1 动机与理论基础 -->
+<section>
+<h2>1. 为什么需要 TTT：从瓶颈到快权重</h2>
+
+<p>大语言模型的部署范式有三个根本限制：适应能力受上下文窗口限制（ICL 容量有天花板），数据飞轮是离线的（用户反馈无法实时回流到权重），个性化缺失（同一模型面对所有用户）。核心问题：<strong>能否让模型在推理的每一步都进行某种形式的学习？</strong></p>
+
+<p>标准 Transformer 用 O(n²) 注意力实现"完美记忆"但计算不可承受；线性 RNN/SSM 用固定大小隐状态实现 O(n) 推理但记忆容量有限——困惑度在约 16K 后饱和。TTT 的核心洞察：隐状态本身就是一个模型（快权重），通过在前向传播中对每个 token 做梯度下降来更新记忆，让记忆容量不再受限于 d²，而是受限于内部模型的表达能力。</p>
+
+<h3>30 年理论积累</h3>
+
+<p><strong>Schmidhuber (1992)</strong> 首次提出快权重概念：慢权重（预训练）决定更新规则，快权重（前向传播中更新）存储工作记忆。<strong>Ba & Hinton (2016)</strong> 将快权重具象化为外积关联记忆 A_t = λ·A_{t-1} + η·h_t·h_tᵀ——实际上就是带衰减的线性注意力。<strong>Schlag, Irie, Schmidhuber (2021)</strong> 正式建立等价关系 "线性 Transformer = 快权重编程器"，提出 Delta 规则修正累加式记忆的干扰问题——"先减去旧关联，再加上新关联" = 在线梯度下降的一步。从这里开始，"快权重"和"测试时学习"在数学上汇合了。</p>
+
+<p><strong>Von Oswald et al. (ICML 2023)</strong> 是真正的理论转折点：证明训练好的 Transformer 在做 ICL 时，其前向传播<strong>数学上等价于梯度下降</strong>。多层 Transformer = 多步梯度下降，且能学会预条件梯度下降（类似牛顿法）。Akyürek et al. (2023) 独立验证 ICL ≈ 岭回归，Ahn et al. (2024) 证明多头注意力能实现预条件 GD。这组工作的革命性意义：Transformer 的前向传播中已经有学习在发生——只不过是隐式的、受限的。<strong>TTT 的跳跃</strong>：既然已经在隐式做梯度下降，为什么不显式做？</p>
+
+<p><strong>MesaNet (DeepMind, 2025)</strong> 提出统一视角：所有序列模型都是在做某种"mesa-optimization"——状态更新就是"在前向传播中学习"，输出就是"用学到的模型预测"。差异在于状态表示（向量 → 矩阵 → 神经网络权重）、更新规则（固定线性 → 门控 → 梯度下降）、目标函数（无 → 隐式 → 显式自监督）、适应强度（均匀 → surprise 调制）和遗忘机制（无 → 衰减 → 学习的遗忘率）。</p>
+</section>
+
+<!-- §2 方法谱系 -->
+<section>
+<h2>2. 方法谱系：从线性注意力到显式 TTT</h2>
+
+<p>按更新规则从简单到复杂，所有方法共享"快权重"本质。</p>
+
+<p><strong>累加式方法 (W += Δ)</strong> 是最简单的快权重。Linear Attention (2020) 用 O(n) 推理但不能遗忘、表征塌陷。RWKV (2023) 加入通道级指数衰减实现简单遗忘。RetNet (MSRA, 2023) 提供保留/循环/并行三种计算模式。GLA (MIT, 2024) 引入数据依赖门控矩阵。mLSTM/xLSTM (Hochreiter, 2024) 用矩阵记忆+指数门控，<strong>xLSTM 7B</strong> 是累加式方法的最大规模开源验证。累加式方法的共同局限：只能累加不能纠错，相同 key 不同时步存储不同 value 会互相干扰。</p>
+
+<p><strong>纠错式方法 (Delta Rule)</strong> 解决干扰问题。<strong>DeltaNet (MIT, 2024)</strong> 更新规则 W += β·k·(v - Wᵀk)ᵀ——"先读旧值，纠正后写入"，1.3B 规模训练 <strong>100B tokens</strong> 超越 Mamba 和 GLA。<strong>Gated DeltaNet (NVIDIA, 2024)</strong> 加入短卷积和 GLA 式门控，证明与线性注意力等价（dual form），是目前非 TTT 阵营最强方法。</p>
+
+<p><strong>显式 TTT（梯度下降更新）</strong> 是范式跳跃。<strong>TTT-Linear (Stanford, 2024.7)</strong> 开创性地将隐状态定义为可学习的线性层 W ∈ R^(d×d)，用重构损失做自监督。关键定理：在 batch GD、η=1/2、W₀=0 条件下 TTT-Linear 精确等价于线性注意力——建立了 TTT 与整个线性注意力家族的数学联系。<strong>TTT-MLP</strong> 将内部模型升级为 2 层 MLP（4x 扩展, GELU, LayerNorm, <strong>8d² 参数</strong>），32K+ 上下文持续改善。<strong>Titans (Google, 2025.1)</strong> 引入 surprise 门控（梯度范数 = 意外程度，意外 token 强记忆），支持 <strong>2M 上下文</strong>，三种变体中 MAC（Memory as Context，记忆与注意力拼接）最强——混合架构优于纯替代。</p>
+
+<table>
+<tr><th>模型</th><th>更新类型</th><th>复杂度</th><th>记忆容量</th><th>遗忘</th><th>最大验证规模</th></tr>
+<tr><td>Linear Attention</td><td>累加</td><td>O(n)</td><td>d²</td><td>无</td><td>—</td></tr>
+<tr><td>RWKV / GLA / mLSTM</td><td>累加+门控</td><td>O(n)</td><td>d²</td><td>衰减/门控</td><td>7B (xLSTM)</td></tr>
+<tr><td>DeltaNet / Gated DeltaNet</td><td>纠错</td><td>O(n)</td><td>d²</td><td>隐式纠错</td><td>1.3B (100B tokens)</td></tr>
+<tr><td>TTT-Linear / TTT-MLP</td><td><strong>梯度下降</strong></td><td>O(n)</td><td>≥d²</td><td>GD 自然遗忘</td><td>1.3B</td></tr>
+<tr><td>Titans MAC</td><td><strong>GD+动量</strong></td><td>O(n)</td><td>≥d²</td><td>surprise 门控</td><td>3.4B</td></tr>
+</table>
+
+<p><strong>Mamba-2 / SSD 对偶性</strong>也值得一提：Dao & Gu (2024) 证明线性注意力 ≡ 对角状态空间模型（通过半可分矩阵建立等价），TTT-Linear 可视为"带学习的结构化状态空间"。这统一了 SSM 和 TTT 的理论基础。</p>
+</section>
+
+<!-- §3 2025-2026 关键突破 -->
+<section>
+<h2>3. 2025-2026 关键突破</h2>
+
+<p><strong>TTT-E2E (Stanford, 2025.12)</strong> 是最颠覆性的发现：不需要设计特殊的 TTT 层，用标准 Transformer + 滑动窗口注意力，在测试时直接做 next-token prediction 继续学习。关键是通过<strong>元学习优化初始化 W₀</strong>——预训练时反向传播穿过内部 GD 步骤。<strong>3B 模型</strong>在 128K 上下文下困惑度匹配全注意力 Transformer，推理快 <strong>2.7×</strong>，恒定延迟。核心启示：关键不在架构，在于如何 meta-learn 初始化——没有元学习的 Mamba/DeltaNet 在 8-16K 后饱和，有了元学习初始化 TTT 能持续 scale。</p>
+
+<p><strong>LaCT / TTT Done Right (Adobe, 2025.5)</strong> 解决了工程瓶颈：发现 TTT 训练效率低的根因是 mini-batch 太小导致 GPU 利用率 <5%。解决方案是大 chunk 更新（2K-1M token），无需自定义 CUDA kernel。在 <strong>14B 视频扩散模型</strong>上验证，56K token 序列——当前最大规模 TTT 实践。这大幅降低了 TTT 的工程门槛。</p>
+
+<p><strong>MesaNet (DeepMind, 2025.6)</strong> 用共轭梯度法将 in-context loss 优化到最优（不止一步 GD），严格证明 DeltaNet、Mamba、xLSTM 的递推动力学全部来自近似优化同一个 in-context 回归目标。核心发现：<strong>增加推理计算 = 提升质量</strong>——与 test-time compute scaling 趋势一致。在 billion-parameter scale 超越此前所有 RNN。</p>
+
+<p><strong>TNT (Google, 2025.11)</strong> 解决 Titans 训练速度问题：两阶段训练（大 chunk 预训练 + 小 chunk 微调），训练速度提升 <strong>17×</strong>。<strong>ATLAS / DeepTransformers (Google, 2025.5)</strong> 针对 Titans 三个局限改进（容量有限→深层记忆网络；只看最近输入→联合优化；记忆管理不灵活→更有表达力的读写），是 Transformer 的严格泛化，BABILong <strong>10M 上下文 +80% 准确度</strong>。</p>
+
+<p><strong>TTC (2026.3)</strong> 将 TTT 从"前向传播中记忆"推广到<strong>"前向传播中推理"</strong>：在推理时执行有限时域 LQR 规划。作为预训练 LLM 的 adapter，MATH-500 <strong>+27.8%</strong>，AMC/AIME Pass@8 提升 <strong>2-3×</strong>。开启新维度：内部优化目标可以是规划/控制，不限于记忆。</p>
+
+<p><strong>NVIDIA 的"祛魅" (2026.2)</strong> 论文标题直接说 "TTT with KV Binding Is Secretly Linear Attention"。证明一大类 TTT 架构可以表示为学习的线性注意力算子——TTT 不一定在做"测试时记忆"，而是在做增强表示能力的线性注意力。既是批评也是机会：可用线性注意力优化技巧加速 TTT。</p>
+
+<p>其他重要工作：<strong>AllMem (Huawei, 2026.2)</strong> SWA+TTT 混合 128K 超越全注意力；<strong>Locas (2026.2)</strong> 参数化记忆可卸载/合并支持持续学习；<strong>OLMo Hybrid (AI2, 2026.4)</strong> 理论证明混合模型严格强于任一单独；<strong>In-Place TTT (2026.4)</strong> 解决 TTT 与当前 LLM 生态的架构不兼容问题。</p>
+</section>
+
+<!-- §4 杀手级应用 -->
+<section>
+<h2>4. 杀手级应用与实验结果</h2>
+
+<h3>3D 重建：2026 年爆发</h3>
+<p>TTT 已成为流式 3D 重建的默认架构选择——2026 初至少 6 篇论文（tttLRM、Mem3R、Spatial-TTT、ZipMap、VGG-T³、Scal3R）。原因：从视频流持续压缩视觉观测到快权重，天然匹配"前向传播中学习"范式。Mem3R 轨迹误差 <strong>-39%</strong>，所有方法都实现了线性时间复杂度的有状态 3D 重建。这是 TTT 从理论走向工程的第一个大规模成功案例。</p>
+
+<h3>视频生成</h3>
+<p>Stanford+NVIDIA (2025.4) 将 TTT 层嵌入 5B Transformer，从文本故事板生成一分钟连贯视频，人工评测 <strong>+34 Elo</strong> 优于 Mamba-2、Gated DeltaNet、滑动窗口注意力。LaCT 在 <strong>14B</strong> 视频扩散模型上验证了 TTT 处理极长视频序列的能力。</p>
+
+<h3>机器人：涌现纠错能力</h3>
+<p><strong>EVOLVE-VLA (2025.12)</strong> 是目前唯一的 TTT × 机器人工作。TTT 框架用于 VLA 模型，通过环境交互持续适应：长程任务 <strong>+8.6%</strong>，1-shot 学习 <strong>+22%</strong>，未见任务 <strong>20.8%</strong> 成功率（SFT 为 0%）。最关键发现：展现了训练数据中不存在的<strong>涌现纠错能力</strong>——模型在推理时"学会"从错误中恢复。这暗示 TTT 的"前向传播中学习"机制可以产生训练时未见过的行为。</p>
+
+<h3>实验结果概览</h3>
+<table>
+<tr><th>维度</th><th>代表性结果</th></tr>
+<tr><td>语言困惑度 (760M)</td><td>Titans MAC <strong>52.33</strong> > DeltaNet 52.54 > Transformer++ 52.91 > Mamba2 53.31</td></tr>
+<tr><td>长上下文能力</td><td>Mamba ~16K 饱和; TTT-MLP 32K+持续改善; TTT-E2E 128K=全注意力; Titans 2M; ATLAS <strong>10M</strong></td></tr>
+<tr><td>最大验证规模</td><td>LaCT <strong>14B</strong> (视频扩散) > xLSTM 7B > Titans 3.4B > TTT-E2E 3B</td></tr>
+<tr><td>3D 重建</td><td>Mem3R 轨迹误差 <strong>-39%</strong>; 6+ 篇论文均线性复杂度</td></tr>
+<tr><td>数学推理</td><td>TTC: MATH-500 <strong>+27.8%</strong>, AMC/AIME <strong>2-3×</strong></td></tr>
+<tr><td>机器人</td><td>EVOLVE-VLA: 长程 +8.6%, 1-shot <strong>+22%</strong>, 涌现纠错</td></tr>
+</table>
+</section>
+
+<!-- §5 硬件与批评 -->
+<section>
+<h2>5. 硬件挑战与批评</h2>
+
+<p>TTT 的核心工程挑战是<strong>前向传播中需要 backward pass</strong>——每个 token 都要做一次梯度计算来更新内部模型。这导致 FLOPs 利用率低（mini-batch 太小，GPU <5%）、显存 3-4×（需存 optimizer state + gradients）、训练速度慢。LaCT 证明大 chunk 更新（2K-1M token）可以无需自定义 CUDA kernel 达到高利用率，TNT 两阶段训练实现 <strong>17× 加速</strong>，In-Place TTT (2026.4) 正在解决与 LLM 生态的架构不兼容问题。趋势是清晰的：自定义 kernel 不再必要，标准 PyTorch 即可实现高效训练。</p>
+
+<p>已知批评中最有分量的是 NVIDIA (2026.2) 的"祛魅"——证明一大类 TTT 本质是学习的线性注意力，多个现象与"记忆"叙事矛盾。TTT-E2E 发现没有元学习的 Mamba/DeltaNet 无法随上下文 scale，暗示原始 TTT 的成功可能更多来自初始化而非架构。MesaNet 提出更多推理计算 = 更好质量，将"推理成本高"转化为特性而非缺陷。</p>
+
+<p>TTT 无效的场景：短上下文 (<1K) 标准注意力已足够、平稳分布无需适应、噪声数据浪费算力"学习"噪声、1D 序列假设不适合图像/视频（LaCT 用大 chunk 缓解）。稳定性方面，内部学习率敏感（过高不稳定、过低无适应）、TTT-MLP 多步更新可能梯度爆炸、超长序列内部模型漂移远离初始化。Titans 的 surprise 门控 + 权重衰减 + 动量缓解但未完全解决。</p>
+</section>
+
+<!-- §6 行业格局与机器人机会 -->
+<section>
+<h2>6. 行业格局与机器人机会</h2>
+
+<p>TTT 领域形成了几个清晰的阵营。<strong>Stanford/UCSD (Yu Sun)</strong> 是开创者，从 TTT 原始到 TTT-E2E 再到视频生成，最大验证 5B。<strong>Google Research (Behrouz)</strong> 贡献了 Titans/TNT/ATLAS 系列架构创新。<strong>Google DeepMind (Von Oswald)</strong> 提供理论统一（MesaNet）。<strong>NVIDIA</strong> 从硬件效率角度推进（Gated DeltaNet + 理论分析），同时提供"祛魅"式批评。<strong>Adobe</strong> 在视频扩散上验证了最大规模（14B）。<strong>NXAI (Hochreiter)</strong> 推动 xLSTM 7B 开源。3D Vision 社区是最活跃的应用阵营。</p>
+
+<h3>开放问题与未来方向</h3>
+
+<p>架构设计空间仍然广阔：自监督目标只探索了重构损失（对比学习、预测编码未试）；内部模型只有线性/2层MLP（稀疏 MLP、LoRA 未试）；<strong>TTT × MoE 完全未探索</strong>——不同 expert 对应不同内部学习策略；<strong>TTC 从记忆到推理的推广</strong>才刚开始。学习动力学方面，TTT-E2E 证明元学习初始化是关键但更好的方法未知，多尺度适应（不同层处理不同时间尺度）未探索。</p>
+
+<table>
+<tr><th>应用方向</th><th>竞争状态</th><th>机会</th></tr>
+<tr><td><strong>TTT × 机器人持续适应</strong></td><td>蓝海 (仅 EVOLVE-VLA 一篇)</td><td>涌现纠错，自然匹配实时环境适应</td></tr>
+<tr><td>3D 重建</td><td>红海 (6+ 篇)</td><td>已成为默认方法，增量空间有限</td></tr>
+<tr><td>视频生成</td><td>早期 (2 篇)</td><td>+34 Elo 验证，长视频有优势</td></tr>
+<tr><td>个性化 LLM</td><td>空白</td><td>每用户维护独立内部状态</td></tr>
+<tr><td>持续学习</td><td>早期 (Locas)</td><td>session/user 级别适应</td></tr>
+</table>
+
+<h3>与力觉世界模型 (FWM) 的交叉</h3>
+
+<p>TTT 与 FWM 存在天然互补。FWM 执行层 (100-1000Hz) 的力觉 RL Tracker 需要实时适应环境变化——TTT 的"前向传播中学习"天然匹配。FWM 规划层 (10-30Hz) 的力觉世界模型预测 F_{t+1}——TTT 内部模型可作为动态转移函数，快权重在接触过程中持续适应材料属性。TTC 的 LQR 规划能力可直接应用于力觉轨迹优化。EVOLVE-VLA 的涌现纠错能力更是令人兴奋——力觉反馈提供最直接的"错误信号"，TTT × 力觉可能产生更强的涌现纠错。</p>
+
+<p><strong>核心机会</strong>：TTT × 机器人目前仅有 EVOLVE-VLA 一篇，且未涉及触觉/力觉。<strong>TTT + 力觉世界模型</strong>是一个完全空白的交叉方向。</p>
+</section>
+
+<!-- §7 论文索引 -->
+<section>
+<h2>附录：41 篇论文索引</h2>
+<p style="font-size:0.85rem;color:var(--text-secondary)">按方法类别收录本综述涉及的全部论文，正文以 [作者, 年份] 格式引用。</p>
+
+<h3>理论基础</h3>
+<ol style="font-size:0.85rem;line-height:1.6">
+<li>Schmidhuber. Learning to Control Fast-Weight Memories. 1992.</li>
+<li>Ba, Hinton et al. Using Fast Weights to Attend to the Recent Past. <a href="https://arxiv.org/abs/1610.06258" target="_blank">arXiv:1610.06258</a>, 2016.</li>
+<li>Schlag, Irie, Schmidhuber. Linear Transformers Are Secretly Fast Weight Programmers. <a href="https://arxiv.org/abs/2102.11174" target="_blank">arXiv:2102.11174</a>, 2021.</li>
+<li>Von Oswald et al. Transformers Learn In-Context by Gradient Descent. <a href="https://arxiv.org/abs/2212.07677" target="_blank">arXiv:2212.07677</a>, ICML 2023.</li>
+<li>Akyürek et al. What Learning Algorithm is In-Context Learning? <a href="https://arxiv.org/abs/2211.15661" target="_blank">arXiv:2211.15661</a>, 2023.</li>
+<li>Ahn et al. Transformers Learn to Implement Preconditioned Gradient Descent. <a href="https://arxiv.org/abs/2306.00297" target="_blank">arXiv:2306.00297</a>, 2024.</li>
+</ol>
+
+<h3>累加式与纠错式方法</h3>
+<ol start="7" style="font-size:0.85rem;line-height:1.6">
+<li>Katharopoulos et al. Transformers are RNNs (Linear Attention). <a href="https://arxiv.org/abs/2006.16236" target="_blank">arXiv:2006.16236</a>, 2020.</li>
+<li>Peng et al. RWKV: Reinventing RNNs for the Transformer Era. <a href="https://arxiv.org/abs/2305.13048" target="_blank">arXiv:2305.13048</a>, 2023.</li>
+<li>Yang et al. GLA: Gated Linear Attention. <a href="https://arxiv.org/abs/2312.06635" target="_blank">arXiv:2312.06635</a>, 2024.</li>
+<li>Beck, Hochreiter et al. xLSTM. <a href="https://arxiv.org/abs/2405.04517" target="_blank">arXiv:2405.04517</a>, 2024. xLSTM 7B: <a href="https://arxiv.org/abs/2503.13427" target="_blank">arXiv:2503.13427</a>, 2025.</li>
+<li>Sun, Dong et al. RetNet. MSRA, 2023.</li>
+<li>Yang et al. DeltaNet. <a href="https://arxiv.org/abs/2406.06484" target="_blank">arXiv:2406.06484</a>, MIT, 2024.</li>
+<li>Yang, Kautz, Hatamizadeh. Gated DeltaNet. <a href="https://arxiv.org/abs/2412.06464" target="_blank">arXiv:2412.06464</a>, NVIDIA, 2024.</li>
+</ol>
+
+<h3>显式 TTT</h3>
+<ol start="14" style="font-size:0.85rem;line-height:1.6">
+<li>Sun et al. TTT-Linear/MLP. <a href="https://arxiv.org/abs/2407.04620" target="_blank">arXiv:2407.04620</a>, Stanford, 2024.</li>
+<li>Behrouz et al. Titans. <a href="https://arxiv.org/abs/2501.00663" target="_blank">arXiv:2501.00663</a>, Google, 2025.</li>
+<li>Tandon, Dalal, ..., Sun. TTT-E2E. <a href="https://arxiv.org/abs/2512.23675" target="_blank">arXiv:2512.23675</a>, Stanford, 2025.</li>
+<li>Zhang et al. LaCT / TTT Done Right. <a href="https://arxiv.org/abs/2505.23884" target="_blank">arXiv:2505.23884</a>, Adobe, 2025.</li>
+<li>Von Oswald et al. MesaNet. <a href="https://arxiv.org/abs/2506.05233" target="_blank">arXiv:2506.05233</a>, DeepMind, 2025.</li>
+<li>Li, Behrouz et al. TNT. <a href="https://arxiv.org/abs/2511.07343" target="_blank">arXiv:2511.07343</a>, Google, 2025.</li>
+<li>Behrouz et al. ATLAS. <a href="https://arxiv.org/abs/2505.23735" target="_blank">arXiv:2505.23735</a>, Google, 2025.</li>
+</ol>
+
+<h3>扩展、分析与 SSM 对偶</h3>
+<ol start="21" style="font-size:0.85rem;line-height:1.6">
+<li>Liu et al. TTT with KV Binding Is Secretly Linear Attention. <a href="https://arxiv.org/abs/2602.21204" target="_blank">arXiv:2602.21204</a>, NVIDIA, 2026.</li>
+<li>Wang, Yang et al. TTC: Test-Time Control. <a href="https://arxiv.org/abs/2603.09221" target="_blank">arXiv:2603.09221</a>, 2026.</li>
+<li>Wang et al. AllMem. <a href="https://arxiv.org/abs/2602.13680" target="_blank">arXiv:2602.13680</a>, Huawei, 2026.</li>
+<li>Locas. <a href="https://arxiv.org/abs/2602.05085" target="_blank">arXiv:2602.05085</a>, 2026.</li>
+<li>Merrill et al. OLMo Hybrid. <a href="https://arxiv.org/abs/2604.03444" target="_blank">arXiv:2604.03444</a>, AI2, 2026.</li>
+<li>Feng, Cai et al. In-Place TTT. <a href="https://arxiv.org/abs/2604.06169" target="_blank">arXiv:2604.06169</a>, 2026.</li>
+<li>Gu, Dao. Mamba. <a href="https://arxiv.org/abs/2312.00752" target="_blank">arXiv:2312.00752</a>, 2023.</li>
+<li>Dao, Gu. Mamba-2 / SSD. <a href="https://arxiv.org/abs/2405.21060" target="_blank">arXiv:2405.21060</a>, 2024.</li>
+<li>Arora et al. Based. <a href="https://arxiv.org/abs/2402.18668" target="_blank">arXiv:2402.18668</a>, 2024.</li>
+</ol>
+
+<h3>应用</h3>
+<ol start="30" style="font-size:0.85rem;line-height:1.6">
+<li>One-Minute Video Generation with TTT. <a href="https://arxiv.org/abs/2504.05298" target="_blank">arXiv:2504.05298</a>, Stanford+NVIDIA, 2025.</li>
+<li>EVOLVE-VLA. <a href="https://arxiv.org/abs/2512.14666" target="_blank">arXiv:2512.14666</a>, 2025.</li>
+<li>ViT³. <a href="https://arxiv.org/abs/2512.01643" target="_blank">arXiv:2512.01643</a>, 2025.</li>
+<li>SAM-TTT. <a href="https://arxiv.org/abs/2509.11884" target="_blank">arXiv:2509.11884</a>, 2025.</li>
+<li>tttLRM. <a href="https://arxiv.org/abs/2602.20160" target="_blank">arXiv:2602.20160</a>, 2026.</li>
+<li>Mem3R. <a href="https://arxiv.org/abs/2604.07279" target="_blank">arXiv:2604.07279</a>, 2026.</li>
+<li>Spatial-TTT. <a href="https://arxiv.org/abs/2603.12255" target="_blank">arXiv:2603.12255</a>, 2026.</li>
+<li>ZipMap. <a href="https://arxiv.org/abs/2603.04385" target="_blank">arXiv:2603.04385</a>, 2026.</li>
+<li>VGG-T³. <a href="https://arxiv.org/abs/2602.23361" target="_blank">arXiv:2602.23361</a>, 2026.</li>
+<li>Scal3R. <a href="https://arxiv.org/abs/2604.08542" target="_blank">arXiv:2604.08542</a>, 2026.</li>
+<li>REE-TTT. <a href="https://arxiv.org/abs/2601.01605" target="_blank">arXiv:2601.01605</a>, 2026.</li>
+</ol>
+</section>
+
+</div>
+<footer>Tactile & Embodied AI Deep Dives 2026</footer>
+<script src="nav.js"></script>
+</body>
+</html>

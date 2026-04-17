@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-290GYTM41D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-290GYTM41D');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Robot Learning Survey 2026</title>
@@ -10,7 +8,19 @@
 </head>
 <body>
 
-<nav id="main-nav"></nav>
+<nav>
+  <span class="logo">Robot Learning 2026</span>
+  <a href="index.html" class="active">Home</a>
+  <a href="p1-vla.html">VLA</a>
+  <a href="p2-wam.html">WAM</a>
+  <a href="p3-rl-sim2real.html">RL</a>
+  <a href="p4-diffusion.html">Diffusion</a>
+  <a href="p5-hybrid.html">Hybrid</a>
+  <a href="p6-unitree.html">Unitree</a>
+  <a href="p7-citation-graph.html">Graph</a>
+  <a href="p8-survey.html">Survey</a>
+  <a href="tactile/index.html" style="color:#7c3aed;font-weight:600">Tactile</a>
+</nav>
 
 <div class="hero">
   <h1>Robot Learning Algorithm Survey</h1>
@@ -101,6 +111,22 @@
       <div>
         <h3>Citation Graph</h3>
         <p>论文引用关系力导向图 — 交互式可视化 60+ 篇论文的引用网络</p>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section>
+  <h2>垂直技术栈子站</h2>
+  <div class="pill-grid">
+
+    <a href="tactile/index.html" class="pill-card" style="border-top:3px solid #7c3aed">
+      <div class="icon" style="background:linear-gradient(135deg,#0e7490,#7c3aed);color:#fff">T</div>
+      <div>
+        <h3>Tactile & Embodied AI Deep Dives</h3>
+        <p>触觉采集硬件 / 具身 SoC / 模型融合与数据飞轮 / 力觉世界模型 / 评测体系 / Test-Time Training</p>
+        <p style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.3rem">6 个专题 · 独立于算法范式的垂直技术栈深入调研</p>
       </div>
     </a>
 
@@ -225,30 +251,9 @@
 
 </div>
 
-<div class="comments-section">
-<h3>Comments</h3>
-<script src="https://giscus.app/client.js"
-  data-repo="kaiqinhu/robot-learning-survey"
-  data-repo-id="R_kgDOR77ZGg"
-  data-category="General"
-  data-category-id="DIC_kwDOR77ZGs4C6Wpr"
-  data-mapping="pathname"
-  data-strict="0"
-  data-reactions-enabled="1"
-  data-emit-metadata="0"
-  data-input-position="bottom"
-  data-theme="preferred_color_scheme"
-  data-lang="zh-CN"
-  crossorigin="anonymous"
-  async>
-</script>
-</div>
-
 <footer>
-  Robot Learning Survey 2026 &mdash; 基于 60+ 篇 arXiv 论文整理 &mdash; Last updated April 2026
+  Robot Learning Survey 2026 &mdash; 基于 87+ 篇 arXiv 论文整理 &mdash; Last updated April 2026 &mdash; <a href="tactile/index.html" style="color:inherit;text-decoration:underline">触觉与具身 AI 子站</a>
 </footer>
 
-<script src="papers.js"></script>
-<script src="render.js"></script>
 </body>
 </html>

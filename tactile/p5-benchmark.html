@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>评测体系 | Tactile & Embodied AI 2026</title>
+<link rel="stylesheet" href="../shared.css">
+<style>h2{border-bottom-color:#059669} .card{border-top-color:#059669} table{font-size:0.85rem} td,th{padding:6px 8px}</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<div class="container">
+
+<h1 style="font-size:1.8rem;margin-bottom:0.3rem">评测体系：Benchmark 与比赛全景</h1>
+<p style="color:var(--text-secondary);margin-bottom:1rem">仿真评测 / 真机评测 / 触觉评测 / 人形机器人 / 比赛 / 系统性问题</p>
+
+<div class="card" style="margin-bottom:2rem">
+<p><strong>摘要</strong>: 本章系统梳理 2024-2026 年机器人操作领域的评测体系全景。仿真侧，LIBERO/Calvin/RLBench 等经典基准持续演进，ManiSkill 3 以 <strong>30,000+ FPS</strong> 实现 GPU 并行评测，RADAR/ManipArena 等新基准将评测从简单成功率扩展到推理和物理直觉。真机侧，<strong>RoboChallenge</strong> 首创"远程机器人"范式——全球任何人可通过 HTTP API 远程调用 10 台真实机器人进行标准化评测，即使最强的 π₀.₅ task-specific 也只有 <strong>44%</strong> 成功率。触觉评测仍处于早期阶段，<strong>力觉世界模型的预测质量评测完全空白</strong>。Benjie's Humanoid Olympic Games 精准暴露了当前学习范式在力反馈、触觉感知和手指控制方面的系统性短板。</p>
+</div>
+
+<!-- §1 仿真评测 -->
+<section>
+<h2>1. 仿真评测 Benchmark 全景</h2>
+
+<p>仿真评测可分为四个层次，各有侧重。</p>
+
+<p><strong>通用操作基准</strong>是基础设施。<strong>LIBERO</strong> (UT Austin, 2023) 以 130 个终身学习任务和 4 个知识迁移套件成为 VLA 标准评测之一，2026 年的 LIBERO-Plus 扩展增加了语言/视觉扰动评测 OOD 鲁棒性。<strong>Calvin</strong> (Freiburg, 2022) 考察 34 个任务的连续指令执行，VPP 报告 +18.6% 泛化。<strong>RLBench</strong> (Dyson Lab, 2020) 100 个任务 × 18 变体/任务是标准 3D 操作基准。<strong>ManiSkill 3</strong> (UCSD Hao Su Lab, 2024) 以 <strong>30,000+ FPS</strong> GPU 并行仿真和 20+ 任务类别代表了高吞吐评测方向。<strong>GRUtopia</strong> (Shanghai AI Lab, 2024) 则走向城市级仿真——100K 场景、89 类环境、LLM NPC。</p>
+
+<p><strong>VLA 专项评测</strong>是 2026 年的新趋势。<strong>SIMPLER</strong> (Google, 2024) 对齐真实 WidowX/Franka 设置评估 sim-real 一致性。<strong>RADAR</strong> (多校联合, 2026) 首次系统评估 VLA 在动态变化环境下的鲁棒性和物理推理能力。<strong>ManipArena</strong> (2026) 强调语义推理而非纯运动执行。<strong>ManipulationNet</strong> (2026) 评测物理直觉。<strong>WAM-vs-VLA</strong> (蚂蚁/浙大, 2026) 在 LIBERO-Plus 和 RoboTwin 2.0-Plus 上做了首次系统的跨范式对比。</p>
+
+<p><strong>双臂/协作/装配</strong>方面，<strong>RoboTwin 2.0</strong> 是 GigaWorld/WAM 的评测标准，<strong>FurnitureBench</strong> (2023) 考察长序列家具组装，<strong>NIST Assembly Task Board</strong> 是政府标准化工业装配基准（齿轮/USB/连接器）。移动操作方面，<strong>MobileManiBench</strong> (2026) 评测移动底盘+操作臂联合，<strong>AffordSim</strong> (2026) 评测可供性感知。</p>
+</section>
+
+<!-- §2 RoboChallenge -->
+<section>
+<h2>2. RoboChallenge：大规模真机在线评测</h2>
+
+<p><a href="https://robochallenge.cn" target="_blank"><strong>RoboChallenge</strong></a> 是首个大规模真机在线评测系统，其"远程机器人"范式解决了真机评测的可扩展性和可复现性问题。核心创新：用户不需要提交模型权重/Docker——通过 HTTP API 远程调用机器人，发送 capture request 获取精确时间戳的观测（RGB+深度+本体感受），提交 action 到队列，模型推理完全在用户侧完成。支持任意控制策略（包括需要精细时间控制的 Real-Time Action Chunking），NAT 友好无需公网 IP。硬件平台包括 10 台机器人 4 种类型：<strong>UR5</strong>（6-DOF, Robotiq 夹爪, RTDE 接口最高 125Hz）、<strong>Franka Panda</strong>（7-DOF, 双模式控制）、<strong>Cobot Magic Aloha</strong>（双 6-DOF, 移动平台）、<strong>ARX-5</strong>（6-DOF, 性价比高）。</p>
+
+<h3>Table30 Benchmark</h3>
+<p>30 个桌面操作任务覆盖家庭/厨房/办公/学校场景，可变形/刚性/铰接体均覆盖，每个任务最多 <strong>1000 episodes</strong> 示范数据。</p>
+
+<table>
+<tr><th>Tag</th><th>任务数</th><th>说明</th><th>难度</th></tr>
+<tr><td><code>precise3d</code></td><td>12</td><td>精确 3D 定位抓放</td><td>SR 18% — 224×224 低分辨率严重限制</td></tr>
+<tr><td><code>repeated</code></td><td>10</td><td>重复技能 ≥3 次</td><td>中等</td></tr>
+<tr><td><code>bimanual</code></td><td>8</td><td>双臂协作</td><td>中等</td></tr>
+<tr><td><code>manipulation</code></td><td>6</td><td>铰链/架子等复杂操作</td><td>较难</td></tr>
+<tr><td><code>temporal</code></td><td>3</td><td>时序依赖 (go-and-back)</td><td>SR 5% — 单帧模型几乎无法完成</td></tr>
+<tr><td><code>softbody</code></td><td>3</td><td>柔性物体 (毛巾、纸张)</td><td>SR 8% — 最难类别之一</td></tr>
+</table>
+
+<table>
+<tr><th>Protocol</th><th>方法</th><th>成功率 (SR)</th><th>Progress Score</th></tr>
+<tr><td>Task-specific</td><td><strong>π₀.₅</strong></td><td><strong>44%</strong></td><td><strong>62</strong></td></tr>
+<tr><td>Task-specific</td><td>π₀</td><td>28%</td><td>48</td></tr>
+<tr><td>Task-specific</td><td>CogACT</td><td>12%</td><td>22</td></tr>
+<tr><td>Generalist</td><td>π₀.₅ (multi)</td><td>18%</td><td>31</td></tr>
+<tr><td>Generalist</td><td>π₀ (multi)</td><td>9%</td><td>21</td></tr>
+</table>
+
+<p><strong>关键发现</strong>：即使最强的 π₀.₅ task-specific 也只有 44% 成功率。<code>temporal</code> 和 <code>softbody</code> 最难（SR 5%/8%），所有测试模型都是单帧模型几乎无法完成时序任务。Generalist 设定大幅低于 Task-specific，但 π₀.₅ 部分任务上 generalist 反超——暗示真正的泛化模型可能到来。<strong>测试人员影响巨大</strong>：同一模型+同一任务，experienced/ignorant/adaptive 三类测试员结果差异可达 0-100%。目前仅用视觉（RealSense RGBD），未接入力/触觉传感器——技术报告明确提到 "We will also consider torque or force sensors in the future"。</p>
+</section>
+
+<!-- §3 触觉评测 -->
+<section>
+<h2>3. 触觉评测：早期阶段与空白地带</h2>
+
+<p>触觉评测远落后于视觉评测的成熟度。<strong>TacBench</strong> (Meta, Sparsh 2024) 是第一个系统性触觉表征评测——6 个任务（抓取稳定性、表面分类、姿态估计等），核心发现 DINO/IJEPA 优于 MAE。<strong>UniVTAC Benchmark</strong> (2025) 扩展到 8 个视触觉任务，验证仿真→真机提升 <strong>17.1%</strong>(仿真)/<strong>25%</strong>(真实)。<strong>ManiFeel</strong> (2025) 是首个视触觉操作策略学习基准，评测触觉对哪些任务有用。</p>
+
+<p><strong>G1 Sensor Benchmark</strong> (Hannover, 2026, <a href="https://arxiv.org/abs/2603.28422" target="_blank">arXiv:2603.28422</a>) 对比了 14 种传感器组合，发现了一个违反直觉的结论：<strong>数据有限时传感器越多反而越差</strong>（87.5%→67.3%）——更多模态意味着更大的特征空间，有限数据下模型无法有效利用。<strong>VITaL 触觉消融</strong>证明 USB 插拔训练加触觉即使推理时移除仍从 20%→85%。<strong>AnyRotate</strong> 验证了触觉 sim2real 可行性。</p>
+
+<p><strong>空白地带</strong>：TacBench 考察触觉表征质量，ManiFeel 考察视触觉策略，但<strong>零个评测集考察力觉动力学预测或力觉世界模型质量</strong>。FWM 的预测误差增长曲线（N 步后误差如何积累）、力觉 rollout 与真实轨迹的一致性、不同材质/接触模式下的预测鲁棒性——这些都需要全新的评测框架。</p>
+</section>
+
+<!-- §4 人形与比赛 -->
+<section>
+<h2>4. 人形评测与国际国内比赛</h2>
+
+<p><strong>人形机器人评测</strong>正在快速标准化。<strong>AGILE</strong> (ETH Zurich, 2026, <a href="https://arxiv.org/abs/2603.20147" target="_blank">arXiv:2603.20147</a>) 覆盖全生命周期（环境验证→训练→评测→部署），已在 G1 和 Booster T1 验证。<strong>MetaWorld-X</strong> (USTC, 2026) 用分治法编排运动/伸手/抓取专家，VLM 路由器调度。<strong>HumanoidBench</strong> (2024) 提供 15+ 人形全身操作+运动评测。NVIDIA <strong>Isaac Lab</strong> 是训练框架标准，GPU 加速支持 G1/Go2 URDF。</p>
+
+<p><strong>国际比赛</strong>方面，<strong>RoCo Challenge</strong> (AAAI 2026) 聚焦双臂协作装配面向工业自动化；<strong>ManiSkill Challenge</strong> (CVPR/CoRL) 以高吞吐 GPU 并行评测为特色；<strong>ICRA Manipulation</strong> 是年度传统旗舰；<strong>RoboCup@Home</strong> 侧重服务机器人系统集成。<strong>国内</strong>方面，WRC 世界机器人大赛（中国电子学会）规模最大，2025-26 年各省市/高校新设的<strong>具身智能专项赛</strong>正在兴起。</p>
+
+<h3>Benjie's Humanoid Olympic Games：暴露系统性短板</h3>
+
+<p>由机器人研究者 <a href="https://generalrobots.substack.com/p/benjies-humanoid-olympic-games" target="_blank">Benjie Holson</a> 发起的社区挑战赛，以铜/银/金三级奖章制考察人形机器人在真实家庭场景中的操作极限。规则：1× 速度无剪辑视频，通用移动操作机器人自主运行，允许 10× 人类用时。</p>
+
+<table>
+<tr><th>赛项</th><th>考察能力</th><th>铜→银→金 递进</th><th>FWM 关联</th></tr>
+<tr><td><strong>门</strong></td><td>全身协调+非对称力</td><td>推圆把手门 → 自动关闭杠杆推门 → 自动关闭杠杆拉门</td><td>门的力反馈是典型力觉预测场景</td></tr>
+<tr><td><strong>洗衣</strong></td><td>长程+柔性物体</td><td>翻正反穿T恤并折叠 → 翻袜子 → 挂衬衫扣纽扣</td><td>柔性物体力觉预测极度困难</td></tr>
+<tr><td><strong>工具使用</strong></td><td>力量+抓取调整</td><td>喷窗+擦 → 做三明治 → 用钥匙开锁</td><td><strong>钥匙=USB插拔升级版，FWM 核心场景</strong></td></tr>
+<tr><td><strong>指尖</strong></td><td>手内操作</td><td>卷袜子配对 → 撕袋子 → 徒手剥橘子</td><td>所有任务都需精细力觉反馈</td></tr>
+<tr><td><strong>湿滑</strong></td><td>防水+湿滑操作</td><td>湿海绵擦台面 → 清洗花生酱 → 海绵洗油锅</td><td>湿滑环境下力觉预测更关键</td></tr>
+</table>
+
+<p>Holson 明确指出当前范式的 4 个核心限制中 <strong>3 个直接与力/触觉相关</strong>："No force feedback at the wrists"（遥操作者感受不到力）、"No sense of touch"（人手布满传感器，机器人手几乎没有）、"Limited finger control"（多数任务只能 open/close）。第 4 个是精度限制（1-3cm）。15 个任务中绝大多数需要力觉世界模型才能根本性解决。</p>
+</section>
+
+<!-- §5 系统性问题 -->
+<section>
+<h2>5. 评测体系的系统性问题</h2>
+
+<p>当前评测生态存在严重碎片化和结构性缺陷。</p>
+
+<p><strong>基准割裂</strong>：VLA 用 SIMPLER/Calvin，WAM 用 RoboTwin，RL 用 Isaac Lab——跨范式对比几乎不可能。WAM-vs-VLA (蚂蚁/浙大, 2026) 是首次系统尝试，但仅覆盖两个范式。<strong>试验量不足</strong>：多数论文 10-100 次试验无置信区间，RoboChallenge 证实同一模型+任务成功率可在 0-100% 波动。<strong>OOD 评测缺乏</strong>：多数基准测试分布内性能，RADAR/ManipArena 正在填补这一空白。<strong>真实部署指标缺失</strong>：基准衡量单次成功率，部署需要 MTBF、故障恢复率、长尾覆盖率。</p>
+
+<p><strong>触觉与力觉评测完全空白</strong>是最大的结构性缺陷。尚无公认的触觉操作基准，力觉预测评测零个。测试人员偏差（"sweet spot effect"）可系统性偏置结果——RoboChallenge 的盲测 Comparative Protocol 是缓解方案之一。</p>
+
+<p><strong>2026 年新趋势</strong>：VLA 评测专项化（RADAR/ManipArena 超越简单成功率评测推理和物理直觉）；真机大规模评测成为可能（RoboChallenge 的远程机器人范式打破物理限制）；协作与装配评测兴起（RoCo Challenge 标志评测从单臂桌面转向双臂工业协作）；自主评估方法（RADAR/ROBOGATE 尝试自动化评测减少人工依赖）。</p>
+</section>
+
+<!-- 参考文献 -->
+<section>
+<h2>参考文献</h2>
+<ol style="font-size:0.85rem;line-height:1.6">
+<li>LIBERO: Lifelong Robot Learning Benchmark. UT Austin, arXiv:2306.03310, 2023.</li>
+<li>ManiSkill 3: GPU-Parallelized Robot Simulation. UCSD (Hao Su Lab), 2024-25.</li>
+<li>RADAR: VLA 泛化评测. 多校联合, 2026.</li>
+<li>ManipArena: 推理导向通用操作评测. 多校联合, 2026.</li>
+<li>RoboChallenge: 大规模真机在线评测系统. robochallenge.cn, 2026.</li>
+<li>Zhang et al. WAM-vs-VLA: 跨范式对比. 蚂蚁/浙大, 2026.</li>
+<li>AGILE: Standardized Humanoid RL Lifecycle. ETH Zurich, arXiv:2603.20147, 2026.</li>
+<li>Kuhn et al. G1 Sensor Benchmark. arXiv:2603.28422, 2026.</li>
+<li>Benjie Holson. Benjie's Humanoid Olympic Games. generalrobots.substack.com, 2025.</li>
+<li>Sparsh: Self-Supervised Tactile Representation Learning. Meta, 2025.</li>
+<li>PI. pi0.5: Physical Intelligence, 2026.</li>
+<li>GRUtopia (GRBench): 城市级具身仿真. Shanghai AI Lab, 2024.</li>
+</ol>
+</section>
+
+</div>
+<footer>Tactile & Embodied AI Deep Dives 2026</footer>
+<script src="nav.js"></script>
+</body>
+</html>

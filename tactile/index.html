@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>触觉与具身智能专题 | Robot Learning Survey 2026</title>
+<link rel="stylesheet" href="../shared.css">
+<style>
+  .hero { background: linear-gradient(135deg, #0e7490 0%, #7c3aed 100%); }
+  .pill-card .icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; }
+  .sub-desc { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem; }
+</style>
+</head>
+<body>
+
+<nav id="main-nav"></nav>
+
+<div class="hero">
+  <h1>Tactile & Embodied AI Deep Dives</h1>
+  <p>触觉采集硬件 / 具身 SoC / 模型架构与力觉世界模型 / 评测体系 / Test-Time Training</p>
+  <p style="margin-top:0.8rem;font-size:0.85rem;opacity:0.7">Updated: April 2026 | 独立于算法范式综述的垂直技术栈专题</p>
+</div>
+
+<div class="container">
+
+<section>
+  <h2>技术栈全景</h2>
+  <div class="diagram">
+                     触觉 → 具身基座模型 → 任务泛化 闭环
+  ┌──────────────────────────────────────────────────────────┐
+  │                                                          │
+  │   采集硬件           模型融合              部署平台        │
+  │  ┌──────────┐     ┌──────────────┐     ┌──────────┐     │
+  │  │ 磁编码器  │     │ Token 级融合  │     │ Orin     │     │
+  │  │ 压阻阵列  │ ──→ │ FiLM 调制    │ ──→ │ Thor     │     │
+  │  │ 视觉触觉  │     │ Cross-Attn   │     │ J6P      │     │
+  │  │ 混合方案  │     │ 异步分层     │     │ 云-端协同  │     │
+  │  └──────────┘     └──────────────┘     └──────────┘     │
+  │       │                  │                   │           │
+  │       └──── 数据飞轮 ────┘                   │           │
+  │       ┌──── 在线学习 ←──── 评测反馈 ←────────┘           │
+  │       │                                                  │
+  │  ┌────┴─────────────────────────────────────────┐       │
+  │  │      力觉世界模型 (Force World Model)          │       │
+  │  │  三频率分层: 语义 1-5Hz / 规划 10-30Hz / 执行 1kHz │       │
+  │  └──────────────────────────────────────────────┘       │
+  └──────────────────────────────────────────────────────────┘</div>
+</section>
+
+<section>
+  <h2>五大专题</h2>
+  <div class="pill-grid">
+
+    <a href="p1-sensing.html" class="pill-card">
+      <div class="icon" style="background:#ede9fe;color:#7c3aed">S</div>
+      <div>
+        <h3>触觉采集硬件</h3>
+        <p>磁编码器 / 压阻阵列 / 视觉触觉 / 混合方案 — 从传感原理到工程 trade-off</p>
+        <div class="sub-desc">1721+ 行深度调研：手套形态、传感密度×耐久性×成本不可能三角</div>
+      </div>
+    </a>
+
+    <a href="p2-soc.html" class="pill-card">
+      <div class="icon" style="background:#fef3c7;color:#d97706">C</div>
+      <div>
+        <h3>芯片与部署平台</h3>
+        <p>Orin / Thor / J6P / A2000 / Kria — 具身 SoC 格局分析</p>
+        <div class="sub-desc">15 款芯片对比、异构部署架构、谁做出第一款真正的具身 SoC</div>
+      </div>
+    </a>
+
+    <a href="p3-model-loop.html" class="pill-card">
+      <div class="icon" style="background:#dbeafe;color:#3b5bdb">M</div>
+      <div>
+        <h3>模型架构与力觉世界模型</h3>
+        <p>四种融合架构 / 触觉基座模型 / 力觉世界模型 (FWM) / 数据飞轮与闭环</p>
+        <div class="sub-desc">从 VTAM/TacFiLM/HTD 到 FWM 三频率分层架构、SSM 骨干、自监督预训练</div>
+      </div>
+    </a>
+
+    <a href="p5-benchmark.html" class="pill-card">
+      <div class="icon" style="background:#d1fae5;color:#059669">B</div>
+      <div>
+        <h3>评测体系</h3>
+        <p>仿真/真机/触觉/人形/国际国内比赛 — 全景梳理</p>
+        <div class="sub-desc">RoboChallenge / Benjie's Olympics / Table30 / 评测系统性问题</div>
+      </div>
+    </a>
+
+    <a href="p6-ttt.html" class="pill-card">
+      <div class="icon" style="background:#ede9fe;color:#8b5cf6">T</div>
+      <div>
+        <h3>Test-Time Training (TTT)</h3>
+        <p>把学习折叠进前向传播 — TTT Layer / Titans / 持续适应</p>
+        <div class="sub-desc">模型在推理时自我更新的算法前沿</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section>
+  <h2>与主站的关系</h2>
+  <p>主站 <a href="../index.html">Robot Learning Algorithm Survey</a> 按<strong>算法范式</strong>横切（VLA / WAM / RL / Diffusion / Hybrid），本子站按<strong>垂直技术栈</strong>深入——从传感硬件到模型融合到部署芯片，聚焦触觉模态如何从"有用但难用"走向"即插即用"。</p>
+  <p>核心发现：截至 2026 Q1，唯一走通完整四阶段闭环（预训练→SFT→RL→在线学习）的系统是 <strong>Physical Intelligence pi0.6</strong>，且不含触觉。触觉模态的闭环仍有多处断点。</p>
+</section>
+
+</div>
+
+<footer>
+  Tactile & Embodied AI Deep Dives 2026 &mdash; Last updated April 2026
+</footer>
+
+<script src="nav.js"></script>
+</body>
+</html>

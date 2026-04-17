@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>芯片与部署平台 | Tactile & Embodied AI 2026</title>
+<link rel="stylesheet" href="../shared.css">
+<style>h2{border-bottom-color:#d97706} .card{border-top-color:#d97706} table{font-size:0.85rem} td,th{padding:6px 8px}
+.fig{margin:1.5rem 0;text-align:center} .fig img{max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.12)} .fig figcaption{font-size:.82rem;color:var(--text-secondary);margin-top:.4rem}</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<div class="container">
+
+<h1 style="font-size:1.8rem;margin-bottom:0.3rem">芯片与部署平台：具身 SoC 格局分析</h1>
+<p style="color:var(--text-secondary);margin-bottom:1rem">Orin / Thor / J6P / A2000 / Kria — 谁能同时覆盖 Transformer 推理 + 运动控制?</p>
+
+<div class="card" style="margin-bottom:2rem">
+<p><strong>摘要</strong>: 具身智能对端侧 SoC 提出了前所未有的三层并行需求：Transformer 级推理（≥100 TOPS）、硬实时运动控制（&lt;1ms 确定性延迟）和多模态传感器融合。本页对比了 NVIDIA Orin/Thor、高通 RB3 Gen2/RB5、地平线 J6P、黑芝麻 A2000、AMD Kria 等 14 款芯片平台，发现<strong>当前没有任何单一 SoC 能完美覆盖全部三层</strong>。业界主流方案仍为 Orin + 外挂 MCU 的异构分层架构。NVIDIA Thor（2000 TOPS + Transformer Engine + Safety Island）是最接近"真正具身 SoC"的候选，地平线 J6P 凭借 560 TOPS + ASIL-D Safety Island 成为国产最有潜力的替代路径。GR00T N1 基础模型的发布进一步锁定了 NVIDIA 在软硬协同生态上的领先地位。</p>
+</div>
+
+<!-- §1 硬件平台 -->
+<section>
+<h2>1. 硬件平台规格对比</h2>
+
+<figure class="fig">
+<img src="figures/jetson_orin.jpg" alt="NVIDIA Jetson AGX Orin 开发套件" style="max-width:500px">
+<figcaption>NVIDIA Jetson AGX Orin 开发套件：275 TOPS (稀疏) / 64GB 统一内存，当前机器人端侧推理主力平台。来源: <a href="https://developer.nvidia.com/embedded-computing" target="_blank">NVIDIA Developer</a></figcaption>
+</figure>
+
+<p>14 款芯片横跨四个生态——NVIDIA 系（Orin/Thor）、高通系（RB3 Gen2/RB5/X Elite）、国产系（地平线 J6P/J6E、地瓜 RDK X5/X3、黑芝麻 A1000/A2000）、FPGA 系（AMD Kria）。下表列出机器人场景最相关的 8 款。</p>
+
+<div style="overflow-x:auto">
+<table>
+<tr><th>平台</th><th>算力 (INT8)</th><th>功耗</th><th>CPU</th><th>硬实时 MCU</th><th>目标场景</th></tr>
+<tr><td><strong><a href="https://developer.nvidia.com/embedded-computing" target="_blank">Jetson AGX Orin</a></strong></td><td>275 TOPS (稀疏)</td><td>15-60W</td><td>12×A78AE</td><td>✅ Cortex-R5</td><td>当前主力机器人推理</td></tr>
+<tr><td><strong><a href="https://developer.nvidia.com/project-gr00t" target="_blank">Jetson Thor</a></strong> (预计)</td><td>2000 TOPS (稀疏)</td><td>>100W</td><td>Grace (Neoverse V2)</td><td>✅ Safety Island (ASIL-D)</td><td>下一代人形机器人</td></tr>
+<tr><td><strong>高通 RB5</strong> (QRB5165)</td><td>15 TOPS</td><td>~10-25W</td><td>8×Kryo 585</td><td>⚠️ 无专用 MCU</td><td>低功耗机器人/无人机</td></tr>
+<tr><td><strong>高通 RB3 Gen2</strong> (QCS6490)</td><td>12.5 TOPS</td><td>~5-15W</td><td>8×Kryo 770</td><td>⚠️ 无专用 MCU</td><td>IoT/轻量机器人</td></tr>
+<tr><td><strong><a href="https://www.horizon.cc/" target="_blank">地平线 J6P</a></strong></td><td>560 TOPS</td><td>~30W</td><td>ARM (BPU Nash)</td><td>✅ Safety Island (ASIL-D)</td><td>自动驾驶→机器人</td></tr>
+<tr><td><strong>黑芝麻 A2000</strong></td><td>256 TOPS</td><td>~45W</td><td>12×A78AE + R5</td><td>✅ Safety Island (ASIL-D)</td><td>高端自动驾驶</td></tr>
+<tr><td><strong>AMD Kria KR260</strong></td><td>可配置 (FPGA)</td><td>10-25W</td><td>4×A53 + 2×R5F</td><td>✅✅ R5F 最强硬实时</td><td>运动控制+定制加速</td></tr>
+<tr><td><strong>云端 A100/H100</strong></td><td>624/1979 TOPS</td><td>300-700W</td><td>服务器 CPU</td><td>❌</td><td>训练 + 云端推理</td></tr>
+</table>
+</div>
+<p style="font-size:0.8rem;color:var(--text-secondary)">数据来源: NVIDIA/高通/地平线官方规格 + 多模型交叉校验 (2026.04)。稀疏 TOPS 通常是密集的 2×。未列入的 RK3588 (6 TOPS)、地瓜 RDK X5 (10 TOPS) 算力不足以运行 VLA。</p>
+</section>
+
+<!-- §2 模型推理 -->
+<section>
+<h2>2. 模型规模与推理瓶颈</h2>
+
+<p>基于 Jetson AGX Orin (275 TOPS, 64GB) 的实测/估算揭示了一个核心矛盾：<strong>VLA 的 1-5Hz 推理频率远低于力控任务所需的 50-100Hz</strong>。</p>
+
+<table>
+<tr><th>模型类型</th><th>参数量</th><th>Orin 推理延迟</th><th>频率</th><th>可行性</th></tr>
+<tr><td>Diffusion Policy (DP3)</td><td>~50M</td><td>~20ms</td><td>~50Hz</td><td>✅ 完全可行</td></tr>
+<tr><td>PocketDP3 (轻量化)</td><td>~10M</td><td>~5ms</td><td>~200Hz</td><td>✅ 实时</td></tr>
+<tr><td>Octo</td><td>300M</td><td>~100ms</td><td>~10Hz</td><td>✅ 可用</td></tr>
+<tr><td>OpenVLA (INT4 AWQ)</td><td>7B</td><td>~500ms-1s</td><td>1-2Hz</td><td>⚠️ 勉强</td></tr>
+<tr><td>pi0 / RT-2 级</td><td>55B</td><td>无法加载</td><td>—</td><td>❌ 需云端</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2503.14734" target="_blank">GR00T N1</a></td><td>未公开</td><td>目标 &lt;100ms</td><td>>10Hz</td><td>🔄 Thor 优化中</td></tr>
+</table>
+
+<p>业界对此有三种应对思路。<strong>ECHO (HKUST/LimX, 2026)</strong> 走云-端协同：云端 GPU 运行扩散模型（~1s 出一个动作序列），边侧 RL tracker 以 <strong>1kHz</strong> 执行，用 38 维紧凑动作表示桥接延迟。<strong>AC²-VLA (2026)</strong> 做自适应计算：简单动作跳过 Transformer 层/token，复杂动作完整计算，推理加速 2-4×。<strong>OneDP (NVIDIA/UT Austin)</strong> 走单步扩散：通过自蒸馏实现 <strong>10× 推理加速</strong>，GPU 上可达数百 Hz。<strong>PocketDP3</strong> 则从模型轻量化入手，专为边侧部署优化解码器。</p>
+</section>
+
+<!-- §3 Orin→Thor + 国产 -->
+<section>
+<h2>3. 代际跳跃与各方路线</h2>
+
+<figure class="fig">
+<img src="figures/jetson_orin_hero.jpg" alt="NVIDIA Jetson Orin 平台" style="max-width:560px">
+<figcaption>Jetson Orin 支持的生成式 AI 应用场景。来源: <a href="https://developer.nvidia.com/embedded/jetson-orin" target="_blank">NVIDIA Jetson Orin</a></figcaption>
+</figure>
+
+<p><strong>NVIDIA Thor</strong> 是最接近"真正具身 SoC"的候选。相比 Orin 的 275 TOPS，Thor 提供 <strong>2000 TOPS</strong>（7× 提升），Blackwell Transformer Engine 原生支持 FP8 推理使 10B+ VLA 可端侧运行，Grace CPU (Neoverse V2) 提供强大通用算力，预计 100GB+ 统一内存可加载 GR00T N1 级模型。配合 <a href="https://arxiv.org/abs/2503.14734" target="_blank"><strong>GR00T N1</strong></a> 基础模型——NVIDIA 为人形机器人设计的多模态基础模型，融合多路视觉、语言指令和本体感觉直接输出全身关节动作——NVIDIA 正从"卖芯片"转向"卖芯片+模型+工具链"的<strong>全栈生态锁定</strong>：Isaac GR00T 平台将仿真训练、模型优化和 Thor 部署整合为端到端流水线。</p>
+
+<p><strong>地平线 J6P</strong> 是国产最有潜力的替代路径。原为高阶自动驾驶设计的旗舰 SoC，自研 BPU Nash 架构提供 <strong>560 TOPS</strong>，具备 ASIL-D 级 Safety Island 硬实时核心。理论上可同时承载感知推理和运动控制——硬件上已满足 FWM 三频率架构需求。关键挑战在于机器人工具链（编译器、运行时、ROS2 集成）的成熟度远落后于车端。<a href="https://developer.d-robotics.cc/" target="_blank">RDK X5</a> 开发者生态（基于征程6 系列的 Sunrise 5 芯片，10 TOPS）为开发者提供入门通道，社区活跃度在国产平台中领先，但量产级 J6P 机器人方案仍处于早期探索阶段。</p>
+
+<figure class="fig">
+<img src="figures/horizon_rdkx5.png" alt="地平线 RDK X5 开发板" style="max-width:420px">
+<figcaption>地平线 RDK X5 开发板 (征程6 系列)。来源: <a href="https://developer.d-robotics.cc/" target="_blank">D-Robotics Developer</a></figcaption>
+</figure>
+
+<p><strong>高通 RB3 Gen2/RB5</strong> 走低功耗异构路线。Hexagon DSP 负责低功耗 AI 推理，Adreno GPU 提供通用计算，原生支持 Linux/ROS2。优势是超低功耗（RB3 Gen2 仅 5-15W）和丰富连接性（Wi-Fi 6E/蓝牙/5G），适合移动巡检机器人。局限是算力不足运行 VLA（7B+ 需 100+ TOPS），且缺乏专用硬实时 MCU。<strong>AMD Kria KR260</strong> 的 FPGA+ARM+R5F 组合在运动控制层最强（R5F 硬实时无出其右），但 FPGA 跑 Transformer 效率差、开发门槛极高。</p>
+</section>
+
+<!-- §4 部署架构 -->
+<section>
+<h2>4. 部署架构模式</h2>
+
+<p>当前有三种部署模式，各有适用场景。</p>
+
+<div class="diagram">
+模式 A: 纯端侧（当前可行）
+  Orin 运行 DP/小模型 (50-200Hz) ← 适合 RL 策略、Diffusion Policy
+
+模式 B: 云-端协同（ECHO 模式，已验证）
+  云端 GPU: VLA/扩散模型 (~1Hz 出动作序列)
+  边侧 Orin: RL Tracker (1kHz 执行) + 感知
+  通信: 38 维动作表示，容忍 ~1s 网络延迟
+
+模式 C: 下一代纯端侧（Thor 时代）
+  Thor 运行 10B+ VLA (目标 >10Hz)
+  本地闭环，无网络依赖</div>
+
+<p>多数团队采用模式 B 或训练时云端+部署时导出 ONNX 到 Orin（模式 A）。Unitree G1 标配 Orin，软件栈为 <code>Isaac Lab (云端训练) → 导出 ONNX → Orin 推理</code>。</p>
+</section>
+
+<!-- §5 具身SoC格局 -->
+<section>
+<h2>5. 具身 SoC 格局：三层并行需求</h2>
+
+<p>真正的具身 SoC 需要同时具备三个能力层：(1) <strong>Transformer 推理</strong>——≥100 TOPS，能跑 1-7B VLA at ≥5Hz；(2) <strong>硬实时运动控制</strong>——确定性延迟 &lt;1ms，50-1000Hz 控制回路（需 MCU/Safety Island）；(3) <strong>多模态传感器接口</strong>——多路 camera ISP + ADC（力/触觉）+ IMU + GPIO。</p>
+
+<table>
+<tr><th>平台</th><th>Transformer 推理</th><th>硬实时控制</th><th>机器人生态</th><th>综合评级</th></tr>
+<tr><td><strong>Orin</strong></td><td>⚠️ 7B 仅 1-2Hz</td><td>✅ R5 安全岛</td><td>★★★★★ Isaac/ROS2</td><td>当前最优，算力不足跑大 VLA</td></tr>
+<tr><td><strong>Thor</strong></td><td>✅ 2000 TOPS</td><td>✅ Safety Island</td><td>★★★★★ GR00T 原生</td><td><strong>理想目标</strong>，未出货</td></tr>
+<tr><td><strong>J6P</strong></td><td>✅ 560 TOPS</td><td>✅ Safety Island</td><td>★★ 适配中</td><td><strong>国产最有潜力</strong>，生态在车端</td></tr>
+<tr><td><strong>A2000</strong></td><td>✅ 256 TOPS</td><td>✅ Safety Island</td><td>★ 几乎无</td><td>算力够但生态空白</td></tr>
+<tr><td><strong>Kria KR260</strong></td><td>❌ FPGA 效率差</td><td>✅✅ R5F 最强</td><td>★ 门槛极高</td><td>控制层最优，无 AI 能力</td></tr>
+</table>
+
+<p><strong>谁最可能做出第一款真正的具身 SoC？</strong> NVIDIA Thor 可能性最高——Grace+Blackwell+Safety Island 三合一，GR00T 生态绑定，2000 TOPS 碾压级算力。地平线 J6P/J7 紧随其后——560 TOPS + Safety Island + 自研 BPU 已有实时路径，车端→机器人自然迁移，国产自主可控。高通如果推出集成 DSP 实时核+更强 NPU 的 RB7 也有机会，5G 集成是独特优势。黑芝麻 A2000 硬件齐备但机器人生态从零起步。AMD Kria 理论完美但开发门槛太高。</p>
+
+<p><strong>业界实际做法</strong>：异构双芯分层。方案 D（Orin + MCU）是当前主流——Orin 运行 VLA/视觉/规划（10-30Hz），通过 EtherCAT/CAN/SPI 连接外挂 STM32/ESP32 做力控/电机伺服（1kHz 硬实时）。Orin 虽有 R5 安全岛，但多数团队仍用外挂 MCU 做电机控制。方案 E（J6P + 内置 Safety Island）理论上可不需外挂 MCU，但机器人工具链不成熟、BPU 对 Transformer 支持待验证。</p>
+
+<h3>对 FWM 三频率架构的适配</h3>
+
+<table>
+<tr><th>频率层</th><th>需求</th><th>当前最优</th><th>理想具身 SoC</th></tr>
+<tr><td>语义层 1-5Hz (VLA/LLM)</td><td>≥100 TOPS, Transformer</td><td>Thor / 云端</td><td>集成 Transformer Engine</td></tr>
+<tr><td>规划层 10-30Hz (FWM)</td><td>~50 TOPS, SSM/Mamba</td><td>Orin 可胜任</td><td>集成 SSM 加速器</td></tr>
+<tr><td>执行层 100-1000Hz (力控)</td><td>硬实时 &lt;1ms</td><td>外挂 MCU / Kria FPGA</td><td>集成 Safety MCU + ADC</td></tr>
+</table>
+
+<p><strong>底线</strong>：在 Thor 出货之前，力觉世界模型的 MVP 部署方案只能是 <strong>Orin + 外挂 MCU</strong>。J6P 如果机器人工具链成熟化，是国产替代 Orin 的最强候选——560 TOPS + Safety Island 硬件上已满足 FWM 三频率架构的需求。</p>
+</section>
+
+<!-- 参考文献 -->
+<section>
+<h2>参考文献</h2>
+<ol style="font-size:0.88rem;line-height:1.7">
+<li>NVIDIA. Jetson AGX Orin Technical Specifications. <a href="https://developer.nvidia.com/embedded-computing" target="_blank">developer.nvidia.com</a>, 2024.</li>
+<li>NVIDIA. Project GR00T — Foundation Models for Humanoid Robots. <a href="https://developer.nvidia.com/project-gr00t" target="_blank">developer.nvidia.com</a>, 2025.</li>
+<li>Bjorck, J. et al. GR00T N1: An Open Foundation Model for Generalist Humanoid Robots. <a href="https://arxiv.org/abs/2503.14734" target="_blank">arXiv:2503.14734</a>, 2025.</li>
+<li>地平线. 征程6 系列技术规格. <a href="https://www.horizon.cc/" target="_blank">www.horizon.cc</a>, 2024.</li>
+<li>D-Robotics. RDK X5 开发者文档. <a href="https://developer.d-robotics.cc/" target="_blank">developer.d-robotics.cc</a>, 2025.</li>
+<li>Qualcomm. QCS6490 (RB3 Gen2) / QRB5165 (RB5) Robotics Platform. <a href="https://developer.qualcomm.com/" target="_blank">developer.qualcomm.com</a>.</li>
+<li>Xiao, T. et al. ECHO: Bridging Cloud VLAs and Edge RL. <a href="https://arxiv.org/abs/2603.16188" target="_blank">arXiv:2603.16188</a>, 2026.</li>
+<li>Li, S. et al. OneDP: One-Step Diffusion Policy. <a href="https://arxiv.org/abs/2410.21257" target="_blank">arXiv:2410.21257</a>, 2024.</li>
+</ol>
+</section>
+
+</div>
+<footer>Tactile & Embodied AI Deep Dives 2026</footer>
+<script src="nav.js"></script>
+</body>
+</html>
