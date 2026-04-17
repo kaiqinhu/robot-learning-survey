@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-290GYTM41D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-290GYTM41D');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Citation Graph | Robot Learning Survey 2026</title>
@@ -50,7 +48,18 @@ canvas:active{cursor:grabbing}
 </style>
 </head>
 <body>
-<nav id="main-nav"></nav>
+<nav>
+  <span class="logo">Robot Learning 2026</span>
+  <a href="index.html">Home</a>
+  <a href="p1-vla.html">VLA</a>
+  <a href="p2-wam.html">WAM</a>
+  <a href="p3-rl-sim2real.html">RL</a>
+  <a href="p4-diffusion.html">Diffusion</a>
+  <a href="p5-hybrid.html">Hybrid</a>
+  <a href="p6-unitree.html">Unitree</a>
+  <a href="p7-citation-graph.html" class="active" style="background:#8b5cf6">Graph</a>
+  <a href="survey.html">Survey</a>
+</nav>
 
 <div class="container">
 <h1 style="font-size:1.8rem;margin-bottom:0.3rem">Citation Graph</h1>
@@ -88,53 +97,275 @@ canvas:active{cursor:grabbing}
 </div>
 </div>
 
-<div class="comments-section">
-<h3>Comments</h3>
-<script src="https://giscus.app/client.js"
-  data-repo="kaiqinhu/robot-learning-survey"
-  data-repo-id="R_kgDOR77ZGg"
-  data-category="General"
-  data-category-id="DIC_kwDOR77ZGs4C6Wpr"
-  data-mapping="pathname"
-  data-strict="0"
-  data-reactions-enabled="1"
-  data-emit-metadata="0"
-  data-input-position="bottom"
-  data-theme="preferred_color_scheme"
-  data-lang="zh-CN"
-  crossorigin="anonymous"
-  async>
-</script>
-</div>
-
 <footer>Robot Learning Survey 2026 &mdash; Citation Graph</footer>
 
-<script src="papers.js"></script>
 <script id="paperData">
 const TC={vla:'#3b5bdb',wam:'#7c3aed',rl:'#e11d48',diff:'#0891b2',hybrid:'#d97706',unitree:'#059669'};
 const TN={vla:'VLA',wam:'WAM',rl:'RL Sim2Real',diff:'Diffusion',hybrid:'Hybrid',unitree:'Unitree'};
-/* ── Load data from papers.json (file:// compatible) ── */
-async function loadPaperData(){
-  let data;
-  if(window.SURVEY_DATA){data=window.SURVEY_DATA;}
-  else{try{const r=await fetch('papers.json');data=await r.json();}catch(e){const x=new XMLHttpRequest();x.open('GET','papers.json',false);x.send();data=JSON.parse(x.responseText);}}
-  const P=data.papers.map(p=>({
-    id:p.id,
-    s:p.shortTitle||p.title,
-    t:p.topic||'unknown',
-    a:p.authors||'',
-    o:p.institution||'',
-    y:typeof p.year==='number'?p.year:parseInt(p.year)||0,
-    d:p.description||'',
-    f:p.foundation?1:0,
-    l:(p.url||'').replace('https://arxiv.org/abs/','')
-  }));
-  const E=data.citations.map(c=>[c.source,c.target]);
-  return {P,E};
-}
+const P=[
+// === VLA (11 survey papers) ===
+{id:'2405.14093',s:'VLA Survey',t:'vla',a:'Ma et al.',o:'CUHK',y:2024,d:'VLM-to-Action 综合 Survey'},
+{id:'2603.10126',s:'AR-VLA',t:'vla',a:'Hu et al.',o:'ETH Zurich / Huawei',y:2026,d:'真正自回归动作专家头 VLA'},
+{id:'2603.13788',s:'ST-VLA',t:'vla',a:'Wu et al.',o:'HUST / Tencent',y:2026,d:'4D 时空感知 VLA'},
+{id:'2603.17524',s:'KineVLA',t:'vla',a:'Han et al.',o:'Tencent / ZJU',y:2026,d:'运动学双层动作分解 VLA'},
+{id:'2603.28740',s:'FocusVLA',t:'vla',a:'Zhang et al.',o:'CUHK-SZ / Shanghai AI Lab',y:2026,d:'视觉注意力聚焦的 VLA'},
+{id:'2604.01570',s:'FAN-VLA',t:'vla',a:'Niu et al.',o:'SJTU',y:2026,d:'可行动作邻域正则化 VLA 微调'},
+{id:'2604.01618',s:'Tex3D',t:'vla',a:'Chen et al.',o:'NYU / NUS',y:2026,d:'3D 纹理对抗攻击 VLA'},
+{id:'2502.05450',s:'ConRFT',t:'vla',a:'Chen et al.',o:'NJU',y:2025,d:'一致性策略 RL 微调 VLA'},
+{id:'2506.08440',s:'TGRPO',t:'vla',a:'Chen et al.',o:'NWPU',y:2025,d:'轨迹 GRPO 微调 VLA'},
+{id:'2603.26666',s:'VLA-OPD',t:'vla',a:'Zhong et al.',o:'CASIA',y:2026,d:'在线策略蒸馏桥接 SFT 与 RL'},
+{id:'2603.27670',s:'ProgressVLA',t:'vla',a:'Yan et al.',o:'PKU',y:2026,d:'进度引导扩散策略 VLA'},
+// === WAM (13 survey papers) ===
+{id:'2412.14803',s:'VPP',t:'wam',a:'Hu et al.',o:'Tsinghua / Shanghai AI Lab',y:2024,d:'视频预测策略，视觉表征驱动'},
+{id:'2602.15922',s:'DreamZero',t:'wam',a:'Ye et al.',o:'KAIST / Google DeepMind',y:2026,d:'WAM 零样本策略，30min 适应新机器人'},
+{id:'2603.17240',s:'GigaWorld',t:'wam',a:'Ye et al.',o:'PKU / Shanghai AI Lab',y:2026,d:'高效 WAM，推理 9x 加速'},
+{id:'2503.16806',s:'DyWA',t:'wam',a:'Lyu et al.',o:'PKU',y:2025,d:'动力学自适应 WAM，非抓取操作'},
+{id:'2603.19370',s:'VAMPO',t:'wam',a:'Ge et al.',o:'NUDT',y:2026,d:'视觉动态优化 WAM'},
+{id:'2603.22078',s:'WAM-vs-VLA',t:'wam',a:'Zhang et al.',o:'Ant Group / ZJU',y:2026,d:'WAM 泛化能力对比研究'},
+{id:'2603.09030',s:'PlayWorld',t:'wam',a:'Yin et al.',o:'Stanford',y:2026,d:'自主游戏数据学世界模型'},
+{id:'2604.01346',s:'WM-Safety',t:'wam',a:'Parmar',o:'Independent',y:2026,d:'世界模型安全性分析'},
+{id:'2506.09985',s:'V-JEPA 2',t:'wam',a:'Assran et al.',o:'Meta FAIR',y:2025,d:'自监督视频 JEPA 理解+预测+规划'},
+{id:'2501.03575',s:'Cosmos',t:'wam',a:'NVIDIA',o:'NVIDIA',y:2025,d:'物理 AI 世界基础模型平台'},
+{id:'2405.15223',s:'iVideoGPT',t:'wam',a:'Wu et al.',o:'Tsinghua',y:2024,d:'交互式视频 GPT 可扩展世界模型'},
+{id:'2508.17600',s:'GWM',t:'wam',a:'Lu et al.',o:'PKU / Tsinghua',y:2025,d:'高斯 3D 世界模型操作'},
+{id:'2509.18428',s:'LAWM',t:'wam',a:'Tharwat et al.',o:'Adelaide',y:2025,d:'潜在动作预训练世界建模'},
+// === RL Sim2Real (11 survey papers) ===
+{id:'2603.25902',s:'G1 Running',t:'rl',a:'Olkin et al.',o:'Caltech',y:2026,d:'G1 跑步 3.3m/s 动态人类动作模仿'},
+{id:'2604.01064',s:'BAT',t:'rl',a:'Baek et al.',o:'Georgia Tech',y:2026,d:'敏捷-稳定在线策略切换'},
+{id:'2603.19078',s:'ABD-Net',t:'rl',a:'Shin et al.',o:'UT Austin / UW-Madison',y:2026,d:'物理信息 GNN 关节体动力学'},
+{id:'2603.15084',s:'HALO',t:'rl',a:'Wang et al.',o:'BUAA',y:2026,d:'可微仿真重载人形 sim2real'},
+{id:'2512.01996',s:'15min-Loco',t:'rl',a:'Seo et al.',o:'UC Berkeley / Physical Intelligence',y:2025,d:'15 分钟学会人形运动'},
+{id:'2603.17092',s:'SLowRL',t:'rl',a:'Daneshmand et al.',o:'Uni. Montreal / TU Darmstadt',y:2026,d:'安全 LoRA RL 真机微调'},
+{id:'2603.15759',s:'SimDist',t:'rl',a:'Levy et al.',o:'MIT / Georgia Tech',y:2026,d:'仿真蒸馏快速真机适应'},
+{id:'2511.15200',s:'VIRAL',t:'rl',a:'He et al.',o:'CMU / UC San Diego',y:2025,d:'大规模视觉 sim2real 人形'},
+{id:'2603.20147',s:'AGILE',t:'rl',a:'Zhao et al.',o:'ETH Zurich',y:2026,d:'标准化人形 RL 全生命周期'},
+{id:'2603.22201',s:'NMR',t:'rl',a:'Zhao et al.',o:'ZJU',y:2026,d:'VAE+CNN-Transformer 运动重定向'},
+{id:'2603.17927',s:'RoboForge',t:'rl',a:'Yuan et al.',o:'MSRA / PKU',y:2026,d:'文本驱动人形全身运动'},
+// === Diffusion Policy (5 survey papers) ===
+{id:'2410.21257',s:'1-Step DP',t:'diff',a:'Wang et al.',o:'Columbia / NVIDIA',y:2024,d:'单步扩散策略蒸馏'},
+{id:'2601.20701',s:'DMPO',t:'diff',a:'Zou et al.',o:'SYSU',y:2026,d:'MeanFlow 单步蒸馏+RL >120Hz'},
+{id:'2604.01860',s:'POCO',t:'diff',a:'Chen et al.',o:'NJU',y:2026,d:'模型无关 RL 微调生成式策略'},
+{id:'2604.03181',s:'MV-VDP',t:'diff',a:'Li et al.',o:'HFUT',y:2026,d:'多视角视频扩散策略 3D 感知'},
+{id:'2603.16188',s:'ECHO',t:'diff',a:'Jia et al.',o:'Alibaba / ZJU',y:2026,d:'边缘-云端人形语言运动控制'},
+// === Hybrid (9 survey papers) ===
+{id:'2502.01105',s:'pi0.5',t:'hybrid',a:'Physical Intelligence',o:'Physical Intelligence',y:2025,d:'VLA+FlowMatching+RL 三阶段训练'},
+{id:'2602.21633',s:'SC-VLA',t:'hybrid',a:'Liu et al.',o:'UESTC',y:2026,d:'自纠正 VLA 稀疏世界想象'},
+{id:'2603.29844',s:'DIAL',t:'hybrid',a:'Chen et al.',o:'Tencent / CUHK-SZ',y:2026,d:'双系统 VLM 意图+轻量执行'},
+{id:'2511.14659',s:'NORA-1.5',t:'hybrid',a:'Hung et al.',o:'NTU Singapore',y:2025,d:'世界模型+偏好奖励训练 VLA'},
+{id:'2603.08519',s:'AtomVLA',t:'hybrid',a:'Sun et al.',o:'Tsinghua / ByteDance',y:2026,d:'潜在世界模型后训练 VLA'},
+{id:'2603.16860',s:'DreamPlan',t:'hybrid',a:'Jia et al.',o:'NVIDIA / UT Austin',y:2026,d:'视频世界模型中做 RL'},
+{id:'2602.20057',s:'AdaWorldP',t:'hybrid',a:'Yuan et al.',o:'University of Sydney',y:2026,d:'世界模型在线自适应扩散策略'},
+{id:'2603.08572',s:'MetaWorld-X',t:'hybrid',a:'Shen et al.',o:'USTC',y:2026,d:'VLM 分层专家人形控制'},
+{id:'gen0',s:'GEN-0',t:'hybrid',a:'Generalist AI',o:'Generalist AI',y:2025,d:'首个具身 scaling law 基础模型，270K 小时真实数据'},
+// === Unitree (10 survey papers) ===
+{id:'2602.08370',s:'Badminton',t:'unitree',a:'Chen et al.',o:'SJTU',y:2026,d:'人形机器人打羽毛球'},
+{id:'2603.19709',s:'MorphVid',t:'unitree',a:'Xu et al.',o:'Tsinghua',y:2026,d:'形态一致人形交互视频合成'},
+{id:'2603.25353',s:'SafeGuard',t:'unitree',a:'Nguyen et al.',o:'SR Robotics',y:2026,d:'自主工业安全巡检'},
+{id:'2604.00416',s:'EgoNav',t:'unitree',a:'Wang et al.',o:'Stanford',y:2026,d:'人类数据学人形导航'},
+{id:'2604.01708',s:'OpenGo',t:'unitree',a:'Li et al.',o:'USTC',y:2026,d:'OpenClaw 机器狗实时技能切换'},
+{id:'2603.28422',s:'ActiveStereo',t:'unitree',a:'Kuhn et al.',o:'Leibniz Uni. Hannover',y:2026,d:'主动立体相机 ACT 模仿学习'},
+{id:'2603.27967',s:'MV-Spatial',t:'unitree',a:'Jeong et al.',o:'SNU',y:2026,d:'多视角空间推理学习'},
+{id:'2507.05257',s:'FlowRL',t:'unitree',a:'Hu et al.',o:'UCSD',y:2025,d:'FlowMatching+RL 策略蒸馏'},
+{id:'2501.09548',s:'REFINE-DP',t:'unitree',a:'N/A',o:'N/A',y:2025,d:'反射增强扩散策略操作'},
+{id:'2604.01001',s:'EgoSim',t:'unitree',a:'Hao et al.',o:'PKU / SJTU',y:2026,d:'自我中心世界模拟器'},
+// === Foundational reference papers (from PDF citations, cited by >=3 survey papers) ===
+// -- Core VLA models --
+{id:'rt2',s:'RT-2',t:'vla',a:'Brohan et al.',o:'Google DeepMind',y:2023,d:'VLM→动作tokens，首个将大模型接入机器人控制',f:1,l:'2307.15818'},
+{id:'openvla',s:'OpenVLA',t:'vla',a:'Kim et al.',o:'Stanford',y:2024,d:'开源 7B VLA，Prismatic VLM + 动作头',f:1,l:'2406.09246'},
+{id:'pi0',s:'pi0',t:'vla',a:'Physical Intelligence',o:'Physical Intelligence',y:2024,d:'VLM + Flow Matching 动作头，灵巧操作',f:1,l:'2410.24164'},
+{id:'rtx',s:'RT-X / OXE',t:'vla',a:'Open X-Embodiment',o:'Google DeepMind + 21 Labs',y:2023,d:'22 种机器人 527 技能跨具身数据集',f:1,l:'2310.08864'},
+{id:'rt1',s:'RT-1',t:'vla',a:'Brohan et al.',o:'Google',y:2022,d:'首个大规模真机数据训练 Transformer 策略',f:1,l:'2212.06817'},
+{id:'groot',s:'GR00T N1',t:'vla',a:'NVIDIA',o:'NVIDIA',y:2025,d:'开源通用人形机器人基础模型',f:1,l:'2503.14734'},
+{id:'palme',s:'PaLM-E',t:'vla',a:'Driess et al.',o:'Google',y:2023,d:'具身多模态语言模型，视觉-语言接地',f:1,l:'2303.03378'},
+{id:'saycan',s:'SayCan',t:'vla',a:'Ahn et al.',o:'Google',y:2022,d:'语言接地机器人可供性，Do As I Can',f:1,l:'2204.01691'},
+{id:'spatialvla',s:'SpatialVLA',t:'vla',a:'Qu et al.',o:'PKU / BAAI',y:2025,d:'空间表征增强 VLA',f:1,l:'2501.15830'},
+{id:'ftvla',s:'FT-VLA',t:'vla',a:'Zhen et al.',o:'ByteDance',y:2025,d:'VLA 微调速度和成功率优化',f:1},
+{id:'cotvla',s:'CoT-VLA',t:'vla',a:'Liu et al.',o:'SJTU',y:2025,d:'视觉思维链推理 VLA',f:1},
+{id:'tracevla',s:'TraceVLA',t:'vla',a:'Zheng et al.',o:'SJTU',y:2024,d:'视觉轨迹提示时空感知 VLA',f:1},
+{id:'univla',s:'UniVLA',t:'vla',a:'Li et al.',o:'PKU',y:2025,d:'任务中心潜在动作统一 VLA',f:1},
+{id:'fast',s:'FAST',t:'vla',a:'Pertsch et al.',o:'MIT',y:2025,d:'高效动作 tokenization VLA',f:1,l:'2501.02702'},
+{id:'worldvla',s:'WorldVLA',t:'vla',a:'Li et al.',o:'HKU',y:2025,d:'自回归动作世界模型 VLA',f:1},
+{id:'pi06',s:'pi0.6',t:'vla',a:'PI Team',o:'Physical Intelligence',y:2025,d:'从真实经验学习的 VLA',f:1},
+{id:'vlarl',s:'VLA-RL',t:'vla',a:'Zhang et al.',o:'PKU',y:2025,d:'RL 精通通用机器人操作 VLA',f:1,l:'2505.07508'},
+{id:'octo',s:'Octo',t:'vla',a:'Ghosh et al.',o:'UC Berkeley',y:2024,d:'开源通用机器人策略',f:1,l:'2405.12213'},
+// -- RL/Control foundations --
+{id:'ppo',s:'PPO',t:'rl',a:'Schulman et al.',o:'OpenAI',y:2017,d:'近端策略优化，RL 训练标配算法',f:1,l:'1707.06347'},
+{id:'amp',s:'AMP',t:'rl',a:'Peng et al.',o:'UC Berkeley',y:2022,d:'GAN 对抗运动先验，替代手工自然性 reward',f:1,l:'2104.02180'},
+{id:'sac',s:'SAC',t:'rl',a:'Haarnoja et al.',o:'UC Berkeley',y:2018,d:'Soft Actor-Critic 最大熵连续控制',f:1,l:'1801.01290'},
+{id:'isaaclab',s:'Isaac Lab',t:'rl',a:'NVIDIA',o:'NVIDIA',y:2024,d:'GPU 加速机器人仿真训练框架',f:1},
+{id:'isaacgym',s:'Isaac Gym',t:'rl',a:'Makoviychuk et al.',o:'NVIDIA',y:2021,d:'GPU 高性能物理仿真 RL 训练',f:1,l:'2108.10470'},
+{id:'rapidloco',s:'Rapid Loco',t:'rl',a:'Rudin et al.',o:'ETH Zurich',y:2022,d:'大规模并行 RL 分钟级四足步态学习',f:1,l:'2109.11978'},
+{id:'drsim2real',s:'DR Sim2Real',t:'rl',a:'Peng et al.',o:'OpenAI',y:2017,d:'动力学随机化实现 Sim-to-Real 迁移',f:1,l:'1710.06537'},
+{id:'domainrand',s:'Domain Rand',t:'rl',a:'Tobin et al.',o:'OpenAI',y:2017,d:'视觉域随机化 Sim-to-Real 迁移',f:1,l:'1703.06907'},
+{id:'beyondmimic',s:'BeyondMimic',t:'rl',a:'Cheng et al.',o:'CMU',y:2025,d:'超越模仿的多功能人形控制',f:1},
+{id:'asap',s:'ASAP',t:'rl',a:'He et al.',o:'Tencent',y:2025,d:'对齐仿真与真实物理 Sim2Real',f:1},
+// -- Diffusion/Generative foundations --
+{id:'dp',s:'Diffusion Policy',t:'diff',a:'Chi et al.',o:'Columbia / MIT',y:2023,d:'DDPM 建模多模态动作分布，开创扩散策略',f:1,l:'2303.04137'},
+{id:'act',s:'ACT',t:'diff',a:'Zhao et al.',o:'Stanford',y:2023,d:'Action Chunking Transformer 模仿学习',f:1,l:'2304.13705'},
+{id:'ddpm',s:'DDPM',t:'diff',a:'Ho et al.',o:'UC Berkeley / Google',y:2020,d:'去噪扩散概率模型，Diffusion 基础',f:1,l:'2006.11239'},
+{id:'flowm',s:'Flow Matching',t:'diff',a:'Lipman et al.',o:'Meta FAIR',y:2023,d:'条件流匹配生成模型，替代扩散',f:1,l:'2210.02747'},
+// -- WAM/Video foundations --
+{id:'dreamer',s:'DreamerV3',t:'wam',a:'Hafner et al.',o:'DeepMind / Uni. Toronto',y:2023,d:'世界模型 RL，Dyna 架构代表',f:1,l:'2301.04104'},
+{id:'gr1',s:'GR-1',t:'wam',a:'Wu et al.',o:'ByteDance',y:2023,d:'大规模视频生成预训练视觉机器人',f:1,l:'2312.13139'},
+{id:'gr2',s:'GR-2',t:'wam',a:'Cheang et al.',o:'ByteDance',y:2024,d:'网络规模视频生成语言动作模型',f:1,l:'2407.14794'},
+{id:'uvam',s:'UVAM',t:'wam',a:'Luo et al.',o:'ByteDance',y:2025,d:'统一视频动作模型',f:1},
+{id:'wan',s:'Wan',t:'wam',a:'Wan Team',o:'Alibaba',y:2025,d:'开放大规模视频生成模型',f:1,l:'2503.20314'},
+{id:'uwm',s:'UWM',t:'wam',a:'Li et al.',o:'UC Berkeley',y:2025,d:'统一世界模型耦合视频和动作扩散',f:1},
+{id:'lapa',s:'LAPA',t:'wam',a:'Ye et al.',o:'UC Berkeley',y:2024,d:'视频潜在动作预训练',f:1,l:'2410.11758'},
+{id:'flare',s:'FLARE',t:'wam',a:'Yu et al.',o:'MIT',y:2025,d:'隐式世界建模机器人学习',f:1},
+{id:'dreamgen',s:'DreamGen',t:'wam',a:'Huang et al.',o:'Stanford',y:2025,d:'梦境生成解锁机器人泛化',f:1},
+// -- Cross-domain --
+{id:'mobilealoha',s:'Mobile ALOHA',t:'unitree',a:'Fu et al.',o:'Stanford',y:2024,d:'双臂移动操作低成本学习',f:1,l:'2401.02117'},
+{id:'libero',s:'LIBERO',t:'vla',a:'Liu et al.',o:'UT Austin',y:2023,d:'终身机器人学习知识迁移基准',f:1,l:'2306.03310'}
+];
+// Citation edges [from, to] = from cites to
+// Source: Semantic Scholar reference lists of 30 survey papers + manual curation
+const E=[
+// === Internal edges (survey paper -> survey paper, from S2 + manual) ===
+['2506.08440','2502.05450'],['2604.01570','2506.08440'],['2604.01570','2502.05450'],
+['2603.26666','2502.05450'],['2604.01860','2502.05450'],
+['2602.15922','2506.09985'],['2602.15922','2412.14803'],
+['2603.19370','2602.15922'],['2603.19370','2412.14803'],
+['2603.22078','2603.17240'],['2603.22078','2506.09985'],['2603.22078','2501.03575'],['2603.22078','2412.14803'],
+['2603.09030','2506.09985'],['2603.09030','2501.03575'],
+['2602.20057','2506.09985'],['2602.20057','2501.03575'],
+['2603.08519','2511.14659'],['2603.08519','2506.09985'],
+['2602.21633','2511.14659'],
+['2603.28740','2511.14659'],
+['2601.20701','2410.21257'],
+['2604.03181','2412.14803'],
+['2508.17600','2405.15223'],
+['2506.09985','2501.03575'],
+['2602.08370','2511.15200'],
+['2603.17240','2602.15922'],['2603.17240','2412.14803'],
+['2502.01105','2412.14803'],['2502.01105','2502.05450'],
+['2603.16860','2506.09985'],['2603.16860','2501.03575'],
+['2604.01860','2601.20701'],['2604.01860','2410.21257'],
+['2603.29844','2506.09985'],
+['2603.08572','2511.15200'],
+['2603.25902','2512.01996'],
+['2604.01064','2512.01996'],
+['2603.27670','2502.05450'],['2603.27670','2412.14803'],
+['2603.19709','2511.15200'],
+['2509.18428','2501.03575'],['2509.18428','2405.15223'],
+['2604.00416','2511.15200'],['2604.00416','2512.01996'],
+// === Edges to original ref nodes (verified from S2 reference lists) ===
+['2405.14093','rt2'],['2405.14093','rt1'],['2405.14093','rtx'],
+['2603.10126','openvla'],['2603.10126','rt2'],['2603.10126','pi0'],['2603.10126','act'],['2603.10126','dp'],
+['2603.13788','openvla'],['2603.13788','rt2'],['2603.13788','rt1'],['2603.13788','dp'],
+['2603.28740','openvla'],['2603.28740','rt2'],['2603.28740','rt1'],['2603.28740','pi0'],['2603.28740','act'],['2603.28740','dp'],
+['2604.01570','openvla'],['2604.01570','rt2'],['2604.01570','pi0'],['2604.01570','act'],['2604.01570','ppo'],['2604.01570','rtx'],
+['2604.01618','openvla'],
+['2502.05450','openvla'],['2502.05450','dp'],
+['2506.08440','openvla'],
+['2603.26666','openvla'],
+['2603.17524','openvla'],['2603.17524','pi0'],
+['2603.27670','dp'],['2603.27670','openvla'],['2603.27670','pi0'],['2603.27670','rt2'],['2603.27670','rtx'],
+['2502.01105','pi0'],
+['2602.15922','pi0'],['2602.15922','ddpm'],['2602.15922','flowm'],['2602.15922','openvla'],['2602.15922','rt2'],['2602.15922','rt1'],
+['2603.17240','pi0'],['2603.17240','ddpm'],
+['2412.14803','dp'],['2412.14803','ddpm'],
+['2603.19370','dp'],
+['2603.09030','dreamer'],['2603.09030','dp'],['2603.09030','pi0'],['2603.09030','rtx'],
+['2506.09985','ddpm'],
+['2410.21257','dp'],['2410.21257','ddpm'],
+['2601.20701','dp'],['2601.20701','flowm'],['2601.20701','pi0'],['2601.20701','ppo'],
+['2604.01860','dp'],['2604.01860','flowm'],['2604.01860','act'],['2604.01860','rt2'],['2604.01860','ppo'],
+['2604.03181','dp'],['2604.03181','act'],['2604.03181','flowm'],['2604.03181','pi0'],
+['2603.16188','act'],
+['2602.21633','pi0'],['2602.21633','openvla'],['2602.21633','rt2'],['2602.21633','rt1'],['2602.21633','dp'],['2602.21633','act'],['2602.21633','ppo'],
+['2603.29844','pi0'],['2603.29844','rt2'],['2603.29844','dp'],
+['2511.14659','openvla'],['2511.14659','dp'],
+['2603.08519','pi0'],['2603.08519','openvla'],['2603.08519','rt1'],
+['2603.16860','dreamer'],['2603.16860','dp'],
+['2602.20057','dp'],['2602.20057','dreamer'],['2602.20057','flowm'],['2602.20057','openvla'],['2602.20057','pi0'],['2602.20057','rt2'],['2602.20057','rt1'],
+['2603.08572','amp'],['2603.08572','ppo'],['2603.08572','rt2'],
+['2603.25902','amp'],['2603.25902','ppo'],['2603.25902','isaaclab'],
+['2604.01064','ppo'],['2604.01064','isaaclab'],
+['2603.19078','ppo'],
+['2603.15084','ppo'],
+['2512.01996','ppo'],['2512.01996','isaaclab'],
+['2603.17092','ppo'],
+['2511.15200','ppo'],['2511.15200','isaaclab'],['2511.15200','rtx'],
+['2603.20147','ppo'],['2603.20147','isaaclab'],['2603.20147','amp'],
+['2603.22201','amp'],
+['2603.17927','ppo'],['2603.17927','amp'],
+['2603.28422','act'],['2603.28422','rt2'],['2603.28422','dp'],
+['2602.08370','ppo'],['2602.08370','isaaclab'],
+['2604.01708','rt2'],
+['2603.15759','dp'],['2603.15759','openvla'],['2603.15759','ppo'],
+// === Edges to new ref nodes (from S2 reference lists of 30 papers) ===
+// -> GR00T N1 (8x cited)
+['2511.15200','groot'],['2602.15922','groot'],['2602.21633','groot'],['2603.10126','groot'],
+['2603.27967','groot'],['2603.29844','groot'],['2604.01570','groot'],['2604.01860','groot'],
+// -> PaLM-E (6x)
+['2602.15922','palme'],['2602.21633','palme'],['2603.10126','palme'],['2603.13788','palme'],
+['2604.01570','palme'],['2604.01708','palme'],
+// -> SayCan (6x)
+['2602.15922','saycan'],['2602.20057','saycan'],['2603.10126','saycan'],['2603.13788','saycan'],
+['2603.29844','saycan'],['2604.01570','saycan'],['2604.01708','saycan'],
+// -> FT-VLA (6x)
+['2602.20057','ftvla'],['2603.10126','ftvla'],['2603.28740','ftvla'],['2603.29844','ftvla'],
+['2604.01570','ftvla'],['2604.01860','ftvla'],
+// -> SpatialVLA (6x)
+['2602.20057','spatialvla'],['2603.08519','spatialvla'],['2603.10126','spatialvla'],
+['2603.28740','spatialvla'],['2604.01570','spatialvla'],['2604.03181','spatialvla'],
+// -> BeyondMimic (5x)
+['2511.15200','beyondmimic'],['2512.01996','beyondmimic'],['2602.08370','beyondmimic'],
+['2603.08572','beyondmimic'],['2603.15084','beyondmimic'],
+// -> CoT-VLA (5x)
+['2602.15922','cotvla'],['2602.21633','cotvla'],['2603.08519','cotvla'],['2603.13788','cotvla'],['2603.29844','cotvla'],
+// -> UVAM (5x)
+['2602.15922','uvam'],['2602.20057','uvam'],['2603.15759','uvam'],['2603.29844','uvam'],['2604.03181','uvam'],
+// -> GR-1 (5x)
+['2602.15922','gr1'],['2602.20057','gr1'],['2602.21633','gr1'],['2603.29844','gr1'],['2604.03181','gr1'],
+// -> Dreamer/Dream to Control (5x) -> existing dreamer node already has edges, add missing
+['2602.15922','dreamer'],['2603.15759','dreamer'],['2604.01346','dreamer'],
+// -> Octo (5x)
+['2602.20057','octo'],['2602.21633','octo'],['2603.10126','octo'],['2603.28740','octo'],['2604.01570','octo'],
+// -> Rapid Loco (4x)
+['2511.15200','rapidloco'],['2512.01996','rapidloco'],['2602.08370','rapidloco'],['2603.15759','rapidloco'],
+// -> Isaac Gym (4x)
+['2511.15200','isaacgym'],['2512.01996','isaacgym'],// 2603.28032 (CARLA-Air) not in graph, skip['2604.01064','isaacgym'],
+// -> UniVLA (4x)
+['2603.08572','univla'],['2603.28740','univla'],['2604.01570','univla'],['2602.15922','univla'],
+// -> Wan (4x)
+['2602.15922','wan'],['2603.09030','wan'],['2604.01001','wan'],['2604.03181','wan'],
+// -> TraceVLA (4x)
+['2602.15922','tracevla'],['2602.21633','tracevla'],['2603.08519','tracevla'],['2603.13788','tracevla'],
+// -> GR-2 (4x)
+['2602.15922','gr2'],['2603.15759','gr2'],['2603.29844','gr2'],['2604.03181','gr2'],
+// -> WorldVLA (4x)
+['2602.20057','worldvla'],['2602.21633','worldvla'],['2603.08519','worldvla'],['2604.01570','worldvla'],
+// -> FAST (4x)
+['2602.20057','fast'],['2603.10126','fast'],['2603.29844','fast'],['2604.03181','fast'],
+// -> LIBERO (4x)
+['2602.20057','libero'],['2603.08519','libero'],['2603.28740','libero'],['2604.01570','libero'],
+// -> pi0.6 (4x)
+['2602.21633','pi06'],['2603.15759','pi06'],['2604.01860','pi06'],['2604.03181','pi06'],
+// -> SAC (3x)
+['2512.01996','sac'],['2603.15759','sac'],['2604.01860','sac'],
+// -> Mobile ALOHA (3x)
+['2603.27967','mobilealoha'],['2603.28422','mobilealoha'],['2511.15200','mobilealoha'],
+// -> DR Sim2Real (3x)
+['2511.15200','drsim2real'],['2512.01996','drsim2real'],['2603.15084','drsim2real'],
+// -> Domain Rand (3x)
+['2511.15200','domainrand'],['2512.01996','domainrand'],['2603.15084','domainrand'],
+// -> ASAP (3x)
+['2512.01996','asap'],['2602.08370','asap'],['2603.15084','asap'],
+// -> VLA-RL (3x)
+['2601.20701','vlarl'],['2602.21633','vlarl'],['2604.01570','vlarl'],
+// -> FLARE (3x)
+['2602.15922','flare'],['2602.21633','flare'],['2603.29844','flare'],
+// -> DreamGen (3x)
+['2602.15922','dreamgen'],['2603.09030','dreamgen'],['2603.15759','dreamgen'],
+// -> UWM (3x)
+['2602.15922','uwm'],['2602.20057','uwm'],['2604.03181','uwm'],
+// -> LAPA (3x)
+['2602.15922','lapa'],['2603.10126','lapa'],['2603.29844','lapa']
+];
 </script>
 <script id="graphEngine">
-loadPaperData().then(({P,E})=>{
 const cv=document.getElementById('graphCanvas'),
       wrap=document.getElementById('graphWrap'),
       tip=document.getElementById('tooltip'),
@@ -577,16 +808,10 @@ function applyFilter(){
   setTimeout(fitCamera,300);
 }
 
-/* ── Expose functions used in HTML onclick handlers ── */
-window.closeDetail=closeDetail;
-window.jumpTo=jumpTo;
-
 /* ── Boot: resize → pre-simulate → start render loop ── */
 resize();
 preSimulate();
 loop();
-});
 </script>
-<script src="render.js"></script>
 </body>
 </html>

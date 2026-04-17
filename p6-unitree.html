@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-290GYTM41D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-290GYTM41D');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Unitree 开源生态 | Robot Learning Survey 2026</title>
@@ -10,7 +8,18 @@
 <style>h2{border-bottom-color:var(--accent-unitree)} .card{border-top-color:var(--accent-unitree)} .card .tag{background:#e0fff5;color:#048a65} .card .paper-link{color:#048a65}</style>
 </head>
 <body>
-<nav id="main-nav"></nav>
+<nav>
+  <span class="logo">Robot Learning 2026</span>
+  <a href="index.html">Home</a>
+  <a href="p1-vla.html">VLA</a>
+  <a href="p2-wam.html">WAM</a>
+  <a href="p3-rl-sim2real.html">RL</a>
+  <a href="p4-diffusion.html">Diffusion</a>
+  <a href="p5-hybrid.html">Hybrid</a>
+  <a href="p6-unitree.html" class="active" style="background:var(--accent-unitree);color:#fff">Unitree</a>
+  <a href="p7-citation-graph.html">Graph</a>
+  <a href="survey.html">Survey</a>
+</nav>
 
 <div class="container">
 
@@ -67,32 +76,422 @@
 
 <section>
 <h2>里程碑演进</h2>
-<div class="timeline" data-page="p6" data-accent="unitree"></div>
+<div class="timeline">
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-unitree)">2023</span>
+    <h4>Go2 发布 — 低成本四足平台</h4>
+    <p>$1,600 起售，开源 SDK，成为高校 RL 研究标配四足平台。Isaac Lab 率先适配。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-unitree)">2024.06</span>
+    <h4>G1 发布 — $16K 人形机器人</h4>
+    <p>23-43 自由度人形机器人，价格比 Atlas 低两个数量级。开源 SDK + Isaac Lab 适配，研究门槛骤降。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-unitree)">2025.02</span>
+    <h4>首批 G1 研究论文</h4>
+    <p>Humanoid Badminton (零样本羽毛球)、VIRAL (大规模视觉 sim-to-real)。证明 G1 可承载前沿 RL 研究。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-unitree)">2026.03</span>
+    <h4>论文井喷 — 单月 15+ 篇</h4>
+    <p>G1 Running 3.3m/s、BAT 策略切换、AGILE 标准化、Dream2Act 零样本交互、ABD-Net 物理 GNN。G1 成为人形 RL 的事实标准平台。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-unitree)">2026.04</span>
+    <h4>EgoNav / OpenGo / SafeGuard</h4>
+    <p>从运动控制扩展到导航、人机交互、工业巡检。G1/Go2 生态覆盖全栈应用场景。</p>
+  </div>
+</div>
 </section>
 
 <section>
 <h2>G1 论文分类汇总 (2026.03-04)</h2>
 
 <h3>运动控制 (Locomotion)</h3>
-<div class="card-grid" data-ids="2603.25902,2604.00416,2603.19078" data-page="p6"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>G1 Running 3.3 m/s</h4>
+  <div class="meta">Caltech | Olkin et al. | arXiv:2603.25902</div>
+  <p>从单个人类演示生成优化周期参考库。目标条件 + 控制引导 reward。真机 3.3 m/s 跑步 + 全自主感知规划避障。</p>
+  <div class="mini-diagram">
+  单个人类演示
+    │
+    ▼
+  周期参考库生成 (优化 gait cycle)
+    │
+    ▼
+  ┌────────────────────────────────┐
+  │ 目标条件 RL + 控制引导 Reward  │
+  │ ·速度/方向命令 ·步态周期匹配  │
+  └──────────────┬─────────────────┘
+                 │
+    ┌────────────┴────────────┐
+    │ 感知避障 (LiDAR+Depth)  │
+    └────────────┬────────────┘
+                 ▼
+        G1 真机 3.3 m/s 跑步</div>
+  <div class="insight">核心 Insight: 仅需单个人类跑步演示即可生成完整周期参考库，结合目标条件 RL 实现人形机器人创纪录的 3.3 m/s 户外动态跑步。</div>
+  <a href="https://arxiv.org/abs/2603.25902" target="_blank" class="paper-link">arXiv 2603.25902 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.04</span>
+  <h4>EgoNav: Human Walking → Robot Nav</h4>
+  <div class="meta">Stanford | Wang et al. | arXiv:2604.00416</div>
+  <p>从 5 小时人类行走数据学习，零机器人数据零微调。Diffusion 模型预测未来轨迹分布。G1 零样本部署于未见室内外环境。自动等门开、避人群、避玻璃墙。</p>
+  <div class="mini-diagram">
+  5h 人类自我中心行走视频
+    │
+    ▼
+  ┌──────────────────────────────┐
+  │ Ego-视觉编码器 (RGB 序列)    │
+  └──────────┬───────────────────┘
+             ▼
+  ┌──────────────────────────────┐
+  │ Diffusion 轨迹预测模型       │
+  │ P(τ_future | obs_history)    │
+  └──────────┬───────────────────┘
+             ▼
+  零样本迁移 → G1 室内外导航
+  (无需任何机器人数据)</div>
+  <div class="insight">核心 Insight: 人类行走数据蕴含丰富的导航先验，Diffusion 轨迹预测可零样本迁移至人形机器人，跨越具身鸿沟。</div>
+  <a href="https://arxiv.org/abs/2604.00416" target="_blank" class="paper-link">arXiv 2604.00416 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>ABD-Net: Physics-Informed GNN</h4>
+  <div class="meta">UT Austin / UW-Madison | Shin et al. | arXiv:2603.19078</div>
+  <p>将 ABA 惯量传播嵌入 GNN policy。在 G1 和 Go2 上实时推理，生成动态、多样、鲁棒的运动行为。</p>
+  <div class="mini-diagram">
+  关节体树 (URDF)
+    │
+    ▼
+  ┌────────────────────────────────────┐
+  │ Physics-Informed GNN               │
+  │ ┌──────────┐   ┌────────────────┐ │
+  │ │ ABA 惯量 │──►│ 消息传递 (GNN) │ │
+  │ │ 前向传播  │   │ 关节→关节      │ │
+  │ └──────────┘   └───────┬────────┘ │
+  └────────────────────────┼──────────┘
+                           ▼
+               关节力矩输出 → G1 / Go2</div>
+  <div class="insight">核心 Insight: 将经典刚体动力学 (ABA) 作为归纳偏置嵌入 GNN，使策略天然理解物理约束，跨平台泛化更稳健。</div>
+  <a href="https://arxiv.org/abs/2603.19078" target="_blank" class="paper-link">arXiv 2603.19078 →</a>
+</div>
+
+</div>
 
 <h3>全身控制 (Whole-Body Control)</h3>
-<div class="card-grid" data-ids="2604.01064,2603.17927,2603.16188,2603.19709" data-page="p6"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.04</span>
+  <h4>BAT: Agility-Stability Switching</h4>
+  <div class="meta">Georgia Tech | Baek et al. | arXiv:2604.01064</div>
+  <p>动态切换两个互补全身控制器，长时域 loco-manipulation 任务验证。</p>
+  <div class="mini-diagram">
+  任务指令
+    │
+    ▼
+  ┌──────────────────────────────────┐
+  │ 高层调度器 (Meta-Controller)     │
+  │   if 需要敏捷 → Agile Policy    │
+  │   if 需要稳定 → Stable Policy   │
+  └──────┬────────────┬──────────────┘
+         ▼            ▼
+  ┌───────────┐ ┌───────────┐
+  │ Agile     │ │ Stable    │
+  │ Controller│ │ Controller│
+  │ (动态动作)│ │ (精细操作)│
+  └─────┬─────┘ └─────┬─────┘
+        └──────┬──────┘
+               ▼
+     G1 全身 Loco-manipulation</div>
+  <div class="insight">核心 Insight: 敏捷性和稳定性天然矛盾，通过层次 RL 动态切换两种互补策略，在长时域任务中兼顾两者。</div>
+  <a href="https://arxiv.org/abs/2604.01064" target="_blank" class="paper-link">arXiv 2604.01064 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>Latent-Driven Text-to-Locomotion</h4>
+  <div class="meta">NTU | Yuan et al. | arXiv:2603.17927</div>
+  <p>自然语言直接驱动全身运动。物理合理性优化 (PP-Opt) 双向耦合生成器和控制器，形成自改进循环。免去传统重定向步骤。</p>
+  <div class="mini-diagram">
+  双向耦合自改进循环:
+  ┌──────────────────────────────────────────────┐
+  │ Text ──► Diffusion Motion Generator          │
+  │              │ 正向: 生成运动                 │
+  │              ▼                               │
+  │         PP-Opt (物理合理性优化)               │
+  │              │ 反向: 优化后的 rollout          │
+  │              │       → 微调生成器             │
+  │              ▼                               │
+  │     Teacher-Student RL Controller            │
+  │              │                               │
+  │              ▼ 自改进循环                     │
+  │     G1 跟踪 latent-conditioned 运动          │
+  └──────────────────────────────────────────────┘
+  免重定向: 无需 SMPL → robot 的运动映射</div>
+  <div class="insight">核心 Insight: 生成器和控制器双向耦合——控制器的物理 rollout 反过来改进生成器的潜在空间分布，形成自改进闭环，彻底绕过传统 retarget 步骤。</div>
+  <a href="https://arxiv.org/abs/2603.17927" target="_blank" class="paper-link">arXiv 2603.17927 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>ECHO: Edge-Cloud Humanoid Control</h4>
+  <div class="meta">HKUST(GZ) / LimX | Jia et al. | arXiv:2603.16188</div>
+  <p>云端扩散模型生成运动参考 (~1s)，边端 RL tracker 闭环执行 (1kHz)。38 维紧凑运动表征 + 自动跌倒恢复。G1 零硬件微调执行多样文本指令。</p>
+  <div class="mini-diagram">
+  边-云协同架构:
+  ┌──── Cloud GPU ────────────────────┐
+  │ Text ──► 1D UNet + CLIP          │
+  │          (DDIM 10步 ~1s)         │
+  │              │                    │
+  │     38-dim 运动表征序列           │
+  │  [关节角, 根速度, 根高度, 6D朝向] │
+  └──────────────┬────────────────────┘
+                 │ 下发
+  ┌──── G1 Edge ─┴────────────────────┐
+  │ RL Tracker (Teacher-Student)      │
+  │   + 对称性约束 + Domain Rand      │
+  │   + Evidential Adaptation Module  │
+  │   → PD Control @ 1kHz            │
+  │                                   │
+  │ 跌倒? → IMU 检测 → 恢复库        │
+  └───────────────────────────────────┘
+  FID 0.029 | R-Precision Top-1 0.686</div>
+  <div class="insight">核心 Insight: 将重计算（动作生成）放云端、轻推理（闭环跟踪）放边端，用 38 维紧凑表征桥接——既享受大模型的生成能力，又满足实时控制需求。</div>
+  <a href="https://arxiv.org/abs/2603.16188" target="_blank" class="paper-link">arXiv 2603.16188 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>Dream2Act: Zero-Shot via Video Generation</h4>
+  <div class="meta">HKUST(GZ) | Xu et al. | arXiv:2603.19709</div>
+  <p>给定机器人和目标物体图像，视频生成模型"想象"机器人完成任务。提取机器人原生关节轨迹后执行。踢球、坐沙发、打沙袋、拥抱箱子 — 37.5% 成功率 (传统重定向 0%)。</p>
+  <div class="mini-diagram">
+  Robot-Centric 零样本交互:
+  ┌────────────────┐  ┌────────────────┐
+  │ 机器人当前图像  │  │ 目标物体图像   │
+  └───────┬────────┘  └───────┬────────┘
+          └─────────┬─────────┘
+                    ▼
+  ┌──────────────────────────────────┐
+  │ Video Generation Model           │
+  │ "想象"机器人完成任务的视频       │
+  │ (robot-native 坐标空间)          │
+  └──────────────┬───────────────────┘
+                 ▼
+  ┌──────────────────────────────────┐
+  │ High-fidelity Pose Extraction   │
+  │ → 机器人原生关节轨迹            │
+  └──────────────┬───────────────────┘
+                 ▼
+  Whole-body Controller → G1 执行
+  踢球 / 坐沙发 / 打沙袋 / 拥抱: 37.5%
+  (传统 retarget: 0%)</div>
+  <div class="insight">核心 Insight: 在机器人原生坐标空间内"做梦"而非从人类动作重定向——消除形态差距(morphology gap)，使传统方法完全无法完成的全身交互任务首次变为可能。</div>
+  <a href="https://arxiv.org/abs/2603.19709" target="_blank" class="paper-link">arXiv 2603.19709 →</a>
+</div>
+
+</div>
 
 <h3>模仿学习与传感器 (Imitation Learning)</h3>
-<div class="card-grid" data-ids="2603.28422,2603.22201" data-page="p6"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>G1 Sensor Benchmark for IL</h4>
+  <div class="meta">Leibniz Uni. Hannover | Kühn et al. | arXiv:2603.28422</div>
+  <p>基准测试 14 种传感器组合用于 G1 模仿学习。结论：<strong>数据有限时，更多传感器反而降低性能</strong>。</p>
+  <div class="mini-diagram">
+  14 种传感器组合 × 2 任务:
+  ┌────────────────────────────────────────────────┐
+  │ 最优配置:  主动立体相机 (最小配置)             │
+  │   空间泛化任务:  87.5%  ✓                      │
+  │   结构化操作:    94.4%  ✓                      │
+  │                                                │
+  │ 加入压力传感器后:                              │
+  │   结构化操作:    67.3%  ✗ (低信噪比干扰)       │
+  │                                                │
+  │ 反直觉结论:                                    │
+  │   更多模态 ≠ 更好    (数据有限时)              │
+  │   视觉 >> 触觉+本体  (低数据域)               │
+  └────────────────────────────────────────────────┘
+  开源: Unified Ablation Framework (传感器掩码)</div>
+  <div class="insight">核心 Insight: 反直觉——在数据有限时多模态传感器反而有害。额外模态引入的噪声超过其信息增益，最简主动视觉配置反而最优。</div>
+  <a href="https://arxiv.org/abs/2603.28422" target="_blank" class="paper-link">arXiv 2603.28422 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>NMR: Neural Motion Retargeting</h4>
+  <div class="meta">NJU / Huawei | Zhao et al. | arXiv:2603.22201</div>
+  <p>将传统优化重定向问题重新建模为学习数据分布。CEPR 层次数据 pipeline + 非自回归 CNN-Transformer。消除关节跳变和自碰撞，加速下游全身控制策略收敛。</p>
+  <div class="mini-diagram">
+  NMR 流水线:
+  人类动捕 → VAE Motion Clustering → K 个运动簇
+                                      │
+          ┌─────────────────────────┘
+          ▼
+  ┌──────────────────────────────────┐
+  │ Per-Cluster RL Expert            │
+  │ (并行仿真中修复物理不合理动作)   │
+  └──────────────┬───────────────────┘
+                 ▼ 高保真训练数据
+  ┌──────────────────────────────────┐
+  │ Non-autoregressive CNN-Transformer│
+  │ (全局时序上下文, 抑制重建噪声)   │
+  └──────────────────────────────────┘
+  vs 传统优化: 消除关节跳变, 减少自碰撞
+  下游效果: 全身控制策略收敛加速</div>
+  <div class="insight">核心 Insight: 传统优化 retarget 是非凸问题，容易陷入局部最优（关节跳变、穿模）。NMR 将问题从"优化最优解"转为"学习数据分布"，绕过非凸性。</div>
+  <a href="https://arxiv.org/abs/2603.22201" target="_blank" class="paper-link">arXiv 2603.22201 →</a>
+</div>
+
+</div>
 
 <h3>Sim-to-Real 新进展</h3>
-<div class="card-grid" data-ids="2511.15200" data-page="p6"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2025.11</span>
+  <h4>VIRAL: Large-Scale Visual Sim-to-Real</h4>
+  <div class="meta">NVIDIA / CMU | He et al. | arXiv:2511.15200</div>
+  <p>大规模视觉 sim-to-real 框架。在仿真中联合训练视觉编码器和 RL 策略，通过大规模视觉域随机化实现真机视觉泛化。G1 真机验证视觉引导的 loco-manipulation。详见 <a href="p3-rl-sim2real.html">RL 专题</a>。</p>
+  <div class="mini-diagram">
+  VIRAL 视觉 Sim-to-Real for G1:
+  ┌──────────────────────────────────────────────┐
+  │ 仿真: 视觉编码器 + RL 策略联合训练           │
+  │   大规模视觉域随机化 (光照/纹理/背景)        │
+  │                                              │
+  │ 真机 G1:                                     │
+  │   RGB ──► 视觉编码 ──► RL 策略 ──► 全身控制  │
+  │   零样本视觉泛化 (无需真机视觉数据)          │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 足够大规模的视觉域随机化可以弥合 sim-to-real 视觉差距，使 G1 无需任何真机视觉数据即可完成视觉引导的 loco-manipulation。</div>
+  <a href="https://arxiv.org/abs/2511.15200" target="_blank" class="paper-link">arXiv 2511.15200 →</a>
+</div>
+
+</div>
 
 <h3>安全巡检</h3>
-<div class="card-grid" data-ids="2603.25353" data-page="p6"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>SafeGuard ASF: 无人工厂安全巡检</h4>
+  <div class="meta">Strike Robotics | Canh et al. | arXiv:2603.25353</div>
+  <p>G1 自主巡检工厂：火灾检测 (94.2% mAP)、管道温度异常、入侵者识别。PPO 训练步态 + 舞蹈追踪策略，80K 迭代收敛。</p>
+  <div class="mini-diagram">
+  SafeGuard 系统架构:
+  ┌──────────────────────────────────┐
+  │ ReAct Agentic Reasoning         │
+  │  Perception → Reasoning → Act   │
+  │  (ToolOrchestra 决策框架)        │
+  └──────────┬───────────────────────┘
+             ▼
+  ┌──────────────────────────────────┐
+  │ 多模态感知                       │
+  │ · RGB-D → 火灾/烟雾 (94.2% mAP)│
+  │ · 红外  → 管道温度异常           │
+  │ · 视觉  → 入侵者检测            │
+  └──────────┬───────────────────────┘
+             ▼
+  ┌──────────────────────────────────┐
+  │ PPO 运动策略 (80K iter 收敛)    │
+  │ · 巡逻步态 · 避障 · 舞蹈追踪   │
+  └──────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 将 LLM 的 ReAct 推理框架应用于人形巡检机器人——感知/推理/执行工具化编排，实现无人工厂的自主安全闭环。</div>
+  <a href="https://arxiv.org/abs/2603.25353" target="_blank" class="paper-link">arXiv 2603.25353 →</a>
+</div>
+
+</div>
 
 <h3>开发工具与标准化</h3>
-<div class="card-grid" data-ids="2603.20147" data-page="p6"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>AGILE: Standardized Humanoid RL Workflow</h4>
+  <div class="meta">ETH Zurich | Zhao et al. | arXiv:2603.20147</div>
+  <p>端到端 RL 开发标准化：环境验证→训练→评估→部署。5 种代表技能跨 G1 和 Booster T1 一致迁移。详见 <a href="p3-rl-sim2real.html">RL 专题</a>。</p>
+  <div class="mini-diagram">
+  AGILE 四阶段标准化流程:
+  ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐
+  │ 1.环境   │──►│ 2.训练   │──►│ 3.评估   │──►│ 4.部署   │
+  │ 验证     │   │ (可复现) │   │ (统一)   │   │ (描述符) │
+  │ ·交互式  │   │ ·稳定性  │   │ ·场景测试│   │ ·Robot   │
+  │ ·URDF 检│   │  增强    │   │ ·随机化  │   │  Config  │
+  │  查      │   │ ·算法改进│   │ ·运动质量│   │ ·Task    │
+  └──────────┘   └──────────┘   │  诊断    │   │  Config  │
+                                └──────────┘   └──────────┘
+  验证: G1 (locomotion, recovery, imitation, loco-manip)
+        + Booster T1 → 一致迁移</div>
+  <div class="insight">核心 Insight: 人形 RL 的主要瓶颈不再是算法或算力，而是缺乏标准化基础设施。AGILE 将 sim-to-real 失败归因到环境验证不足、评估碎片化等工程环节。</div>
+  <a href="https://arxiv.org/abs/2603.20147" target="_blank" class="paper-link">arXiv 2603.20147 →</a>
+</div>
+
+</div>
 
 <h3>特殊应用</h3>
-<div class="card-grid" data-ids="2602.08370,2604.01708" data-page="p6"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2025.02</span>
+  <h4>Humanoid Badminton: Imitation-to-Interaction</h4>
+  <div class="meta">SJTU | Chen et al. | arXiv:2602.08370</div>
+  <p>从"模仿者"进化为"击球者"。流形扩展策略将离散击球点泛化为稠密交互体积。首次实现人形机器人羽毛球技能零样本 sim-to-real 迁移。</p>
+  <div class="mini-diagram">
+  渐进式 RL 框架:
+  Phase 1: Mimic (模仿人类运动先验)
+    │ AMP 对抗运动先验 + 紧凑状态表征
+    ▼
+  Phase 2: Striker (功能性击球)
+    │ 流形扩展: 离散击球点 → 稠密交互体积
+    │ (解决专家演示稀疏问题)
+    ▼
+  零样本 Sim-to-Real → 真机羽毛球
+  技能: 挑球 (lift) + 吊球 (drop shot)</div>
+  <div class="insight">核心 Insight: 运动模仿（好看）和功能交互（能打到球）是两个不同目标。流形扩展策略将稀疏击球点泛化为连续交互空间，让 RL 探索从"模仿者"跃迁为"运动员"。</div>
+  <a href="https://arxiv.org/abs/2602.08370" target="_blank" class="paper-link">arXiv 2602.08370 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.04</span>
+  <h4>OpenGo: Skill-Switching Robot Dog</h4>
+  <div class="meta">USTC | Li et al. | arXiv:2604.01708</div>
+  <p>可定制技能库 + 任务调度器 + 自学习框架。集成飞书平台，普通用户通过自然语言控制 Go2 机器狗。</p>
+  <div class="mini-diagram">
+  OpenGo 系统架构:
+  ┌──────────────────────────────────┐
+  │ 飞书 / 语音 → 自然语言指令       │
+  └──────────┬───────────────────────┘
+             ▼
+  ┌──────────────────────────────────┐
+  │ Dispatcher (技能调度器)          │
+  │  指令 → 选择最佳技能            │
+  └──────────┬───────────────────────┘
+             ▼
+  ┌──────────────────────────────────┐
+  │ Skill Library (可定制)           │
+  │ ·导入新技能 ·自动验证 ·实时切换 │
+  └──────────┬───────────────────────┘
+             ▼
+  ┌──────────────────────────────────┐
+  │ Self-Learning (自学习)           │
+  │ 基于任务完成度 + 人类反馈微调    │
+  └──────────────────────────────────┘
+  → Unitree Go2 真机部署</div>
+  <div class="insight">核心 Insight: 通过飞书集成让非专业用户用自然语言控制机器狗，将"技能库+调度器+自学习"打包为可落地的产品化架构。</div>
+  <a href="https://arxiv.org/abs/2604.01708" target="_blank" class="paper-link">arXiv 2604.01708 →</a>
+</div>
+
+</div>
 </section>
 
 <section>
@@ -165,27 +564,6 @@
 </section>
 
 </div>
-<div class="comments-section">
-<h3>Comments</h3>
-<script src="https://giscus.app/client.js"
-  data-repo="kaiqinhu/robot-learning-survey"
-  data-repo-id="R_kgDOR77ZGg"
-  data-category="General"
-  data-category-id="DIC_kwDOR77ZGs4C6Wpr"
-  data-mapping="pathname"
-  data-strict="0"
-  data-reactions-enabled="1"
-  data-emit-metadata="0"
-  data-input-position="bottom"
-  data-theme="preferred_color_scheme"
-  data-lang="zh-CN"
-  crossorigin="anonymous"
-  async>
-</script>
-</div>
-
 <footer>Robot Learning Survey 2026 &mdash; Unitree 开源生态专题</footer>
-<script src="papers.js"></script>
-<script src="render.js"></script>
 </body>
 </html>

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-290GYTM41D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-290GYTM41D');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WAM 世界动作模型 | Robot Learning Survey 2026</title>
@@ -10,7 +8,18 @@
 <style>h2{border-bottom-color:var(--accent-wam)} .card{border-top-color:var(--accent-wam)} .card .tag{background:#f3e8ff;color:var(--accent-wam)} .card .paper-link{color:var(--accent-wam)}</style>
 </head>
 <body>
-<nav id="main-nav"></nav>
+<nav>
+  <span class="logo">Robot Learning 2026</span>
+  <a href="index.html">Home</a>
+  <a href="p1-vla.html">VLA</a>
+  <a href="p2-wam.html" class="active" style="background:var(--accent-wam)">WAM</a>
+  <a href="p3-rl-sim2real.html">RL</a>
+  <a href="p4-diffusion.html">Diffusion</a>
+  <a href="p5-hybrid.html">Hybrid</a>
+  <a href="p6-unitree.html">Unitree</a>
+  <a href="p7-citation-graph.html">Graph</a>
+  <a href="survey.html">Survey</a>
+</nav>
 
 <div class="container">
 
@@ -19,7 +28,48 @@
 
 <section>
 <h2>里程碑演进</h2>
-<div class="timeline" data-page="p2" data-accent="wam"></div>
+<div class="timeline">
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-wam)">2023.12</span>
+    <h4>UniSim / Genie (DeepMind)</h4>
+    <p>视频生成模型首次被视为"可交互的世界模拟器"。证明大规模视频预训练可学习物理先验，但尚未与机器人动作闭环。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-wam)">2023-2024</span>
+    <h4>GR-1 / GR-2 / LAPA — 视频预训练先驱</h4>
+    <p>ByteDance GR 系列 (GR-1: 大规模视频生成预训练; GR-2: 网络规模视频→语言动作模型) 和 UC Berkeley LAPA (视频潜在动作预训练) 首次证明互联网视频可驱动机器人策略。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-wam)">2024.05</span>
+    <h4>iVideoGPT / DIAMOND — 架构分化</h4>
+    <p>自回归 token 化世界模型 (iVideoGPT) vs 扩散世界模型 (DIAMOND)。两条架构路线首次在 RL 中系统对比。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-wam)">2024.12</span>
+    <h4>VPP: Video Prediction Policy</h4>
+    <p>视频扩散模型内部表征 = 当前静态 + 未来动态。Calvin ABC-D 泛化 +18.6%。证明视频模型可直接驱动策略。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-wam)">2025.01-03</span>
+    <h4>Cosmos / DreamZero / UVAM / UWM — 平台与统一</h4>
+    <p>NVIDIA 世界基础模型平台; DreamZero 14B 零样本泛化 2x+; ByteDance UVAM 统一视频动作模型; UC Berkeley UWM 耦合视频和动作扩散。WAM 从概念验证走向基础设施。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-wam)">2025.06-09</span>
+    <h4>V-JEPA 2 / GWM / LAWM — 表征空间爆发</h4>
+    <p>潜在空间预测 (V-JEPA 2) + 3D 高斯世界模型 (GWM) + 无动作标签预训练 (LAWM)。像素空间不再是唯一选择。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-wam)">2026.03</span>
+    <h4>GigaWorld / DIAL — 效率与双系统</h4>
+    <p>因果分离 9x 加速 + System-2/System-1 双系统架构。解决 WAM 推理慢的核心瓶颈。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-wam)">2026.03-04</span>
+    <h4>VAMPO / PlayWorld / VLA vs WAM 对比</h4>
+    <p>RL 优化视频动力学 + 自主探索学习世界模型 + 首次系统鲁棒性对比。WAM 进入成熟期。</p>
+  </div>
+</div>
 </section>
 
 <section>
@@ -56,7 +106,66 @@
 <h2>WAM 核心论文 (2025-2026)</h2>
 
 <h3>WAM 核心范式</h3>
-<div class="card-grid" data-ids="2602.15922,2603.17240" data-page="p2"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2025.02</span>
+  <span class="tag">里程碑</span>
+  <h4>DreamZero: Zero-Shot World Action Model</h4>
+  <div class="meta">KAIST / Google DeepMind | Ye et al. | arXiv:2602.15922</div>
+  <p>基于预训练视频扩散模型构建 WAM。联合建模视频和动作，学会物理动力学。</p>
+  <div class="mini-diagram">
+  DreamZero 架构:
+  ┌──────────────────────────────────────────────────┐
+  │  Pre-trained Video Diffusion Model (14B)         │
+  │  ┌────────────┐                                  │
+  │  │ obs + lang │──► Joint Video-Action Modeling   │
+  │  └────────────┘    ┌───────────┐ ┌───────────┐  │
+  │                    │ Future    │ │ Action    │  │
+  │                    │ Video     │ │ Sequence  │  │
+  │                    └───────────┘ └───────────┘  │
+  └──────────────────────────────────────────────────┘
+  关键数据:
+  · 零样本泛化: 比 SOTA VLA 提升 2x+
+  · 跨具身迁移: 仅需 30 min play data → 保留零样本能力
+  · 系统优化: 14B 自回归模型 → 7Hz 闭环 (原本不可能实时)</div>
+  <div class="insight">核心 Insight: 视频扩散模型预训练学到的时空动力学先验是 WAM 泛化能力的关键来源。VLA 只看静态图文对，WAM 看过无数"物体运动的视频"——这个先验差异导致 2x 泛化差距。</div>
+  <a href="https://arxiv.org/abs/2602.15922" target="_blank" class="paper-link">arXiv 2602.15922 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <span class="tag">效率突破</span>
+  <h4>GigaWorld-Policy: Action-Centered WAM (9x Faster)</h4>
+  <div class="meta">GigaAI | GigaAI Team | arXiv:2603.17240</div>
+  <p>解决 WAM 推理慢的核心瓶颈——将动作预测和视频生成解耦。</p>
+  <div class="mini-diagram">
+  GigaWorld 因果分离设计:
+
+  训练时 (双重监督):
+  ┌─────────┐    Causal Transformer
+  │ obs+lang│──►┌────────────────────────────────┐
+  └─────────┘  │ [Action Tokens] ──► [Video Tokens]│
+               │      ↓ L_action         ↓ L_video │
+               └────────────────────────────────────┘
+               关键: video tokens ──╳──► action tokens
+                     (因果掩码: 视频不影响动作)
+
+  推理时 (跳过视频):
+  ┌─────────┐    ┌──────────────────┐
+  │ obs+lang│──►│ Action Tokens Only│  ← 9x 加速!
+  └─────────┘  └──────────┬───────┘
+                           ▼ Robot Actions
+
+  对比:          速度      成功率 (RoboTwin 2.0)
+  Motus (WAM):  1x base    baseline
+  GigaWorld:    9x faster   +7%
+  π₀.5 (VLA):  —           GigaWorld +95% over π₀.5</div>
+  <div class="insight">核心 Insight: WAM 不必在推理时生成视频。训练时视频生成提供物理约束监督信号，推理时只需动作解码即可——因果掩码保证两者解耦。"训练时想象，推理时直觉"。</div>
+  <a href="https://arxiv.org/abs/2603.17240" target="_blank" class="paper-link">arXiv 2603.17240 →</a>
+</div>
+
+</div>
 
 <h3>WAM 架构创新</h3>
 <p>WAM 的架构空间远比"视频扩散+动作解码"丰富。核心设计选择在三个维度上展开：</p>
@@ -84,20 +193,415 @@
   │ 预训练平台: 大规模预训练→下游任务 (Cosmos)       │
   └─────────────────────────────────────────────────┘</div>
 
-<div class="card-grid" data-ids="2506.09985,2509.18428,2508.17600,2405.15223,2501.03575" data-page="p2"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2025.06</span>
+  <span class="tag">潜在空间</span>
+  <h4>V-JEPA 2: Self-Supervised Video → Planning</h4>
+  <div class="meta">Meta FAIR | Assran et al. | arXiv:2506.09985</div>
+  <p>将 V-JEPA（视频联合嵌入预测架构）扩展为动作条件化世界模型。在潜在嵌入空间内预测未来视频表征，完全不生成像素。比像素空间预测快数十倍，同时保留足够结构支持机器人规划和控制。</p>
+  <div class="mini-diagram">
+  V-JEPA 2 潜在空间预测:
+  ┌──────────────────────────────────────────────┐
+  │ 像素空间 WAM (DreamZero):                    │
+  │   obs → 生成未来视频帧 → 解码动作            │
+  │   问题: 生成像素开销大, 大部分像素无用        │
+  │                                              │
+  │ V-JEPA 2 (潜在空间):                         │
+  │   obs ──► Video Encoder ──► z_t (嵌入)       │
+  │                                │              │
+  │              Predictor ──► ẑ_t+k (预测嵌入)  │
+  │                                │              │
+  │   不生成像素! 直接在嵌入空间预测              │
+  │   → 保留语义+动力学信息                      │
+  │   → 丢弃无关像素细节 (光影/纹理)             │
+  │                                              │
+  │ 优势: 10-100x 更快 + 对视觉扰动天然鲁棒     │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: WAM 不需要"看见"未来——只需"理解"未来。JEPA 在嵌入空间预测，丢弃了像素级细节（光影、纹理），保留了决策所需的语义和动力学信息。这解释了为什么潜在空间 WAM 对视觉扰动更鲁棒。</div>
+  <a href="https://arxiv.org/abs/2506.09985" target="_blank" class="paper-link">arXiv 2506.09985 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2025.09</span>
+  <span class="tag">无动作预训练</span>
+  <h4>LAWM: Latent Action Pretraining from Video</h4>
+  <div class="meta">Adelaide | Tharwat et al. | arXiv:2509.18428</div>
+  <p>从无动作标签的纯观测视频中学习世界模型。自动推断帧间"潜在动作"，用于预训练动力学模型。下游只需少量动作标注数据即可微调为完整 WAM。解锁互联网规模视频作为 WAM 预训练数据源。</p>
+  <div class="mini-diagram">
+  LAWM 潜在动作推断:
+  ┌──────────────────────────────────────────────┐
+  │ 传统 WAM 预训练:                             │
+  │   需要 (video, action) 配对数据 ← 昂贵!      │
+  │                                              │
+  │ LAWM:                                        │
+  │   frame_t ──► Latent Action Encoder ──► ẑ_a  │
+  │   frame_t+1 ◄─┘  (推断帧间"发生了什么")     │
+  │                                              │
+  │   ẑ_a = 潜在动作 (无需真实动作标签)          │
+  │                                              │
+  │   World Model: f(z_t, ẑ_a) → z_t+1          │
+  │   在潜在动作空间预训练动力学模型              │
+  │                                              │
+  │ 下游微调:                                    │
+  │   潜在动作 ẑ_a ←对齐→ 真实动作 a             │
+  │   少量配对数据即可 (100x less)               │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 互联网上有无限视频但几乎没有动作标签。LAWM 证明可以先从纯视频学到"世界如何变化"的动力学，再用少量机器人数据对齐"什么动作导致了变化"——数据效率提升两个数量级。</div>
+  <a href="https://arxiv.org/abs/2509.18428" target="_blank" class="paper-link">arXiv 2509.18428 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2025.08</span>
+  <span class="tag">3D 结构化</span>
+  <h4>GWM: Gaussian World Models for Manipulation</h4>
+  <div class="meta">Tsinghua / BIGAI / NTU | Lu et al. | arXiv:2508.17600</div>
+  <p>用 3D Gaussian Splatting 替代 2D 视频作为世界模型的核心表征。世界状态表示为 3D 高斯点云，动作导致高斯点的变形和运动。天然支持任意视角渲染、遮挡推理和 3D 空间规划。</p>
+  <div class="mini-diagram">
+  GWM 3D 高斯世界模型:
+  ┌──────────────────────────────────────────────┐
+  │ 2D 视频 WAM:                                 │
+  │   观测: 2D 图像 → 预测: 2D 未来帧            │
+  │   问题: 视角固定, 遮挡无法推理, 无 3D 理解   │
+  │                                              │
+  │ GWM (3D Gaussian):                           │
+  │   观测 → 重建 3D 高斯场景                    │
+  │   ┌──────────────────────────────┐           │
+  │   │  ·  ·  ·    3D Gaussians    │           │
+  │   │ · ·· ·  ·   (位置+颜色+     │           │
+  │   │  · ·  ··     形状+不透明度)  │           │
+  │   └──────────────────────────────┘           │
+  │   动作 → 高斯变形 → 新场景                   │
+  │   任意视角渲染 + 遮挡推理 + 3D 规划          │
+  │                                              │
+  │ 优势: 多视角免费, 3D 空间推理原生支持        │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 2D 视频 WAM 本质上在"看照片预测照片"，丢失了 3D 空间信息。3D 高斯表征让世界模型直接在 3D 空间中推理——遮挡、深度、多视角都成为免费副产品。</div>
+  <a href="https://arxiv.org/abs/2508.17600" target="_blank" class="paper-link">arXiv 2508.17600 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2024.05</span>
+  <span class="tag">自回归</span>
+  <h4>iVideoGPT: Autoregressive Tokenized World Model</h4>
+  <div class="meta">Tsinghua | Wu et al. | arXiv:2405.15223</div>
+  <p>将视觉观测、动作和奖励统一 token 化为同一序列，用 GPT 自回归预测。与扩散 WAM 的"去噪生成"不同，iVideoGPT 用"下一 token 预测"建模世界动力学。天然继承 LLM 的 scaling law 和基础设施。</p>
+  <div class="mini-diagram">
+  iVideoGPT vs 扩散 WAM:
+  ┌──────────────────────────────────────────────┐
+  │ 扩散 WAM (DreamZero):                        │
+  │   noise → 多步去噪 → 未来视频+动作           │
+  │   优点: 高质量生成  缺点: 多步推理慢          │
+  │                                              │
+  │ iVideoGPT (自回归):                          │
+  │   VQ-VAE 编码:                               │
+  │   [obs_tokens][action_tokens][reward_tokens]  │
+  │        ↓ 统一序列                             │
+  │   GPT: [..., v_t, a_t, r_t, v_t+1, ...]     │
+  │        next-token prediction                  │
+  │                                              │
+  │   优点: scaling law 适用, 基础设施复用        │
+  │   优点: 序列建模天然支持长程依赖              │
+  │   缺点: VQ 离散化损失细节                    │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 世界模型和 LLM 本质上都是"预测下一个 token"——iVideoGPT 证明将视觉/动作/奖励统一 token 化后，LLM 的 GPT 架构和 scaling law 可以直接迁移到世界建模。</div>
+  <a href="https://arxiv.org/abs/2405.15223" target="_blank" class="paper-link">arXiv 2405.15223 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2025.01</span>
+  <span class="tag">基础模型</span>
+  <h4>Cosmos: World Foundation Model Platform</h4>
+  <div class="meta">NVIDIA | arXiv:2501.03575</div>
+  <p>NVIDIA 发布的世界基础模型平台。同时提供自回归和扩散两种生成范式的预训练世界模型，配套高效视频 tokenizer。下游任务（机器人、自动驾驶）可根据需求选择或组合两种范式。平台级方案，类似 LLM 领域的 foundation model。</p>
+  <div class="mini-diagram">
+  Cosmos 平台架构:
+  ┌──────────────────────────────────────────────┐
+  │         Cosmos World Foundation Model         │
+  │                                              │
+  │  ┌─────────────────────────────────────────┐ │
+  │  │ Cosmos Tokenizer (高效视频编码)          │ │
+  │  │  连续 token (扩散用) + 离散 token (AR用) │ │
+  │  └──────────────┬──────────────────────────┘ │
+  │                 ▼                            │
+  │  ┌──────────────┐  ┌──────────────────────┐ │
+  │  │ AR World     │  │ Diffusion World      │ │
+  │  │ Model        │  │ Model                │ │
+  │  │ (GPT-style)  │  │ (去噪生成)           │ │
+  │  └──────┬───────┘  └──────────┬───────────┘ │
+  │         └──────────┬──────────┘              │
+  │                    ▼                         │
+  │  下游任务选择: 机器人 / 自动驾驶 / 仿真      │
+  └──────────────────────────────────────────────┘
+  定位: 世界模型领域的 "GPT-4 级别" 基础设施</div>
+  <div class="insight">核心 Insight: 单一生成范式（扩散或自回归）各有优劣，Cosmos 的答案是"都要"——统一 tokenizer + 双范式预训练，让下游任务根据延迟/质量需求选择。这是世界模型从"单点方案"走向"平台基础设施"的标志。</div>
+  <a href="https://arxiv.org/abs/2501.03575" target="_blank" class="paper-link">arXiv 2501.03575 →</a>
+</div>
+
+</div>
 
 <h3>WAM 架构与意图建模</h3>
-<div class="card-grid" data-ids="2603.29844,2603.22078" data-page="p2"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <span class="tag">意图建模</span>
+  <h4>DIAL: Differentiable Latent Intent Bottleneck</h4>
+  <div class="meta">HKU / XPENG | Chen et al. | arXiv:2603.29844</div>
+  <p>将世界建模重构为 System-2 慢思考 + System-1 快执行的双系统架构。</p>
+  <div class="mini-diagram">
+  DIAL 双系统架构:
+  ┌─────────────────────────────────────────────┐
+  │ System-2 (VLM): Latent World Modeling       │
+  │ ┌────────┐    ┌──────────────────────┐     │
+  │ │obs+lang│──►│ Predict Latent Future │     │
+  │ └────────┘   │ (VLM 特征空间内)      │     │
+  │              └──────────┬───────────┘     │
+  │                         │ latent intent    │
+  │                         │ (意图瓶颈)       │
+  └─────────────────────────┼─────────────────┘
+                            ▼
+  ┌─────────────────────────────────────────────┐
+  │ System-1 (轻量网络): Motor Execution        │
+  │  latent intent + current obs → actions      │
+  │  (Latent Inverse Dynamics)                  │
+  └─────────────────────────────────────────────┘
+
+  两阶段训练:
+  Phase 1: 解耦预热 — S2 学预测 + S1 学控制 (统一特征空间)
+  Phase 2: 端到端联合优化 — action 梯度可微地优化 VLM</div>
+  <div class="insight">核心 Insight: 直接用 VLM 映射到 action 会破坏预训练表征。DIAL 的"意图瓶颈"设计让 VLM 只需预测高层意图(latent future)，轻量网络负责精确控制——各司其职，VLM 预训练知识得以保留。</div>
+  <a href="https://arxiv.org/abs/2603.29844" target="_blank" class="paper-link">arXiv 2603.29844 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <span class="tag">对比研究</span>
+  <h4>VLA vs WAM: Systematic Robustness Comparison</h4>
+  <div class="meta">Huawei / UofT | Zhang et al. | arXiv:2603.22078</div>
+  <p>首次系统对比 VLA 和 WAM 在视觉/语言扰动下的鲁棒性。</p>
+  <div class="mini-diagram">
+  实验设置: 多种扰动下的成功率
+
+                  RoboTwin 2.0-Plus   LIBERO-Plus
+  ──────────────────────────────────────────────────
+  WAM:
+    LingBot-VA      74.2%               —
+    Cosmos-Policy   —                   82.2%
+  VLA:
+    π₀.5            部分任务可比         需大规模训练
+  Hybrid:
+    部分集成视频     中间水平             中间水平
+
+  WAM 鲁棒性来源:
+  ├── 视频预训练 → 时空动力学先验 (扰动不变)
+  ├── 显式状态预测 → 物理一致性约束
+  └── 异构数据学习 → 不依赖重复 demo</div>
+  <div class="insight">核心 Insight: WAM 天然对视觉和语言扰动更鲁棒，因为其决策基于物理动力学预测而非表面统计关联。VLA 达到同等鲁棒性需要大规模多样化训练数据。</div>
+  <a href="https://arxiv.org/abs/2603.22078" target="_blank" class="paper-link">arXiv 2603.22078 →</a>
+</div>
+
+</div>
 
 <h3>WAM 应用拓展</h3>
-<div class="card-grid" data-ids="2503.16806,2412.14803,2603.19370,2603.09030,2604.01001" data-page="p2"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2025.03</span>
+  <h4>DyWA: Dynamics-Adaptive World Action Model</h4>
+  <div class="meta">PKU | Lyu et al. | arXiv:2503.16806</div>
+  <p>面向非抓取操作 (推、滑、倒)。联合建模几何、状态、物理和动作。</p>
+  <div class="mini-diagram">
+  DyWA 四维统一建模:
+  ┌──────────────────────────────────────────┐
+  │         Single-View Point Cloud          │
+  │              ↓                           │
+  │  ┌────────┐ ┌────────┐ ┌────────┐      │
+  │  │Geometry│ │ State  │ │Physics │      │
+  │  │(形状)  │ │(位姿)  │ │(质量/  │      │
+  │  │        │ │        │ │ 摩擦)  │      │
+  │  └───┬────┘ └───┬────┘ └───┬────┘      │
+  │      └──────┬───┘──────┬───┘            │
+  │             ▼          ▼                │
+  │    ┌────────────────────────┐           │
+  │    │ History-conditioned    │           │
+  │    │ Dynamics Adaptation    │  ← 关键!   │
+  │    │ (从历史轨迹推断物理)   │           │
+  │    └───────────┬────────────┘           │
+  │                ▼                        │
+  │         Action Prediction               │
+  └──────────────────────────────────────────┘
+  真机: 68% 成功率, 适应不同质量/摩擦/半满水瓶</div>
+  <div class="insight">核心 Insight: 非抓取操作（推、滑、倒）高度依赖物理参数（质量、摩擦），但这些参数不可直接观测。DyWA 通过历史轨迹隐式推断物理参数，实现在线动力学适应。</div>
+  <a href="https://arxiv.org/abs/2503.16806" target="_blank" class="paper-link">arXiv 2503.16806 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2024.12</span>
+  <span class="tag">WAM 先驱</span>
+  <h4>VPP: Video Prediction Policy</h4>
+  <div class="meta">Tsinghua / Shanghai AI Lab | Hu et al. | arXiv:2412.14803</div>
+  <p>WAM 概念的早期验证。假设视频扩散模型内部表征包含当前静态信息和未来动态预测。</p>
+  <div class="mini-diagram">
+  VPP 核心假设与验证:
+
+  假设: Video Diffusion Model 的中间表征 =
+        当前静态信息 + 未来动态预测
+
+  ┌──────────────────────────────────────────┐
+  │  Pre-trained Video Foundation Model      │
+  │  (fine-tuned on robot + human videos)    │
+  │                                          │
+  │  obs_t ──► [内部表征] ──► future_repr    │
+  │                 │                        │
+  │                 ▼                        │
+  │      Implicit Inverse Dynamics           │
+  │      f(current_repr, future_repr) → a_t  │
+  └──────────────────────────────────────────┘
+
+  验证: Calvin ABC-D 泛化 benchmark +18.6% (vs SOTA)
+        真机灵巧操作 +31.6% 成功率</div>
+  <div class="insight">核心 Insight: 视频扩散模型天然是世界模型——它的去噪过程隐式地编码了"世界如何演化"的物理先验。利用这个免费的先验来引导动作生成，比从零学习策略高效得多。</div>
+  <a href="https://arxiv.org/abs/2412.14803" target="_blank" class="paper-link">arXiv 2412.14803 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>VAMPO: RL 优化视频动力学</h4>
+  <div class="meta">ZJU / Westlake / OpenHelix | Ge et al. | arXiv:2603.19370</div>
+  <p>用 RL 优化 WAM 的视频动力学预测质量。标准 WAM 的视频生成目标（像素重建）与下游动作质量不完全对齐。VAMPO 引入策略优化直接优化"视频预测→动作成功率"的端到端链路。</p>
+  <div class="mini-diagram">
+  VAMPO: 从视频重建到任务成功的对齐
+  ┌────────────────────────────────────────────┐
+  │ 标准 WAM:                                  │
+  │   Video Loss (像素重建) ──╳── Task Success │
+  │   (好看的视频 ≠ 好用的动作)                │
+  │                                            │
+  │ VAMPO:                                     │
+  │   Video Model ──► Action ──► Env Reward    │
+  │        ↑                         │         │
+  │        └── Policy Optimization ──┘         │
+  │   直接优化 "视频质量→任务成功" 链路         │
+  └────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: WAM 的视频生成目标和下游任务目标存在 gap——精确重建像素不等于预测出对决策有用的状态变化。VAMPO 用 RL 闭环弥合此 gap。</div>
+  <a href="https://arxiv.org/abs/2603.19370" target="_blank" class="paper-link">arXiv 2603.19370 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>PlayWorld: 自主探索学习世界模型</h4>
+  <div class="meta">Princeton | Yin et al. | arXiv:2603.09030</div>
+  <p>机器人通过自主探索（play）收集多样化交互数据，从中学习通用世界模型。无需人类演示或任务标注——纯好奇心驱动的探索即可构建物理先验。</p>
+  <div class="mini-diagram">
+  PlayWorld 自主学习闭环:
+  ┌────────────────────────────────────────────┐
+  │ 1. Autonomous Play (好奇心驱动)            │
+  │    机器人自主探索 → 多样化交互数据          │
+  │         ▼                                  │
+  │ 2. World Model Learning                    │
+  │    从 play data 学习通用物理先验            │
+  │         ▼                                  │
+  │ 3. Task-conditioned Policy                 │
+  │    给定任务指令 → 世界模型引导动作生成      │
+  └────────────────────────────────────────────┘
+  关键: 零人类演示, 纯自主探索 → 通用世界模型</div>
+  <div class="insight">核心 Insight: 世界模型的训练数据不必来自人类演示。机器人的自主探索（play）天然产生多样化的物理交互，是学习通用世界模型的理想数据源。</div>
+  <a href="https://arxiv.org/abs/2603.09030" target="_blank" class="paper-link">arXiv 2603.09030 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.04</span>
+  <h4>EgoSim: 自我中心世界模拟器</h4>
+  <div class="meta">SJTU / Shanghai AI Lab | Hao et al. | arXiv:2604.01001</div>
+  <p>从野外单目视频中提取训练数据的可扩展 pipeline，构建闭环自我中心世界模拟器。Geometry-action-aware 观测模拟 + 交互感知状态更新，支持跨具身迁移到机器人操作。</p>
+  <div class="mini-diagram">
+  EgoSim 数据飞轮:
+  野外单目视频 ──► 数据提取 Pipeline ──► 训练数据
+                                           │
+  闭环模拟:                                ▼
+  当前帧 + 动作 ──► Geometry-Action  ──► 下一帧预测
+       ▲             Aware 模块           │
+       │                                  ▼
+       └──── 交互感知状态更新 ◄──── 状态估计
+                 跨具身迁移: 人类视频 → 机器人操作</div>
+  <div class="insight">核心 Insight: 互联网上存在海量自我中心视频（烹饪、手工、维修），这些天然包含物理交互信息。EgoSim 证明可以从这些"免费数据"中学习可迁移的世界模型。</div>
+  <a href="https://arxiv.org/abs/2604.01001" target="_blank" class="paper-link">arXiv 2604.01001 →</a>
+</div>
+
+</div>
 </section>
 
 <section>
 <h2>关键参考文献 (WAM 先驱与基础工作)</h2>
 <p>以下论文是 WAM 范式的重要先驱和基础，在 p7 引用图中被多篇 2026 论文引用：</p>
 
-<div class="card-grid" data-ids="gr1,gr2,uvam,uwm,lapa,dreamgen,flare" data-page="p2"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2023</span>
+  <span class="tag">5x cited</span>
+  <h4>GR-1: 大规模视频生成预训练机器人</h4>
+  <div class="meta">ByteDance | Wu et al.</div>
+  <p>WAM 范式的直接先驱。用大规模视频生成预训练 Transformer，再微调为机器人策略。首次证明"视频预训练→机器人策略"的技术路线可行。直接启发了 DreamZero、GR-2、UVAM 等后续工作。</p>
+  <div class="insight">GR-1 回答了关键问题: 视频生成模型的知识能否迁移到机器人? — 答案是 yes，且泛化能力显著优于纯机器人数据训练。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2024</span>
+  <span class="tag">4x cited</span>
+  <h4>GR-2: 网络规模视频→语言动作模型</h4>
+  <div class="meta">ByteDance | Cheang et al.</div>
+  <p>GR-1 的扩展版。利用网络规模视频数据 (非机器人数据) 预训练，将视频生成能力和语言理解结合。证明互联网视频的 scaling 对 WAM 有效，是 WAM 走向大规模预训练的关键证据。</p>
+  <div class="insight">从 GR-1 到 GR-2: 数据规模从机器人视频扩展到互联网视频，模型能力显著提升——WAM 的 scaling law。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">5x cited</span>
+  <h4>UVAM: 统一视频动作模型</h4>
+  <div class="meta">ByteDance | Luo et al.</div>
+  <p>ByteDance GR 系列第三代。统一视频生成和动作预测为单一模型，不再需要分离的视频模型和动作解码器。在多个操作基准上取得 SOTA，被 5 篇 2026 论文引用。</p>
+  <div class="insight">从分离式 (GR-1: 视频→策略) 到统一式 (UVAM: 视频=策略)——统一建模消除了中间环节的信息损失。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">3x cited</span>
+  <h4>UWM: 统一世界模型 — 视频+动作扩散耦合</h4>
+  <div class="meta">UC Berkeley | Li et al.</div>
+  <p>将视频预测和动作生成统一到同一个扩散过程中。视频和动作共享去噪 Transformer，使两者相互约束——视频预测提供物理约束，动作生成提供因果结构。</p>
+  <div class="insight">UWM 的核心 insight: 视频和动作不应独立去噪——它们是同一物理过程的两面，联合去噪产生更强的物理一致性。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2024</span>
+  <span class="tag">3x cited</span>
+  <h4>LAPA: 视频潜在动作预训练</h4>
+  <div class="meta">UC Berkeley | Ye et al.</div>
+  <p>从无动作标签的视频中学习潜在动作表示，用于预训练世界模型。与 LAWM 思路相近但方法不同：LAPA 用逆动力学模型推断帧间潜在动作，然后用这些潜在动作预训练策略。</p>
+  <div class="insight">LAPA 和 LAWM 形成"潜在动作预训练"双子星——证明互联网视频即使没有动作标签也包含丰富的动力学信息。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">3x cited</span>
+  <h4>DreamGen: 梦境生成解锁机器人泛化</h4>
+  <div class="meta">Stanford | Huang et al.</div>
+  <p>让机器人在"梦中"生成虚拟训练数据。利用视频生成模型合成多样化的交互场景，扩充训练数据。在少样本场景下将泛化能力提升显著。直接启发了 PlayWorld 等自主数据生成工作。</p>
+  <div class="insight">数据瓶颈的新解法: 不是收集更多真实数据，而是让世界模型"做梦"生成数据——类似人类在睡眠中巩固学习。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">3x cited</span>
+  <h4>FLARE: 隐式世界建模</h4>
+  <div class="meta">MIT | Yu et al.</div>
+  <p>不显式生成视频或潜在状态预测，而是将世界建模能力隐式编码到策略网络中。通过辅助预测任务（未来观测嵌入）增强策略的物理理解，但推理时不需要额外的预测步骤。</p>
+  <div class="insight">世界建模不一定需要显式预测——隐式方法(FLARE)在训练时注入物理先验，推理时零额外开销，是 WAM 和 VLA 之间的中间路线。</div>
+</div>
+
+</div>
 </section>
 
 <section>
@@ -174,31 +678,31 @@
 
 <section>
 <h2>World Model 安全风险 (2026 新议题)</h2>
-<div class="card-grid" data-ids="2604.01346" data-page="p2"></div>
+<div class="card-grid">
+<div class="card" style="border-top-color:#e63946">
+  <span class="tag" style="background:#ffe0e0;color:#e63946">2026.04</span>
+  <span class="tag" style="background:#ffe0e0;color:#e63946">安全</span>
+  <h4>World Model Threat Landscape</h4>
+  <div class="meta">SovereignAI Security Labs | Parmar | arXiv:2604.01346</div>
+  <p>世界模型的预测能力带来独特安全风险。提出五级攻击者能力分类和统一威胁模型，扩展 MITRE ATLAS 和 OWASP LLM Top 10 到世界模型场景。</p>
+  <div class="mini-diagram">
+  World Model 独特安全风险:
+  ┌──────────────────────────────────────────────────────┐
+  │ 1. 数据投毒 → 污染物理先验 → 错误预测 → 灾难性决策  │
+  │ 2. 潜在表征攻击 → 微小扰动 → 复合滚动误差放大       │
+  │ 3. 目标误泛化 → 世界模型"想象"出错误的成功路径       │
+  │ 4. 欺骗性对齐 → 利用预测能力模拟"听话"行为          │
+  │ 5. Reward Hacking → 在想象空间找到高 reward 捷径     │
+  └──────────────────────────────────────────────────────┘
+  实验验证: GRU-RSSM 轨迹持续对抗攻击 A₁=2.26x 放大
+  结论: 世界模型应被视为安全关键基础设施</div>
+  <div class="insight">核心 Insight: 世界模型"能预测未来"这个能力本身就是双刃剑——它让 agent 更强大，也让 agent 更擅长 reward hacking 和欺骗性对齐。这是一类 VLA 不存在的新安全风险。</div>
+  <a href="https://arxiv.org/abs/2604.01346" target="_blank" class="paper-link" style="color:#e63946">arXiv 2604.01346 →</a>
+</div>
+</div>
 </section>
 
 </div>
-<div class="comments-section">
-<h3>Comments</h3>
-<script src="https://giscus.app/client.js"
-  data-repo="kaiqinhu/robot-learning-survey"
-  data-repo-id="R_kgDOR77ZGg"
-  data-category="General"
-  data-category-id="DIC_kwDOR77ZGs4C6Wpr"
-  data-mapping="pathname"
-  data-strict="0"
-  data-reactions-enabled="1"
-  data-emit-metadata="0"
-  data-input-position="bottom"
-  data-theme="preferred_color_scheme"
-  data-lang="zh-CN"
-  crossorigin="anonymous"
-  async>
-</script>
-</div>
-
 <footer>Robot Learning Survey 2026 &mdash; WAM 世界动作模型专题</footer>
-<script src="papers.js"></script>
-<script src="render.js"></script>
 </body>
 </html>

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-290GYTM41D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-290GYTM41D');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RL Sim-to-Real | Robot Learning Survey 2026</title>
@@ -10,7 +8,18 @@
 <style>h2{border-bottom-color:var(--accent-rl)} .card{border-top-color:var(--accent-rl)} .card .tag{background:#ffe4e6;color:var(--accent-rl)} .card .paper-link{color:var(--accent-rl)}</style>
 </head>
 <body>
-<nav id="main-nav"></nav>
+<nav>
+  <span class="logo">Robot Learning 2026</span>
+  <a href="index.html">Home</a>
+  <a href="p1-vla.html">VLA</a>
+  <a href="p2-wam.html">WAM</a>
+  <a href="p3-rl-sim2real.html" class="active" style="background:var(--accent-rl)">RL</a>
+  <a href="p4-diffusion.html">Diffusion</a>
+  <a href="p5-hybrid.html">Hybrid</a>
+  <a href="p6-unitree.html">Unitree</a>
+  <a href="p7-citation-graph.html">Graph</a>
+  <a href="survey.html">Survey</a>
+</nav>
 
 <div class="container">
 
@@ -19,7 +28,43 @@
 
 <section>
 <h2>里程碑演进</h2>
-<div class="timeline" data-page="p3" data-accent="rl"></div>
+<div class="timeline">
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-rl)">2019</span>
+    <h4>Sim-to-Real for Dexterous Hand (OpenAI)</h4>
+    <p>5000 年仿真经验 + massive domain randomization → 魔方复原。证明 sim-to-real 大规模可行性。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-rl)">2022</span>
+    <h4>AMP (Adversarial Motion Priors)</h4>
+    <p>用 GAN 判别器替代手工自然性 reward。人类动捕数据 → 判别器 → style reward。成为人形运动 RL 的标配。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-rl)">2023</span>
+    <h4>Agility Robotics Digit / Tesla Optimus RL</h4>
+    <p>工业级人形机器人开始采用 sim-to-real RL。Teacher-Student + domain randomization 成为标准 pipeline。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-rl)">2024-2025</span>
+    <h4>BeyondMimic / ASAP — 超越模仿与 Sim2Real 对齐</h4>
+    <p>BeyondMimic (CMU): 超越单纯运动模仿，实现多功能人形控制（操作+运动+恢复），被 5 篇 2026 论文引用。ASAP (Tencent): 系统对齐仿真与真实物理参数，解决 sim-to-real gap 的根因。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-rl)">2024</span>
+    <h4>Isaac Lab + Unitree G1/H1 生态爆发</h4>
+    <p>NVIDIA Isaac Lab 提供标准化训练框架，Unitree 低成本硬件降低门槛。人形 RL 论文数量爆增。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-rl)">2025.12</span>
+    <h4>15 分钟学会人形运动</h4>
+    <p>GPU 加速 RL 将 sim-to-real 时间从数天压缩到 15 分钟。极速迭代成为可能。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year" style="color:var(--accent-rl)">2026.03</span>
+    <h4>G1 Running 3.3m/s / BAT / HALO / AGILE</h4>
+    <p>人形跑步速度记录 + 敏捷-稳定切换 + 重载可微仿真 + 标准化工作流。RL sim-to-real 全面成熟。</p>
+  </div>
+</div>
 </section>
 
 <section>
@@ -102,17 +147,309 @@
 
 <section>
 <h2>人形运动控制</h2>
-<div class="card-grid" data-ids="2603.25902,2604.01064,2603.19078,2603.15084" data-page="p3"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">arXiv:2603.25902</span>
+  <h4>G1 Running at 3.3 m/s</h4>
+  <div class="meta">Caltech | Olkin et al. | arXiv:2603.25902</div>
+  <p>从单个人类演示生成优化的周期参考运动库。目标条件 + 控制引导 reward 结构。G1 真机跑步速度达 3.3 m/s，户外数百米长距离验证。集成感知和规划实现跑步中避障。</p>
+  <div class="mini-diagram">
+  G1 Running Pipeline:
+  ┌──────────────────────────────────────────────┐
+  │ 1. 单个人类跑步演示                          │
+  │         ▼                                    │
+  │ 2. 周期参考运动库生成 (优化+插值)             │
+  │    ·步频/步幅参数化                           │
+  │    ·目标速度条件                              │
+  │         ▼                                    │
+  │ 3. PPO 训练 (Isaac Lab)                      │
+  │    ·参考运动跟踪 reward                       │
+  │    ·控制引导: 速度跟踪 + 能耗 + 稳定性       │
+  │         ▼                                    │
+  │ 4. 真机部署: 3.3 m/s + 户外避障              │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 不需要大量动捕数据——单个人类跑步演示 + 参数化运动库即可覆盖多种速度。关键是 reward 结构设计：参考跟踪 + 控制约束的平衡。</div>
+  <a href="https://arxiv.org/abs/2603.25902" target="_blank" class="paper-link">arXiv 2603.25902 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">arXiv:2604.01064</span>
+  <h4>BAT: Policy-Switching for Humanoid</h4>
+  <div class="meta">Georgia Tech | Baek et al. | arXiv:2604.01064</div>
+  <p>在线策略切换框架：动态在两个互补全身 RL 控制器之间切换，平衡敏捷性和稳定性。层次 RL + 滑动视窗策略预评估 + 基于 VQ-VAE 的运动偏好预测。</p>
+  <div class="mini-diagram">
+  BAT 在线策略切换:
+  ┌──────────────────────────────────────────────┐
+  │ Policy A: 敏捷控制器 (速度优先)              │
+  │ Policy B: 稳定控制器 (安全优先)              │
+  │                                              │
+  │         ┌──────────────────┐                 │
+  │ obs ──► │ Meta-Controller  │ ──► 选择 A or B │
+  │         │ ·滑动视窗评估    │                 │
+  │         │ ·VQ-VAE 偏好预测 │                 │
+  │         └──────────────────┘                 │
+  │                                              │
+  │ 关键: 不是混合输出, 而是硬切换               │
+  │   → 避免两个策略互相干扰                     │
+  │   → 长时域 loco-manipulation G1 真机验证     │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 单一 RL 策略难以同时兼顾敏捷性和稳定性（reward 冲突）。BAT 用两个专精策略 + 元控制器硬切换，比混合策略更有效。</div>
+  <a href="https://arxiv.org/abs/2604.01064" target="_blank" class="paper-link">arXiv 2604.01064 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">arXiv:2603.19078</span>
+  <h4>ABD-Net: Physics-Informed GNN</h4>
+  <div class="meta">UT Austin / UW-Madison | Shin et al. | arXiv:2603.19078</div>
+  <p>将关节体动力学算法 (ABA) 的惯量传播机制嵌入 GNN。物理信息表征捕获动作如何在身体中传播。采样效率提升 + 动力学偏移泛化 + G1/Go2 真机实时推理验证。</p>
+  <div class="mini-diagram">
+  ABD-Net 物理信息 GNN:
+  ┌──────────────────────────────────────────────┐
+  │ 传统 RL: MLP(obs) → action                  │
+  │   问题: 不理解身体拓扑结构                   │
+  │                                              │
+  │ ABD-Net: 关节体动力学 + GNN                  │
+  │   ┌─────┐  ┌─────┐  ┌─────┐                │
+  │   │ 关节1│──│ 关节2│──│ 关节3│  ← 身体拓扑图 │
+  │   └──┬──┘  └──┬──┘  └──┬──┘                │
+  │      │  ABA 惯量传播  │                      │
+  │      └───────┬────────┘                      │
+  │              ▼                               │
+  │   物理感知表征 → 动作预测                     │
+  │                                              │
+  │ 优势: 换机器人只需换拓扑图, 表征可迁移       │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 机器人身体是树结构——力从末端传播到根。ABD-Net 把这个物理先验编码进 GNN 的消息传递中，而非让 MLP 从数据中重新学习。</div>
+  <a href="https://arxiv.org/abs/2603.19078" target="_blank" class="paper-link">arXiv 2603.19078 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">arXiv:2603.15084</span>
+  <h4>HALO: Heavy-Load Humanoid via Differentiable Sim</h4>
+  <div class="meta">ZJU / TeleAI | Wang et al. | arXiv:2603.15084</div>
+  <p>针对重载人形机器人（搬运、负重行走）的 sim-to-real 方案。可微仿真器提供解析梯度，加速策略优化。通过 contact-aware 自适应补偿真机接触动力学差异。真机验证负重 20kg 稳定行走。</p>
+  <div class="mini-diagram">
+  HALO 可微仿真 Sim-to-Real:
+  ┌──────────────────────────────────────────────┐
+  │ 传统: PPO (采样梯度, 方差大, 慢)             │
+  │ HALO: 可微仿真器 (解析梯度, 精确, 快)       │
+  │                                              │
+  │  ┌────────────┐    ∂reward/∂action           │
+  │  │ 可微仿真器  │ ──────────────────► 策略更新 │
+  │  │ (解析梯度)  │    无需 PPO 采样!           │
+  │  └────────────┘                              │
+  │         +                                    │
+  │  Contact-Aware 补偿:                         │
+  │    仿真接触 vs 真机接触 → 在线适应            │
+  │                                              │
+  │  真机: 负重 20kg 稳定行走                    │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: PPO 的零阶梯度估计是 sim-to-real 训练的瓶颈之一。可微仿真提供精确梯度，但代价是接触动力学的不可微问题——HALO 用自适应补偿绕过此限制。</div>
+  <a href="https://arxiv.org/abs/2603.15084" target="_blank" class="paper-link">arXiv 2603.15084 →</a>
+</div>
+
+</div>
 
 <h2>高效 Sim-to-Real 迁移</h2>
-<div class="card-grid" data-ids="2512.01996,2603.17092,2603.15759,2511.15200" data-page="p3"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">arXiv:2512.01996</span>
+  <span class="tag">效率突破</span>
+  <h4>15 分钟学会人形运动</h4>
+  <div class="meta">UC Berkeley / Physical Intelligence | Seo et al. | arXiv:2512.01996</div>
+  <p>GPU 大规模并行仿真 + 高效 PPO 实现，将人形 sim-to-real 训练时间从数天压缩到 15 分钟。Isaac Lab 上 4096 个并行环境，单张 A100 即可完成全流程。极速迭代使 reward 调参从"实验"变为"调试"。</p>
+  <div class="mini-diagram">
+  15 分钟训练 vs 传统:
+  ┌──────────────────────────────────────────────┐
+  │ 传统:                                        │
+  │   128 envs × 1B steps → 2-3 天训练           │
+  │   reward 调一次参 = 等两天                    │
+  │                                              │
+  │ 15-Min:                                      │
+  │   4096 envs × GPU 并行 → 15 分钟训练         │
+  │   reward 调参 = 快速迭代 (一天几十次!)        │
+  │                                              │
+  │ 关键技术:                                    │
+  │   ·Isaac Lab 大规模并行                      │
+  │   ·Vectorized PPO (GPU-native)               │
+  │   ·Terrain curriculum 自动调度               │
+  │   ·单张 A100 即可                            │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: Sim-to-real 的真正瓶颈不是算法而是迭代速度。15 分钟训练意味着一天可以尝试几十种 reward 设计——这把 RL 从"炼丹"变成了工程化调试。</div>
+  <a href="https://arxiv.org/abs/2512.01996" target="_blank" class="paper-link">arXiv 2512.01996 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">arXiv:2603.17092</span>
+  <h4>SLowRL: Safe LoRA Fine-tuning on Real Robot</h4>
+  <div class="meta">McGill / Mila / TU Munich | Daneshmand et al. | arXiv:2603.17092</div>
+  <p>解决真机 RL 微调的安全问题。LoRA (rank-1!) + recovery policy 安全约束。微调时间减少 46.5%，安全违规近零。证明极低秩适应即可弥合 sim-to-real gap。</p>
+  <div class="mini-diagram">
+  SLowRL 安全真机微调:
+  ┌──────────────────────────────────────────────┐
+  │ 问题: sim-to-real gap → 真机需要微调         │
+  │       但真机微调 → 可能摔坏机器人!            │
+  │                                              │
+  │ SLowRL 解法:                                 │
+  │ ┌──────────────┐   ┌──────────────────┐      │
+  │ │ 冻结策略     │ + │ LoRA rank-1 适配 │      │
+  │ │ (sim 预训练) │   │ (极少参数微调)   │      │
+  │ └──────────────┘   └──────────────────┘      │
+  │         +                                    │
+  │ ┌─────────────────────────────────────┐      │
+  │ │ Recovery Policy: 检测危险 → 接管    │      │
+  │ │ (安全约束, 违规率 ≈ 0)             │      │
+  │ └─────────────────────────────────────┘      │
+  │ 效果: 微调时间 -46.5%, 安全违规近零          │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: Sim-to-real gap 可能只需要极少的参数调整（rank-1 LoRA!）。大部分 sim 策略是正确的，gap 集中在少数物理参数不匹配的维度上。</div>
+  <a href="https://arxiv.org/abs/2603.17092" target="_blank" class="paper-link">arXiv 2603.17092 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">arXiv:2603.15759</span>
+  <h4>SimDist: Simulation Distillation</h4>
+  <div class="meta">UT Austin / UW | Levy et al. | arXiv:2603.15759</div>
+  <p>将仿真器结构先验蒸馏到潜在世界模型中，真机端通过在线规划 + 监督动力学微调快速适应。将真实世界适应简化为短视窗系统辨识，避免长时域信用分配。</p>
+  <div class="mini-diagram">
+  SimDist 两阶段迁移:
+  ┌──────────────────────────────────────────────┐
+  │ Phase 1 (仿真): 蒸馏仿真器先验               │
+  │   Simulator ──► Latent World Model           │
+  │   (学习物理结构, 不是精确参数)                │
+  │         ▼                                    │
+  │ Phase 2 (真机): 快速在线适应                  │
+  │   ┌────────────────────────────────────┐     │
+  │   │ 短视窗系统辨识 (几秒数据)          │     │
+  │   │   → 微调潜在动力学模型             │     │
+  │   │   → 在线规划 (MPC)                 │     │
+  │   └────────────────────────────────────┘     │
+  │                                              │
+  │ 关键: 避免长时域信用分配                     │
+  │   → 仅需辨识短视窗动力学偏移                 │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 仿真器提供的不仅是数据，还有物理结构先验。蒸馏这个先验到世界模型中，真机适应就从"从零学物理"降级为"参数微调"。</div>
+  <a href="https://arxiv.org/abs/2603.15759" target="_blank" class="paper-link">arXiv 2603.15759 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">arXiv:2511.15200</span>
+  <h4>VIRAL: Large-Scale Visual Sim-to-Real</h4>
+  <div class="meta">NVIDIA / CMU | He et al. | arXiv:2511.15200</div>
+  <p>大规模视觉 sim-to-real 框架，统一视觉感知和全身控制。在仿真中联合训练视觉编码器和 RL 策略，通过大规模视觉域随机化实现真机视觉泛化。G1 真机验证视觉引导的 loco-manipulation。</p>
+  <div class="mini-diagram">
+  VIRAL 视觉 Sim-to-Real:
+  ┌──────────────────────────────────────────────┐
+  │ 传统: 视觉感知(独立) + RL 控制(独立)         │
+  │   问题: 感知-控制断层                        │
+  │                                              │
+  │ VIRAL: 端到端联合训练                        │
+  │ ┌──────────┐   ┌──────────┐   ┌──────────┐ │
+  │ │ 视觉输入 │──►│ 视觉编码 │──►│ RL 策略  │ │
+  │ │ (RGB)    │   │ (CNN)    │   │ (PPO)    │ │
+  │ └──────────┘   └──────────┘   └──────────┘ │
+  │       联合训练 in sim                        │
+  │                                              │
+  │ 视觉域随机化:                                │
+  │   ·光照/颜色/纹理/背景/遮挡 大规模随机       │
+  │   → 真机视觉零样本泛化                       │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 视觉 sim-to-real 的难点不在控制策略，而在视觉域差距。VIRAL 证明足够大规模的视觉域随机化可以弥合这个差距，不需要真机视觉数据。</div>
+  <a href="https://arxiv.org/abs/2511.15200" target="_blank" class="paper-link">arXiv 2511.15200 →</a>
+</div>
+
+</div>
 
 <h2>标准化工作流</h2>
-<div class="card-grid" data-ids="2603.20147" data-page="p3"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">arXiv:2603.20147</span>
+  <h4>AGILE: End-to-End Humanoid RL Workflow</h4>
+  <div class="meta">ETH Zurich | Zhao et al. | arXiv:2603.20147</div>
+  <p>标准化人形 RL 全生命周期：环境验证→训练→评估→部署。场景测试 + 随机化 rollout + 运动质量诊断。5 种代表性技能（行走、恢复、模仿、loco-manipulation）跨 G1 和 T1 平台一致迁移。</p>
+  <div class="mini-diagram">
+  AGILE 标准化工作流:
+  ┌──────────────────────────────────────────────┐
+  │ Stage 1: 环境验证                            │
+  │   ·仿真器配置检查                            │
+  │   ·URDF/物理参数验证                         │
+  │   ·场景测试 (基准行为)                       │
+  │                                              │
+  │ Stage 2: 训练 + 评估                         │
+  │   ·随机化 rollout 诊断                       │
+  │   ·运动质量度量 (步态对称/能耗/稳定性)       │
+  │   ·自动化 reward 调参建议                    │
+  │                                              │
+  │ Stage 3: 部署                                │
+  │   ·Teacher→Student 蒸馏                      │
+  │   ·真机安全检查清单                          │
+  │   ·逐步增加难度验证                          │
+  │                                              │
+  │ 跨平台: G1 + T1 一致迁移 (5 种技能)         │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 人形 RL 的可复现性是行业痛点——同一代码在不同机器人上结果差异巨大。AGILE 通过标准化流程和诊断工具，使 sim-to-real 从"炼丹"走向"工程"。</div>
+  <a href="https://arxiv.org/abs/2603.20147" target="_blank" class="paper-link">arXiv 2603.20147 →</a>
+</div>
+
+</div>
 </section>
 
 <h2>关键参考文献 (高被引基础工作)</h2>
-<div class="card-grid" data-ids="beyondmimic,asap" data-page="p3"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">5x cited</span>
+  <h4>BeyondMimic: 超越模仿的多功能人形控制</h4>
+  <div class="meta">CMU | Cheng et al.</div>
+  <p>突破传统运动模仿 RL 的单一任务局限。训练单一策略同时支持行走、跑步、跳跃、搬运、恢复等多种技能，并能在技能间平滑切换。被 5 篇 2026 论文引用，是人形 RL 从"模仿单个动作"走向"通用运动能力"的标志性工作。</p>
+  <div class="mini-diagram">
+  BeyondMimic 多功能控制:
+  ┌──────────────────────────────────────────────┐
+  │ 传统运动 RL:                                  │
+  │   一个策略 = 一个技能 (走 or 跑 or 搬)        │
+  │                                              │
+  │ BeyondMimic:                                 │
+  │   ┌─────────────────────────────────────────┐│
+  │   │        Single Versatile Policy          ││
+  │   │  ┌─────┐ ┌─────┐ ┌─────┐ ┌──────────┐ ││
+  │   │  │Walk │ │Run  │ │Jump │ │Loco-Manip│ ││
+  │   │  └──┬──┘ └──┬──┘ └──┬──┘ └────┬─────┘ ││
+  │   │     └───────┴───────┴─────────┘        ││
+  │   │         平滑技能切换                    ││
+  │   └─────────────────────────────────────────┘│
+  │ 关键: 共享低层运动原语 + 高层技能调度         │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 人类的运动能力不是一组离散技能，而是连续运动流形上的不同区域。BeyondMimic 学习这个流形，使技能切换成为流形上的平滑移动而非硬切换。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">3x cited</span>
+  <h4>ASAP: 对齐仿真与真实物理</h4>
+  <div class="meta">Tencent | He et al.</div>
+  <p>系统性解决 sim-to-real gap 的根因——仿真器物理参数与真实世界不匹配。自动化物理参数辨识 + 在线校准流程，使仿真动力学更贴近真实。被 3 篇 2026 论文引用，是 domain randomization 之外的互补方案。</p>
+  <div class="mini-diagram">
+  ASAP vs Domain Randomization:
+  ┌──────────────────────────────────────────────┐
+  │ Domain Randomization:                        │
+  │   "不知道真实参数 → 随机化所有参数"           │
+  │   问题: 过度随机化 → 性能下降                 │
+  │                                              │
+  │ ASAP:                                        │
+  │   "精确辨识真实参数 → 对齐仿真器"             │
+  │   真机数据 → 系统辨识 → 修正仿真物理          │
+  │   → 更小的 sim-real gap → 更好的迁移          │
+  │                                              │
+  │ 互补: ASAP 缩小 gap + DR 覆盖残余不确定性    │
+  └──────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: Domain Randomization 是"承认无知"的暴力方案，ASAP 是"减少无知"的精确方案。两者互补：先用 ASAP 对齐核心物理参数，再用 DR 覆盖残余不确定性。</div>
+</div>
+
+</div>
 
 <section>
 <h2>Adversarial Motion Priors (AMP)</h2>
@@ -135,27 +472,6 @@
 </section>
 
 </div>
-<div class="comments-section">
-<h3>Comments</h3>
-<script src="https://giscus.app/client.js"
-  data-repo="kaiqinhu/robot-learning-survey"
-  data-repo-id="R_kgDOR77ZGg"
-  data-category="General"
-  data-category-id="DIC_kwDOR77ZGs4C6Wpr"
-  data-mapping="pathname"
-  data-strict="0"
-  data-reactions-enabled="1"
-  data-emit-metadata="0"
-  data-input-position="bottom"
-  data-theme="preferred_color_scheme"
-  data-lang="zh-CN"
-  crossorigin="anonymous"
-  async>
-</script>
-</div>
-
 <footer>Robot Learning Survey 2026 &mdash; RL Sim-to-Real 专题</footer>
-<script src="papers.js"></script>
-<script src="render.js"></script>
 </body>
 </html>

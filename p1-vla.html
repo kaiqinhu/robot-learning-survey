@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-290GYTM41D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-290GYTM41D');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VLA 视觉-语言-动作模型 | Robot Learning Survey 2026</title>
 <link rel="stylesheet" href="shared.css">
-<style>h2{border-bottom-color:var(--accent-vla)} .card{border-top-color:var(--accent-vla)} .card .tag{background:#dbeafe;color:var(--accent-vla)} .card .paper-link{color:var(--accent-vla)}</style>
+<style>h2{border-bottom-color:var(--accent-vla)}</style>
 </head>
 <body>
-<nav id="main-nav"></nav>
+<nav>
+  <span class="logo">Robot Learning 2026</span>
+  <a href="index.html">Home</a>
+  <a href="p1-vla.html" class="active">VLA</a>
+  <a href="p2-wam.html">WAM</a>
+  <a href="p3-rl-sim2real.html">RL</a>
+  <a href="p4-diffusion.html">Diffusion</a>
+  <a href="p5-hybrid.html">Hybrid</a>
+  <a href="p6-unitree.html">Unitree</a>
+  <a href="p7-citation-graph.html">Graph</a>
+  <a href="survey.html">Survey</a>
+</nav>
 
 <div class="container">
 
@@ -50,27 +59,461 @@
 
 <section>
 <h2>里程碑模型演进</h2>
-<div class="timeline" data-page="p1"></div>
+<div class="timeline">
+  <div class="timeline-item">
+    <span class="year">2023.07</span>
+    <h4>RT-2 (Google DeepMind)</h4>
+    <p>首次证明 VLM 语义知识可迁移至机器人。将 PaLM-E 微调输出 action tokens，但模型巨大 (55B)，推理慢。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year">2023.10</span>
+    <h4>Open X-Embodiment / RT-X</h4>
+    <p>21 个机构、22 种机器人、527 种技能、160K+ 任务。证明跨具身正迁移：在一个机器人上的数据可以提升另一个机器人的性能。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year">2024.06</span>
+    <h4>OpenVLA</h4>
+    <p>开源 LLaMA-based VLA，社区可微调。降低了 VLA 的使用门槛，但受限于离散 action token 的精度。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year">2024.10</span>
+    <h4>π₀ (Physical Intelligence)</h4>
+    <p>VLM + Flow Matching 架构。连续动作生成替代离散 token，适合高精度操作。叠衣服、清桌子等高灵巧任务表现优异。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year">2023.03</span>
+    <h4>PaLM-E (Google)</h4>
+    <p>具身多模态语言模型开山之作。562B 参数，将视觉、语言和机器人观测统一编码到 LLM 中，证明 LLM 可直接接地物理世界。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year">2024-2025</span>
+    <h4>VLA 生态爆发</h4>
+    <p>SpatialVLA (空间表征)、CoT-VLA (思维链推理)、TraceVLA (视觉轨迹)、FT-VLA (高效微调)、FAST (动作 tokenization)、UniVLA (统一潜在动作)、WorldVLA (世界模型 VLA)。架构和训练方法全面分化。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year">2025.03</span>
+    <h4>GR00T N1 (NVIDIA) / π₀.6 (PI)</h4>
+    <p>GR00T N1：开源通用人形基础模型，被 8 篇 2026 论文引用，成为 VLA 生态标杆。π₀.6：从真实经验学习的 VLA，PI 团队第三代迭代。</p>
+  </div>
+  <div class="timeline-item">
+    <span class="year">2025-2026</span>
+    <h4>FocusVLA / FAN-VLA / Tex3D</h4>
+    <p>最新一代：解决视觉注意力瓶颈、动作空间正则化、对抗鲁棒性。</p>
+  </div>
+</div>
 </section>
 
 <section>
 <h2>核心架构演进</h2>
 
 <h3>架构改进与视觉优化</h3>
-<div class="card-grid" data-ids="2604.01570,2604.01618,2603.28740,2603.27670,2603.27967,2405.14093" data-page="p1"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.04</span>
+  <h4>FAN-VLA: Feasible Action Neighborhood Regularization</h4>
+  <div class="meta">SJTU / Huawei | Niu et al. | arXiv:2604.01570</div>
+  <p>发现机器人状态空间中存在"可行动作邻域"(FAN)——微小动作差异不影响结果。用高斯先验正则化 VLA 输出分布，对齐物理操作的内在容错性。</p>
+  <div class="mini-diagram">
+  核心思想: 状态 s 附近存在可行动作邻域 FAN(s)
+  ┌───────────────────────────┐
+  │  Action Space             │
+  │       ┌─────────┐        │
+  │       │ FAN(s)  │        │  ← 邻域内动作等效
+  │       │  ·a_gt  │        │
+  │       │  ·a'    │        │  高斯先验 N(a_gt, σ²)
+  │       │  ·a''   │        │  约束输出在 FAN 内
+  │       └─────────┘        │
+  └───────────────────────────┘
+  效果: SFT 和 RFT 样本效率 ↑, OOD 泛化 ↑</div>
+  <div class="insight">核心 Insight: 机器人动作空间有内在容错性，VLA 不应追求点估计精确匹配 GT，而应输出覆盖整个可行邻域的分布。</div>
+  <a href="https://arxiv.org/abs/2604.01570" target="_blank" class="paper-link">arXiv 2604.01570 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.04</span>
+  <h4>Tex3D: 3D Adversarial Textures Attack VLA</h4>
+  <div class="meta">ECNU / Tsinghua | Chen et al. | arXiv:2604.01618</div>
+  <p>首次对 VLA 进行端到端 3D 对抗纹理攻击。通过前景-背景解耦(FBD)实现可微纹理优化，轨迹感知优化(TAAO)确保跨视角攻击有效性。</p>
+  <div class="mini-diagram">
+  攻击流程:
+  ┌──────────┐    FBD     ┌───────────────┐
+  │ 3D物体   │ ──────────►│ 对抗纹理优化   │
+  │ (操作目标)│  可微渲染  │ ∂L_vla/∂texture│
+  └──────────┘           └───────┬───────┘
+                                 │ TAAO
+                          ┌──────▼──────┐
+                          │ 关键帧优先级 │
+                          │ 顶点参数化   │
+                          └──────┬──────┘
+                                 ▼
+  VLA 任务失败率: 96.7% ← 物体表面贴对抗纹理即可</div>
+  <div class="insight">核心 Insight: VLA 对 3D 物理域攻击极度脆弱。标准仿真器无法提供从 VLA loss 到物体外观的可微路径——FBD 通过双渲染器对齐解决此问题。</div>
+  <a href="https://arxiv.org/abs/2604.01618" target="_blank" class="paper-link">arXiv 2604.01618 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>FocusVLA: Visual Attention for Action</h4>
+  <div class="meta">HIT-SZ / DaiMon | Zhang et al. | arXiv:2603.28740</div>
+  <p>诊断 VLA 三大视觉瓶颈并逐一解决：架构偏见忽略视觉细节、过多 visual token 分散注意力、无关视觉信息引入噪声。</p>
+  <div class="mini-diagram">
+  VLA 视觉三大瓶颈与解法:
+
+  问题1: 架构偏见 → language shortcut 跳过视觉
+  解法:  Modality Cascaded Attention (消除捷径)
+
+  问题2: visual token 过多 → 注意力稀释
+  解法:  Focus Attention 动态选择 task-relevant patches
+         ┌─────────────────────────┐
+         │ 全部 visual patches     │
+         │  [x][x][✓][x][✓][x]   │  ← 动态选择
+         │       ↓     ↓          │
+         │  task-relevant only    │  → 送入 action head
+         └─────────────────────────┘
+
+  问题3: 无关视觉信息 → 噪声
+  解法:  显式调制 relevant patch 影响力</div>
+  <div class="insight">核心 Insight: VLA 性能瓶颈不在视觉表征质量，而在视觉信息如何被利用。实验证明：更好地用现有视觉表征 > 提升视觉编码器。</div>
+  <a href="https://arxiv.org/abs/2603.28740" target="_blank" class="paper-link">arXiv 2603.28740 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>Progress-Aware VLA</h4>
+  <div class="meta">PKU | Yan et al. | arXiv:2603.27670</div>
+  <p>大多数 VLA 缺乏任务进度感知，依赖手工启发式判断任务终止。引入可微进度引导管线：预训练进度估计器 + 逆动力学世界模型。</p>
+  <div class="mini-diagram">
+  可微进度引导管线:
+  ┌──────────┐     ┌──────────────────┐     ┌──────────────┐
+  │ Action   │────►│ Inverse Dynamics │────►│ Future Latent│
+  │ Tokens   │     │ World Model      │     │ Visual State │
+  └──────────┘     └──────────────────┘     └──────┬───────┘
+                                                    │
+                                            ┌───────▼───────┐
+                                            │  Progress     │
+                                            │  Estimator    │
+                                            │  p(t) ∈ [0,1] │
+                                            └───────┬───────┘
+                                                    │ max progress
+                                                    │ regularization
+                                                    ▼
+                                            refine action tokens</div>
+  <div class="insight">核心 Insight: 进度估计器在大规模无监督视频-文本机器人数据上预训练，预测残差仅 0.07（0-1 scale），且零样本迁移到未见真机场景。</div>
+  <a href="https://arxiv.org/abs/2603.27670" target="_blank" class="paper-link">arXiv 2603.27670 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>XVR: Cross-View Spatial Relations</h4>
+  <div class="meta">KAIST | Jeong et al. | arXiv:2603.27967</div>
+  <p>VLM 缺乏多视角空间推理能力。构建 100K 视觉问答数据集（18K 3D 场景 + 70K 机器人轨迹），训练三类跨视角能力。</p>
+  <div class="mini-diagram">
+  三类跨视角空间推理任务:
+  ┌─────────────────────────────────────────────────┐
+  │ 1. Correspondence — 跨视角物体匹配              │
+  │    View A: [杯子在左]  ←→  View B: [杯子在右]   │
+  │                                                  │
+  │ 2. Verification — 空间关系验证                   │
+  │    "View B 中苹果在碗的左边?" → Yes/No           │
+  │                                                  │
+  │ 3. Localization — 目标位置识别                   │
+  │    "从 View C 看，机械臂末端在哪?" → (x,y)      │
+  └─────────────────────────────────────────────────┘
+  数据: 18K 3D scenes + 70K robot trajectories = 100K QA
+  效果: VLA backbone 换用 XVR → RoboCasa 成功率 ↑</div>
+  <div class="insight">核心 Insight: 显式训练跨视角空间关系比增大模型或数据更有效。3D 理解能力可以通过 QA 形式注入 VLM，无需修改架构。</div>
+  <a href="https://arxiv.org/abs/2603.27967" target="_blank" class="paper-link">arXiv 2603.27967 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2024.05</span>
+  <span class="tag">综述</span>
+  <h4>A Survey on VLA for Embodied AI</h4>
+  <div class="meta">CUHK | Ma et al. | arXiv:2405.14093</div>
+  <p>梳理三条研究线：VLA 组件设计、VLA 作为低层控制策略、VLA 作为高层任务规划器。汇总数据集、仿真器、评测基准。</p>
+  <div class="mini-diagram">
+  VLA 研究三条线:
+  Line 1: 组件设计 ── 视觉编码器 / 语言模型 / 动作解码器
+  Line 2: 低层策略 ── 直接输出关节动作 (end-to-end)
+  Line 3: 高层规划 ── 分解长 horizon 任务为子任务序列
+
+  资源汇总: 数据集 / 仿真器 / 评测基准
+  GitHub: github.com/yueen-ma/Awesome-VLA</div>
+  <a href="https://arxiv.org/abs/2405.14093" target="_blank" class="paper-link">arXiv 2405.14093 →</a>
+  <a href="https://github.com/yueen-ma/Awesome-VLA" target="_blank" class="paper-link" style="margin-left:4px">GitHub Awesome-VLA →</a>
+</div>
+
+</div>
 
 <h3>VLA + RL 微调 (2026 最热方向)</h3>
-<div class="card-grid" data-ids="2505.18719,2603.26666,2506.08440,2502.05450" data-page="p1"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2025.05</span>
+  <span class="tag">里程碑</span>
+  <h4>VLA-RL: Scalable RL for VLA</h4>
+  <div class="meta">Tsinghua / NTU | Lu et al. | arXiv:2505.18719</div>
+  <p>将 LLM RLHF 范式完整迁移到 VLA：VLA 在真实环境中交互，用任务成功信号做 RL 微调。证明 RL 阶段可以在不破坏预训练泛化的前提下显著提升任务成功率和鲁棒性。</p>
+  <div class="mini-diagram">
+  VLA-RL 三阶段 (= LLM Pre-train → SFT → RLHF):
+  ┌────────────────────────────────────────────┐
+  │ Phase 1: VLM Pre-train (Internet-scale)    │
+  │   Vision + Language → 语义理解              │
+  │         ▼                                  │
+  │ Phase 2: IL/SFT (Robot demonstrations)     │
+  │   Obs + Lang → Action (模仿学习对齐)       │
+  │         ▼                                  │
+  │ Phase 3: RL Fine-tune (Env interaction)    │
+  │   Task success reward → 超越演示水平        │
+  │   策略梯度优化, 不破坏预训练泛化            │
+  └────────────────────────────────────────────┘
+  效果: 成功率显著↑, 泛化保持</div>
+  <div class="insight">核心 Insight: VLA 的 IL/SFT 阶段受限于演示数据的质量和覆盖范围。RL 微调通过环境交互突破此上界——类似 LLM 中 RLHF 突破 SFT 的天花板。</div>
+  <a href="https://arxiv.org/abs/2505.18719" target="_blank" class="paper-link">arXiv 2505.18719 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>VLA-OPD: On-Policy Distillation</h4>
+  <div class="meta">HKUST(GZ) | Zhong et al. | arXiv:2603.26666</div>
+  <p>大 VLA teacher 给小 student rollout 重标签，实现 on-policy distillation。解决直接 RL 微调大型 VLA 的计算瓶颈：teacher 只在标注时运行，student 轻量在线学习。</p>
+  <div class="mini-diagram">
+  On-Policy Distillation:
+  ┌────────────────────────────────────────────┐
+  │ Large VLA Teacher (offline, 标注用)         │
+  │   ↓ relabel student rollouts               │
+  │ Small Student Policy (online, 部署用)       │
+  │   ↓ on-policy RL with teacher labels       │
+  │ 效果: 桥接 offline SFT ←→ online RL        │
+  │   无需大模型在线推理, 降低计算成本 10x+     │
+  └────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 大 VLA 直接做 RL 太贵，小模型直接 RL 又太弱。OPD 用大模型标注小模型的在线经验，兼顾大模型的知识和小模型的效率。</div>
+  <a href="https://arxiv.org/abs/2603.26666" target="_blank" class="paper-link">arXiv 2603.26666 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2025.06</span>
+  <h4>TGRPO: Trajectory-wise GRPO for VLA</h4>
+  <div class="meta">NWPU | Chen et al. | arXiv:2506.08440</div>
+  <p>修复 GRPO 在轨迹级任务中的 token 不均衡问题：标准 GRPO 在 token 级归一化 advantage，导致长轨迹中关键决策点的信号被稀释。TGRPO 在轨迹级归一化，保留时序结构中的关键信号。</p>
+  <div class="mini-diagram">
+  GRPO vs TGRPO:
+  ┌────────────────────────────────────────────┐
+  │ GRPO:  token-level normalize               │
+  │   [t1][t2][t3]...[tN] → 每个 token 独立   │
+  │   问题: 关键决策 token 信号被大量填充稀释   │
+  │                                            │
+  │ TGRPO: trajectory-level normalize          │
+  │   [───── trajectory ─────] → 整体归一化    │
+  │   优势: 保留轨迹内关键决策点的相对重要性    │
+  │   方差更低, 收敛更稳定                     │
+  └────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: GRPO 的 token 级归一化对 LLM 文本生成合理，但对机器人轨迹不合理——轨迹中 95% 的 token 是常规运动，5% 是关键决策。轨迹级归一化保护了这 5% 的信号。</div>
+  <a href="https://arxiv.org/abs/2506.08440" target="_blank" class="paper-link">arXiv 2506.08440 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2025.02</span>
+  <h4>ConRFT: Consistency Policy for VLA RL</h4>
+  <div class="meta">CASIA / UCAS | Chen et al. | arXiv:2502.05450</div>
+  <p>用 Consistency Model 替代 Diffusion 作为 VLA 的动作头，使 RL 微调更高效：单步生成 + 端到端可微。在操作任务上比 Flow Matching + RL 收敛更快。</p>
+  <div class="mini-diagram">
+  ConRFT 架构:
+  ┌────────────────────────────────────────────┐
+  │ VLM Backbone → Consistency Action Head     │
+  │   (单步生成, 无需迭代去噪)                  │
+  │         ▼                                  │
+  │ RL Fine-tune:                              │
+  │   ·端到端可微 (vs Diffusion 需多步展开)     │
+  │   ·单步采样 → 直接策略梯度                  │
+  │   ·收敛速度: 2-3x faster than Flow+RL      │
+  └────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: Diffusion/Flow 的多步去噪阻碍 RL 梯度传播。Consistency Model 的单步生成天然适配 RL——无需 DMPO 那样的额外蒸馏步骤。</div>
+  <a href="https://arxiv.org/abs/2502.05450" target="_blank" class="paper-link">arXiv 2502.05450 →</a>
+</div>
+
+</div>
 
 <h3>VLA 架构创新</h3>
-<div class="card-grid" data-ids="2603.17524,2603.13788,2603.10126" data-page="p1"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>KineVLA: 运动学感知 VLA</h4>
+  <div class="meta">Tencent / ZJU | Han et al. | arXiv:2603.17524</div>
+  <p>将运动学信息注入 VLA：高层预测末端执行器目标位姿，低层通过逆运动学求解关节动作。双层分解使同一 VLA 可跨不同机器人具身迁移。</p>
+  <div class="mini-diagram">
+  KineVLA 双层分解:
+  ┌────────────────────────────────────────────┐
+  │ VLM Backbone (obs + lang)                  │
+  │         ▼                                  │
+  │ High-level: 末端执行器目标位姿 (SE3)        │
+  │   (具身无关, 可跨机器人迁移)                │
+  │         ▼                                  │
+  │ Low-level: IK 求解器 → 关节动作            │
+  │   (具身相关, 按机器人 URDF 计算)            │
+  └────────────────────────────────────────────┘
+  跨具身迁移: 换机器人只需换 IK 求解器</div>
+  <div class="insight">核心 Insight: VLA 直接输出关节角度把"运动学知识"的负担交给了网络。KineVLA 将这个负担交还给解析 IK 求解器，VLA 只需预测具身无关的末端目标。</div>
+  <a href="https://arxiv.org/abs/2603.17524" target="_blank" class="paper-link">arXiv 2603.17524 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>ST-VLA: 4D 时空 VLA</h4>
+  <div class="meta">NJU | Wu et al. | arXiv:2603.13788</div>
+  <p>引入时间动态编码和空间自适应 tokenization，让 VLA 具备 4D (3D+时间) 时空推理能力。解决标准 VLA 只看单帧静态图的根本缺陷。</p>
+  <div class="mini-diagram">
+  ST-VLA 4D 推理:
+  ┌────────────────────────────────────────────┐
+  │ 时间维: Temporal Dynamic Encoding          │
+  │   [frame_t-2] [frame_t-1] [frame_t]       │
+  │   → 编码运动趋势和速度变化                  │
+  │                                            │
+  │ 空间维: Spatial Adaptive Tokenization      │
+  │   → 动态分配 token 预算给运动区域           │
+  │   静止背景少 token, 运动前景多 token        │
+  │                                            │
+  │ 4D = 3D空间 + 时间 → 理解物体运动轨迹      │
+  └────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: 标准 VLA 输入单帧图像，本质上是"看照片做决策"。ST-VLA 通过时序编码让模型"看视频做决策"，时空信息提供运动预测的物理直觉。</div>
+  <a href="https://arxiv.org/abs/2603.13788" target="_blank" class="paper-link">arXiv 2603.13788 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2026.03</span>
+  <h4>AR-VLA: 真自回归动作专家</h4>
+  <div class="meta">INSAIT / KU Leuven | Hu et al. | arXiv:2603.10126</div>
+  <p>将动作生成回归到纯自回归范式：像 LLM 生成 token 一样逐维度生成动作。证明精心设计的自回归动作头可以媲美 Diffusion/Flow Matching，同时推理更简单。</p>
+  <div class="mini-diagram">
+  AR-VLA vs Diffusion VLA:
+  ┌────────────────────────────────────────────┐
+  │ Diffusion/Flow VLA:                        │
+  │   noise → 多步去噪 → action               │
+  │   优点: 多模态  缺点: 慢, RL难微调         │
+  │                                            │
+  │ AR-VLA:                                    │
+  │   a_1 → a_2 → a_3 → ... → a_n            │
+  │   像 LLM token-by-token 生成               │
+  │   优点: 简单, 快, 天然适配 RL              │
+  │   关键: 动作维度排序 + 条件依赖建模         │
+  └────────────────────────────────────────────┘</div>
+  <div class="insight">核心 Insight: Diffusion 不是动作生成的唯一选择。精心设计的自回归动作头（维度排序+条件依赖）可以达到同等多模态建模能力，且天然兼容 LLM 的自回归训练基础设施。</div>
+  <a href="https://arxiv.org/abs/2603.10126" target="_blank" class="paper-link">arXiv 2603.10126 →</a>
+</div>
+
+</div>
 </section>
 
 <section>
 <h2>关键参考文献 (高被引基础工作)</h2>
 <p>以下论文在 p7 引用图中被多篇 2026 年论文引用，是 VLA 领域的里程碑工作：</p>
 
-<div class="card-grid" data-ids="2503.14734,palme,saycan,2501.15830,ftvla,cotvla,pi06,fast,univla,tracevla,worldvla" data-page="p1"></div>
+<div class="card-grid">
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">8x cited</span>
+  <h4>GR00T N1: 通用人形基础模型</h4>
+  <div class="meta">NVIDIA | arXiv:2503.14734</div>
+  <p>开源通用人形机器人基础模型。统一架构支持多种人形平台，提供预训练权重和标准化接口。成为 2026 年 VLA 研究的主要对比基线和生态标杆，被 8 篇 survey 论文引用。</p>
+  <div class="insight">生态意义: GR00T N1 之于人形 VLA = LLaMA 之于 LLM 开源生态。</div>
+  <a href="https://arxiv.org/abs/2503.14734" target="_blank" class="paper-link">arXiv 2503.14734 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2023</span>
+  <span class="tag">6x cited</span>
+  <h4>PaLM-E: 具身多模态语言模型</h4>
+  <div class="meta">Google | Driess et al.</div>
+  <p>562B 参数的具身多模态 LLM。首次将视觉、语言和机器人传感器观测统一编码到大语言模型中。证明 LLM 具备接地物理世界的潜力，是 RT-2 和后续所有 VLA 工作的直接理论基础。</p>
+  <div class="insight">PaLM-E 回答了关键问题: "LLM 能否理解物理世界?" — 答案是 yes，但需要多模态编码。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2022</span>
+  <span class="tag">6x cited</span>
+  <h4>SayCan: Do As I Can, Not As I Say</h4>
+  <div class="meta">Google | Ahn et al.</div>
+  <p>语言接地机器人可供性 (affordance)。LLM 生成计划，机器人 affordance 函数过滤不可行步骤。将"语言理解"和"物理可行性"解耦，是 VLA 高层规划路线的奠基工作。</p>
+  <div class="insight">SayCan 的 insight: LLM 知道"该做什么"，但不知道"能做什么"——affordance 函数弥补此 gap。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">6x cited</span>
+  <h4>SpatialVLA: 空间表征增强 VLA</h4>
+  <div class="meta">Shanghai AI Lab / Fudan | Qu et al. | arXiv:2501.15830</div>
+  <p>将显式 3D 空间表征注入 VLA。通过空间感知 token 增强 VLM backbone，使 VLA 在需要精确 3D 定位的任务（如插件、装配）上性能大幅提升。被 6 篇 2026 论文引用，是"VLA + 3D"路线的代表作。</p>
+  <div class="insight">VLA 的 2D 视觉天然缺乏深度信息——SpatialVLA 证明显式空间表征比更大的模型更有效。</div>
+  <a href="https://arxiv.org/abs/2501.15830" target="_blank" class="paper-link">arXiv 2501.15830 →</a>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">6x cited</span>
+  <h4>FT-VLA: 高效 VLA 微调</h4>
+  <div class="meta">ByteDance | Zhen et al.</div>
+  <p>系统优化 VLA 微调流程：数据高效采样、参数高效适配、推理加速。在同等数据量下微调速度和下游任务成功率均优于直接全量微调。成为 VLA 实际部署的关键使能技术。</p>
+  <div class="insight">预训练 VLA 很贵，FT-VLA 解决"如何在有限数据和算力下高效适配"这个落地关键问题。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">5x cited</span>
+  <h4>CoT-VLA: 视觉思维链推理</h4>
+  <div class="meta">SJTU | Liu et al.</div>
+  <p>将 Chain-of-Thought 推理引入 VLA。模型在输出动作前先生成视觉推理步骤（物体位置→抓取策略→运动路径），使决策过程可解释。在复杂多步操作任务上显著优于直接映射的 VLA。</p>
+  <div class="insight">LLM 的 CoT 提升推理能力 → VLA 的 CoT 提升物理推理能力。可解释性是附加收益。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">4x cited</span>
+  <h4>π₀.6: Learning from Real Experience</h4>
+  <div class="meta">Physical Intelligence | PI Team</div>
+  <p>PI 团队第三代 VLA。在 π₀ (Flow Matching) 和 π₀.5 (+ RL) 基础上，强调从真实机器人经验中持续学习。验证了 VLA 在长期部署中的在线改进能力。</p>
+  <div class="insight">从 π₀ → π₀.5 → π₀.6 的演进路线完美映射 LLM 的 pretrain → RLHF → online learning。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">4x cited</span>
+  <h4>FAST: 高效动作 Tokenization</h4>
+  <div class="meta">MIT | Pertsch et al.</div>
+  <p>提出高效的机器人动作 tokenization 方案。通过学习压缩的动作 token 表示，使 VLA 的自回归动作生成效率大幅提升，同时保持精度。解决了 VLA 中"动作 token 数量多→推理慢"的核心瓶颈。</p>
+  <div class="insight">动作序列存在大量冗余——FAST 用学习的 tokenizer 压缩冗余，类似 BPE 对文本的作用。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">4x cited</span>
+  <h4>UniVLA: 任务中心潜在动作统一</h4>
+  <div class="meta">PKU | Li et al.</div>
+  <p>将不同类型的机器人动作统一到潜在动作空间中。通过任务中心的动作抽象，使单一 VLA 模型可跨不同动作空间的机器人迁移，无需为每种机器人分别训练。</p>
+  <div class="insight">机器人动作空间高度异构（关节角 vs 末端位姿 vs 夹爪）——UniVLA 用潜在空间统一消除此障碍。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2024</span>
+  <span class="tag">4x cited</span>
+  <h4>TraceVLA: 视觉轨迹提示</h4>
+  <div class="meta">SJTU | Zheng et al.</div>
+  <p>在 VLA 输入中叠加视觉轨迹提示（历史末端轨迹在图像上的投影）。无需修改架构，仅通过输入增强即可显著提升 VLA 的时空感知能力。简单有效，被多篇后续工作采用。</p>
+  <div class="insight">最简单的时序信息注入方式——在图像上画出运动轨迹，让 VLA "看到" 历史运动趋势。</div>
+</div>
+
+<div class="card">
+  <span class="tag">2025</span>
+  <span class="tag">4x cited</span>
+  <h4>WorldVLA: 自回归动作世界模型</h4>
+  <div class="meta">HKU | Li et al.</div>
+  <p>在 VLA 的自回归框架内同时预测动作和未来视觉状态。统一动作生成和世界预测，是 VLA 和 WAM 融合的早期探索，直接启发了 AtomVLA 等后续混合工作。</p>
+  <div class="insight">WorldVLA 证明自回归 VLA 可以"免费"获得世界建模能力——只需在 token 序列中加入未来视觉 token。</div>
+</div>
+
+</div>
 </section>
 
 <section>
@@ -106,27 +549,6 @@
 </section>
 
 </div>
-<div class="comments-section">
-<h3>Comments</h3>
-<script src="https://giscus.app/client.js"
-  data-repo="kaiqinhu/robot-learning-survey"
-  data-repo-id="R_kgDOR77ZGg"
-  data-category="General"
-  data-category-id="DIC_kwDOR77ZGs4C6Wpr"
-  data-mapping="pathname"
-  data-strict="0"
-  data-reactions-enabled="1"
-  data-emit-metadata="0"
-  data-input-position="bottom"
-  data-theme="preferred_color_scheme"
-  data-lang="zh-CN"
-  crossorigin="anonymous"
-  async>
-</script>
-</div>
-
 <footer>Robot Learning Survey 2026 &mdash; VLA 专题</footer>
-<script src="papers.js"></script>
-<script src="render.js"></script>
 </body>
 </html>
