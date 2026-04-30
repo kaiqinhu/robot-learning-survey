@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>柔性压力传感器与电子皮肤调研 | Tactile & Embodied AI 2026</title>
+<link rel="stylesheet" href="../shared.css">
+<style>
+h2{border-bottom-color:#7c3aed} .card{border-top-color:#7c3aed}
+table{font-size:0.85rem} td,th{padding:6px 8px}
+.perf-highlight{background:#ede9fe;padding:2px 6px;border-radius:4px;font-weight:600}
+.company-tag{display:inline-block;font-size:0.75rem;padding:1px 6px;border-radius:3px;margin-right:4px}
+.tag-piezor{background:#fef3c7;color:#92400e}
+.tag-cap{background:#dbeafe;color:#1e40af}
+.tag-ion{background:#d1fae5;color:#065f46}
+.tag-optical{background:#fce7f3;color:#9d174d}
+.tag-mag{background:#e0e7ff;color:#3730a3}
+.tag-textile{background:#f3e8ff;color:#6b21a8}
+
+@media (max-width: 768px) {
+  table{font-size:0.78rem; min-width:580px}
+  td,th{padding:5px 6px; white-space:normal}
+  .card p{font-size:0.82rem}
+  h1{font-size:1.3rem !important}
+}
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<div class="container">
+
+<h1 style="font-size:1.8rem;margin-bottom:0.3rem">柔性压力传感器与电子皮肤调研</h1>
+<p style="color:var(--text-secondary);margin-bottom:0.5rem">六大传感机制 / 关键材料体系 / 微结构工程 / 代表性学术工作 / 40+国内供应商 / 成熟产线复用路径</p>
+
+<div class="card" style="margin-bottom:2rem">
+<p>柔性压力传感器是电子皮肤与触觉感知系统的核心元器件。从压阻、电容到离子电容 (iontronic)，从微金字塔到多孔泡沫，从实验室单点器件到全身 1000+ taxel 阵列——这个领域在过去五年经历了灵敏度从 kPa⁻¹ 级跃升到近万 kPa⁻¹ 级、量程从几十 kPa 拓展到 MPa 级、制造路径从洁净室 MEMS 工艺走向 R2R 纺织产线的快速演变。本页面从传感机制、材料、微结构、学术前沿、商业产品/国内供应商、成熟产线复用路径六个维度，系统记录截至 2026 年 4 月的领域进展。</p>
+</div>
+
+<!-- §1 六大传感机制 -->
+<section>
+<h2>1. 六大传感机制性能对比</h2>
+
+<p>柔性压力传感器按换能原理分为六大类。压阻式结构最简单、成本最低，但需要持续供电且存在信号漂移。电容式功耗极低且适合 AM-TFT 主动矩阵集成，JDI 已将其商业化。离子电容 (iontronic) 利用电双层 (EDL) 的纳米级厚度实现 2-3 个数量级的灵敏度提升，但温度敏感性是其部署的主要障碍。混合响应 (HRPS) 通过将压阻和压容耦合在同一材料中，在宽量程内保持高灵敏度。压电/摩擦电可自供电但只能检测动态信号。光学式 (VBTS) 空间分辨率最高但体积大、功耗高，仅适合指尖局部。</p>
+
+<table>
+<tr><th>机制</th><th>灵敏度范围</th><th>典型量程</th><th>功耗</th><th>阵列适配性</th><th>代表最新工作</th></tr>
+<tr><td><strong>压阻式</strong></td><td>0.1~334 kPa⁻¹</td><td>0~210 kPa</td><td>持续 mW 级</td><td>被动矩阵可行</td><td>MXene/LM@PDMS sponge 334.1 kPa⁻¹ (JACS 2025)</td></tr>
+<tr><td><strong>电容式</strong></td><td>0.5~9.22 kPa⁻¹</td><td>0~2 MPa</td><td>极低 μW 级</td><td>AM-TFT 最成熟</td><td>PKU contact-dominated 9.22 kPa⁻¹ R²=0.9998 (Nat Comms 2025)</td></tr>
+<tr><td><strong>混合响应 (HRPS)</strong></td><td>3.13 kPa⁻¹(低压)</td><td>0~125 kPa</td><td>低</td><td>待开发</td><td>Lu Nanshu SHRPS 抗拉伸 (Matter 2024)</td></tr>
+<tr><td><strong>离子电容 (EDL)</strong></td><td>100~9280 kPa⁻¹</td><td>0~400 kPa</td><td>低</td><td>温度敏感限制部署</td><td>非吸湿 ionogel (NSR 2024); 可编程离子 (npj 2025)</td></tr>
+<tr><td><strong>压电/摩擦电</strong></td><td>自供电无需外部</td><td>仅动态信号</td><td>零 (自供电)</td><td>只测动态变化</td><td>极端环境摩擦电 (Nat Comms 2025)</td></tr>
+<tr><td><strong>光学 (VBTS)</strong></td><td>图像级空间分辨</td><td>—</td><td>高 (摄像头+光源)</td><td>仅指尖尺度</td><td>GelSight/DIGIT/DenseTact 系列</td></tr>
+</table>
+
+<div class="card" style="margin-top:1rem">
+<p><strong>离子电容 (Iontronic) 代表工作汇总</strong></p>
+<table>
+<tr><th>论文</th><th>灵敏度</th><th>量程</th><th>特点</th></tr>
+<tr><td>Liu et al. 2022 (Nano-Micro Lett)</td><td class="perf-highlight">9280 kPa⁻¹</td><td>窄</td><td>PU-离子液体泡沫，95.4% 孔隙率</td></tr>
+<tr><td>He et al. 2024 (Nat. Mater.)</td><td>—</td><td>—</td><td>无蠕变聚电解质弹性体，解决漂移</td></tr>
+<tr><td>Nature Comms 2023 (s41467-023-38274-2)</td><td>33.7 kPa⁻¹</td><td>1700 kPa</td><td>超宽线性范围，检测极限 0.36Pa</td></tr>
+<tr><td>CEJ 2024</td><td>92.14 kPa⁻¹(0-50kPa)</td><td>500 kPa</td><td>飞秒激光微结构</td></tr>
+<tr><td>Nature Comms 2024 (s41467-024-51415-5)</td><td>—</td><td>—</td><td>正压+负压双模柔性阵列</td></tr>
+<tr><td>中科院重庆绿智院 2025</td><td>—</td><td>0-1MPa</td><td>双机制协同实现 C∝P 线性</td></tr>
+</table>
+<p style="font-size:0.82rem;color:var(--text-secondary);margin-top:0.5rem">原理：离子液体/凝胶与电极界面形成电双层 (EDL)，厚度~1nm，单位面积电容~μF/cm²，灵敏度比传统电容高 2-3 个数量级。已知问题：温度敏感、EDL 建立需 ms 级时间、阵列最高密度~1mm pitch、长期稳定性数据稀少。</p>
+</div>
+</section>
+
+<!-- §2 关键材料体系 -->
+<section>
+<h2>2. 关键材料体系</h2>
+
+<p>传感器性能的天花板由材料决定。导电填料方面，MXene (Ti₃C₂Tₓ) 导电率高且可溶液加工，但在空气中容易氧化降解；CNT 渗流阈值低至~0.5wt%（HRPS 的最优浓度），柔韧性好但分散困难；石墨烯/rGO 化学稳定但片层堆叠后压阻响应弱。弹性基底方面，PDMS 是最通用的微结构模板化材料，Ecoflex 模量极低(~60kPa)适合超灵敏应用但机械强度差。离子凝胶/离子液体作为 EDL 电容层可实现 μF/cm² 级面电容密度，但温度、湿度和长期可靠性是三个待解决的工程问题。导电纤维/纺织适合大面积穿戴，但精度和耐洗性目前都无法满足高分辨率触觉需求。</p>
+
+<table>
+<tr><th>材料</th><th>角色</th><th>优势</th><th>劣势</th></tr>
+<tr><td><strong>MXene (Ti₃C₂Tₓ)</strong></td><td>导电填料</td><td>导电率高、可溶液加工、2D 结构利于接触面积变化</td><td>空气中氧化降解，长期稳定性差</td></tr>
+<tr><td><strong>CNT</strong></td><td>导电填料</td><td>高长径比、渗流阈值低 (~0.5wt%)、柔韧</td><td>分散困难、批次一致性差</td></tr>
+<tr><td><strong>石墨烯/rGO</strong></td><td>导电填料/结构层</td><td>化学稳定、可大面积转移/涂覆</td><td>片层堆叠后压阻响应弱</td></tr>
+<tr><td><strong>PDMS</strong></td><td>弹性基底</td><td>生物相容、光学透明、可微结构模板化</td><td>黏附性差需等离子处理</td></tr>
+<tr><td><strong>Ecoflex</strong></td><td>超软弹性体</td><td>极低模量 (~60kPa)、断裂伸长 >900%</td><td>机械强度低，不耐溶剂</td></tr>
+<tr><td><strong>离子凝胶/离子液体</strong></td><td>EDL 电容层</td><td>超高灵敏度 (μF/cm² 级)、透明</td><td>温度敏感、湿度影响、长期可靠性未验证</td></tr>
+<tr><td><strong>导电纤维/纺织</strong></td><td>可穿戴集成</td><td>透气、可编织、舒适</td><td>精度差、校准困难、耐洗性有限</td></tr>
+</table>
+</section>
+
+<!-- §3 微结构工程 -->
+<section>
+<h2>3. 微结构工程——灵敏度提升核心手段</h2>
+
+<div class="card">
+<p><strong>微金字塔/微锥阵列：</strong>最经典方案，通过应力集中降低初始接触面积实现高灵敏度。PKU 的层级微金字塔做到 100μm/50μm 两级尖端 0.1μm，使接触从点接触开始逐步扩展，在全量程保持线性。</p>
+</div>
+
+<div class="card">
+<p><strong>多孔结构：</strong>HRPS 的核心策略，86% 孔隙率镍泡沫模板给出高压缩比和低初始模量。问题是不可逆压缩——高压载荷后孔壁坍塌导致基线漂移。</p>
+</div>
+
+<div class="card">
+<p><strong>仿生棘突 (spinous)：</strong>Adv. Funct. Mater. 2024，高密度传感器阵列利用棘突尖锐接触识别刻纹图案。</p>
+</div>
+
+<div class="card">
+<p><strong>褶皱/裂纹结构：</strong>一步法热应力诱导离子凝胶微结构 (CEJ 2024)，无需模板。</p>
+</div>
+
+<div class="card">
+<p><strong>3D 打印拱形：</strong>Additive Manufacturing 2026，单片集成 FDM 直接打印介电层拱结构。</p>
+</div>
+</section>
+
+<!-- §4 代表性学术工作 -->
+<section>
+<h2>4. 代表性学术工作与性能数据</h2>
+
+<h3>4.1 鲁南姝 HRPS (UT Austin)</h3>
+<div class="card">
+<p><strong>论文：</strong>"Highly Sensitive Capacitive Pressure Sensors over a Wide Pressure Range Enabled by the Hybrid Responses of a Highly Porous Nanocomposite", Adv. Mater. 2021</p>
+<p><strong>核心机制：</strong>导电多孔纳米复合材料 (PNC, 86% 孔隙率, 0.5wt% CNT/Ecoflex) 同时产生压阻+压容双响应。500nm PMMA 绝缘层使器件整体读出为电容信号，但内部阻抗变化由压阻放大灵敏度。与传统电容传感器相比，在 10-30 kPa 范围灵敏度提升 423%。</p>
+<p><strong>制备工艺：</strong>镍泡沫模板 → CNT/Ecoflex 氯仿溶液浸渍 → 150°C 固化 30min → HCl 刻蚀镍模板 → 86% 孔隙率 PNC。Au/PI 柔性电极 + 500nm PMMA 旋涂绝缘层 + 3M Tegaderm 封装。无需真空设备、无需洁净室。</p>
+<p><strong>性能参数：</strong>灵敏度 3.13 kPa⁻¹(0-1kPa), 1.65(1-5kPa), 1.16(5-10kPa), 0.68(10-30kPa), 0.43(30-50kPa)。测量范围 0.07Pa~125kPa。最小弯曲半径 271μm。5000 次循环后基线漂移约 15%。</p>
+<p><strong>后续迭代：</strong>SHRPS (Matter 2024) 全本征可拉伸版，对拉伸和剪切力不敏感，只响应法向压缩——解决了电子皮肤贴合弯曲关节表面时拉伸污染压力读数的问题。</p>
+<p><strong>应用演示：</strong>果蝇自重 0.07Pa 检测（94ms 响应）；受试者颈动脉脉搏波动；VR 头盔 8kPa 预压下颞动脉搏动；80kg 受试者行走最大 125kPa。</p>
+</div>
+
+<h3>4.2 PKU 接触主导电位移场增强传感 (Nature Comms 2025)</h3>
+<div class="card">
+<p><strong>机构：</strong>北京大学 彭练矛/胡又凡组。DOI: 10.1038/s41467-025-63018-9</p>
+<p><strong>核心技术：</strong>层级 PDMS/CNTs 微金字塔 + ALD Y₂O₃/HfO₂ 高 k 介电层，通过接触主导的局部电位移场增强效应实现高灵敏度+高线性度。</p>
+<p><strong>性能：</strong>灵敏度 <span class="perf-highlight">9.22 kPa⁻¹</span>，线性度 R²=0.9998，分辨率 0.1Pa，量程 2MPa。</p>
+</div>
+
+<h3>4.3 中科院北京纳米能源所——摩擦电多功能触觉 (Science Advances 2020)</h3>
+<div class="card">
+<p><strong>团队：</strong>王中林院士/杨亚研究员指导。</p>
+<p><strong>结构：</strong>PTFE 介电层 + 覆银纳米线铜片电极 + 海绵状 PDMS/石墨烯导电复合材料。单器件实现压力 (15.22 kPa⁻¹) + 温度 (1K 分辨) + 材料识别三功能。</p>
+<p><strong>性能：</strong>响应时间 <74ms，3000 次循环稳定。</p>
+</div>
+
+<h3>4.4 清华材料学院刘锴组——AISH (Advanced Functional Materials)</h3>
+<div class="card">
+<p><strong>团队：</strong>清华刘锴副教授、西安交大张磊教授，合作者伍晖、张莹莹、范守善院士。</p>
+<p><strong>机制：</strong>非对称界面化学反应+离子电流传导。银纳米颗粒负载丙烯酸水凝胶，两铜箔电极界面银离子非对称化学置换反应，外加电压匹配器件自发电动势使初始电流极小，受压后离子传导电流大幅改变。</p>
+<p><strong>性能：</strong>灵敏度 <span class="perf-highlight">171 kPa⁻¹</span>，检测下限 0.075Pa，工作电压 0.02V，循环 >1500 次。</p>
+</div>
+
+<h3>4.5 中科院重庆绿智院——高线性离电传感 (2025)</h3>
+<div class="card">
+<p><strong>机制：</strong>皮肤启发双机制模型——织物微结构接触面积演化 (∝P<sup>1/3</sup>) + 离子浓度自适应调制 (∝P<sup>2/3</sup>) 协同，整体输出 C∝P 线性。</p>
+<p><strong>性能：</strong>0-1MPa 宽区间线性度高。从机理层面解决非线性问题。</p>
+</div>
+
+<h3>4.6 Cambridge 三轴力传感 (Nature Materials 2026)</h3>
+<div class="card">
+<p>石墨烯协同各向异性多孔导电弹性体 (APE)，多尺度结构微型化 3D 力传感器阵列。首次实现微型尺度+高灵敏度+法向/剪切力完全解耦。</p>
+</div>
+</section>
+
+<!-- §5 阵列集成与信号读出 -->
+<section>
+<h2>5. 阵列集成与信号读出</h2>
+
+<p>单点传感器的灵敏度已经足够高，阵列集成和信号读出才是走向实用的关键瓶颈。被动矩阵 N×M 布线最简单但存在"ghost point"串扰——电流沿非目标路径泄漏导致相邻像素误读。Nature Comms 2025 提出纳米间隙结构从物理层面隔离边缘电场，是目前最有效的被动矩阵串扰抑制方案。主动矩阵 (AM-TFT) 通过每像素配一个薄膜晶体管开关完全消除串扰，JDI 已将此技术商业化——直接复用 LTPS-TFT 显示面板产线。事件驱动/神经形态方案将触觉编码为类神经脉冲序列，PNAS 2025 NRE-skin 实现了疼痛感知和保护反射功能，数据吞吐量降低 1-2 个数量级，为大面积 (>1000 taxel) 部署提供了带宽和功耗上的可行性。</p>
+
+<table>
+<tr><th>方案</th><th>原理</th><th>优势</th><th>劣势</th><th>代表工作</th></tr>
+<tr><td><strong>被动矩阵</strong></td><td>N×M 传感器只需 N+M 根线</td><td>布线简单、成本低</td><td>"ghost point"串扰</td><td>Nat Comms 2025 纳米间隙隔离; ACS AEM 2025 摩擦 Au 隔离</td></tr>
+<tr><td><strong>主动矩阵 (AM-TFT)</strong></td><td>每像素配 TFT 开关，逐行扫描</td><td>无串扰、高分辨率</td><td>成本高、工艺复杂</td><td>JDI LTPS-TFT 商用; Nano Lett 2018 16×16 CNT-TFT</td></tr>
+<tr><td><strong>事件驱动/神经形态</strong></td><td>触觉编码为类神经脉冲序列</td><td>数据吞吐降 1-2 数量级</td><td>需专用芯片</td><td>PNAS 2025 NRE-skin; arXiv 2026 SNN 实时分类</td></tr>
+</table>
+</section>
+
+<!-- §6 商业产品与公司 -->
+<section>
+<h2>6. 商业产品与国际公司</h2>
+
+<p>已实现批量商用的触觉传感器产品按技术路线分布在磁性 (XELA uSkin)、织物压阻 (BeBop RoboSkin)、AM-TFT 电容 (JDI)、薄膜压阻 (Tekscan FlexiForce)、磁性开源 (Meta ReSkin/AnySkin) 五条路线上。其中 JDI 的方案最有工业意义——直接复用显示面板产线，量程覆盖 0.01~4MPa，已通过 ISO/IATF 认证。JQ Industries 矩侨是目前唯一实现纤维压阻全身皮肤千套级出货的创业公司。</p>
+
+<table>
+<tr><th>公司</th><th>产品</th><th>技术路线</th><th>关键参数</th><th>状态</th></tr>
+<tr><td>XELA Robotics (日本)</td><td>uSkin</td><td><span class="company-tag tag-mag">磁性</span></td><td>3 轴力+扭矩</td><td>已商用，兼容多种夹爪和灵巧手</td></tr>
+<tr><td>BeBop Sensors (美国)</td><td>RoboSkin</td><td><span class="company-tag tag-textile">织物压阻</span></td><td>&lt;1mm 厚</td><td>2022 年发布，全身覆盖方案</td></tr>
+<tr><td>JDI (日本)</td><td>LTPS TFT 触觉</td><td><span class="company-tag tag-cap">AM-TFT 电容</span></td><td>0.01~4MPa</td><td>商用代工，复用显示面板产线</td></tr>
+<tr><td>Tekscan (美国)</td><td>FlexiForce</td><td><span class="company-tag tag-piezor">薄膜压阻</span></td><td>成熟标定</td><td>医疗/工业长期商用</td></tr>
+<tr><td>ReSkin/AnySkin (Meta)</td><td>磁性皮肤</td><td><span class="company-tag tag-mag">磁性 taxel</span></td><td>开源 $13/个</td><td>研究用，可快速替换</td></tr>
+</table>
+
+<h3>6.1 JQ Industries 矩侨工业 (山东威海)</h3>
+<div class="card">
+<p><strong>成立：</strong>2024 年初 | <strong>融资：</strong>2025 年 A 轮 8 位数人民币 (JHF/新东方/孚瑞石墨)</p>
+<p><strong>技术：</strong>第四代压阻柔性纤维传感器，纤维尼龙芯+压阻外层+电极芯结构。弯折半径 <0.1mm，通过汽车级冲击测试，检测力 0.01N，量程 3500kPa。</p>
+<p><strong>产能：</strong>自建工厂改造纺织机械，R2R 产线年产能 20 万传感器，良率 95%，生产成本降 80%，24h 出新样品。</p>
+<p><strong>出货：</strong>已出货 1000 套全身皮肤 (Unitree G1)，含手套/躯干/鞋底。与 10+ 人形机器人公司合作。</p>
+<p><strong>创始人：</strong>张景琦 (约克大学电子工程，前小米生态链 CTO)，团队 30 人。</p>
+</div>
+</section>
+
+<!-- §7 国内供应商 -->
+<section>
+<h2>7. 国内触觉传感器供应商 (40+家)</h2>
+<p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:0.5rem">来源：艾邦机器人产业研究 2025.10 + 港中深 SIDE 报告 2025.06 + 公开信息整理</p>
+
+<p>国内触觉传感器创业在 2024-2025 年进入爆发期。压阻式仍是出货量最大的技术路线，汉威科技/能斯达拥有最完整的技术矩阵（压阻/压电/电容/生物四条线），墨现科技 5760 点阵列在单位面积密度上领先。电容式阵营中，他山科技已出货数万颗、华威科获"专精特新"认证并批量出货，赛感科技半年内完成 Pre-A 和 Pre-A+ 两轮融资。光学/视触觉方案（纬钛、戴盟、千觉）精度最高但体积和成本限制了应用场景。2025 年新入局的晶智感（晶华新材子公司）宣布 2026 年 3 月投产 20 万只灵巧手触觉薄膜产能，是产能规划最激进的玩家。猿声科技半年三轮融资、李泽湘支持，是资本最看好的新团队之一。</p>
+
+<p>整体而言，国内供应商在压阻和电容两条路线上已形成一定竞争格局，离子电容 (iontronic) 量产方面奥迪威子公司奥感微建成行业首条生产线。磁性方案仍以代理 XELA (欣佰特) 或自研 6D 霍尔 (帕西尼) 为主。光纤方案仅麦格米特一家量产。以下按技术路线分类列出。</p>
+
+<h3>7.1 霍尔效应/磁性方案</h3>
+<table>
+<tr><th>公司</th><th>成立</th><th>核心技术</th><th>关键参数</th><th>备注</th></tr>
+<tr><td>帕西尼感知科技 (深圳)</td><td>2021</td><td>6D 霍尔阵列式触觉</td><td>15 维度感知；第三代 2025.8 发布，单价降至数千元</td><td>TORA 人形机器人 + DexH5 灵巧手；天津 Super EID Factory 年产 2 亿规模数据集</td></tr>
+<tr><td>欣佰特科技 (北京)</td><td>2013</td><td>代理 XELA 三轴触觉</td><td>3 轴力+剪切力</td><td>Allegro Hand + Sarcomere 灵巧手</td></tr>
+</table>
+
+<h3>7.2 压阻式方案</h3>
+<table>
+<tr><th>公司</th><th>成立</th><th>核心技术</th><th>关键参数</th><th>备注</th></tr>
+<tr><td>汉威科技/能斯达 (苏州)</td><td>1998/2013</td><td>纳米纤维/CNTs 柔性压阻</td><td>0.3mm 厚，1ms 响应；>10 万次耐弯折</td><td>四项核心技术 (压阻/压电/电容/生物)，灵巧手压力检测系统</td></tr>
+<tr><td>福莱新材 (浙江, 605488)</td><td>2009</td><td>全柔性压阻</td><td>2024.2 发布第一代；全曲面覆盖</td><td>2017 年起布局，已获灵巧手/人形机器人小批量订单</td></tr>
+<tr><td>墨现科技 (东莞)</td><td>2021</td><td>五层结构柔性压阻膜</td><td>FLX 系列；5760 点阵列 (72×80), 1cm²；低触发力+大量程</td><td>服务 500+ 客户；创始人匡正入选 2025 福布斯 30U30；CMEF 2026 参展</td></tr>
+<tr><td>埔慧科技 (广州)</td><td>2021</td><td>微结构柔性压阻</td><td>宽量程/高线性/高精度；半导体抛光/轮胎印痕/中医脉诊</td><td>硕博 >80%；专利 >100 件；黄埔材料研究院转化；服务 200+ 客户</td></tr>
+<tr><td>力感科技 (深圳)</td><td>2016</td><td>薄膜电阻柔性压力</td><td>高灵敏度/宽量程</td><td>—</td></tr>
+<tr><td>纽迪瑞 NDT (深圳)</td><td>2011</td><td>压阻式指尖触觉</td><td>压感触控+灵巧手</td><td>中外合资</td></tr>
+<tr><td>钛深科技 TacSense (深圳)</td><td>2018</td><td>薄膜分布式压力</td><td>>15 年使用寿命</td><td>与优必选、大疆合作；触觉 AI 解决方案</td></tr>
+<tr><td>慧闻纳米 (苏州)</td><td>2012</td><td>柔性薄膜压阻</td><td>SPF01: 10gf 以下触发，<5ms 响应，>100 万次按压</td><td>含 MEMS 气体传感器产线</td></tr>
+</table>
+
+<h3>7.3 电容式方案</h3>
+<table>
+<tr><th>公司</th><th>成立</th><th>核心技术</th><th>关键参数</th><th>备注</th></tr>
+<tr><td>他山科技 (北京)</td><td>2017</td><td>电容式多功能触觉</td><td>TS 系列: 0.01N 力分辨率，法向+切向+接近觉 (≥1cm)；AI 触感芯片+R-SpiNNaker 架构</td><td>清华/曼大团队；MuJoCo 仿真平台；已出货数万颗；因时机器人/强脑科技等客户</td></tr>
+<tr><td>猿声科技 (深圳)</td><td>2025.1</td><td>感算一体多维触觉</td><td>Tacta 超薄高密度; HexSkin 全身 &lt;1 万元/台; 半年三轮融资</td><td>牛津博士带队；华为专家加盟；李泽湘支持；CES 2026 展示；天使轮系列 (启高资本等)</td></tr>
+<tr><td>模量科技 (深圳)</td><td>2024</td><td>高密度阵列式+三维力</td><td>0.1N 触发力；多维触觉感知链路</td><td>千万级天使轮 (2025.7)；头部灵巧手企业合作；3C/新能源拓展</td></tr>
+<tr><td>华威科 (武汉)</td><td>2011</td><td>仿生柔性电容</td><td>超高灵敏度仿生电容；手部电子皮肤 >1000 触觉点</td><td>院士熊有伦创办；华中科大；国家级专精特新"小巨人"；已向 AI 领军企业批量出货</td></tr>
+<tr><td>赛感科技 (深圳)</td><td>2023</td><td>柔性电容</td><td>高灵敏/高线性/快响应；材料-结构-器件-系统全栈</td><td>CEO 熊赓超；Pre-A 轮数千万 (2025.7 招商局创投/琥珀资本)；Pre-A+ (2025.9 爱施德/稳正)；人形机器人/消费电子/汽车/医疗头部客户</td></tr>
+<tr><td>韧和科技 (宁波)</td><td>2018</td><td>三维力触觉 (三明治结构)</td><td>被钉扎层/间隔层/自由层；可弯曲拉伸贴合指尖</td><td>中科院宁波材料所孵化；刘宜伟任总经理；汉威科技关联；弹性电子材料产业化</td></tr>
+<tr><td>中科纳芯 (滨海)</td><td>2024.6</td><td>电容式数字触觉模组</td><td>ZKS 系列高精度微小压力</td><td>—</td></tr>
+<tr><td>奥迪威/奥感微 (广东)</td><td>1999</td><td>离电型柔性触觉</td><td>行业首条离电型柔性触觉生产线</td><td>子公司奥感微，向人形机器人送样验证中</td></tr>
+</table>
+
+<h3>7.4 光学/视触觉方案</h3>
+<table>
+<tr><th>公司</th><th>成立</th><th>核心技术</th><th>关键参数</th><th>备注</th></tr>
+<tr><td>纬钛机器人 (上海)</td><td>2024.1</td><td>视触觉传感器</td><td>GF225: 10μm 分辨率，1cm² 数万触觉点，法向+切向力</td><td>创始人 2011 年发明分辨率超越人手的视触觉传感器</td></tr>
+<tr><td>戴盟机器人 (深圳)</td><td>2021.12</td><td>多维高分辨率高频率视触觉</td><td>DM-Tac W/F: 500 万次按压，CE+FCC 双认证</td><td>全球首款多维高分辨率高频率视触觉</td></tr>
+<tr><td>千觉机器人 (上海)</td><td>2024</td><td>高精度多模态触觉</td><td>XENSE-G1 系列，2025.7 发布</td><td>触觉感知与控制智能化模组</td></tr>
+</table>
+
+<h3>7.5 光纤方案</h3>
+<table>
+<tr><th>公司</th><th>成立</th><th>核心技术</th><th>关键参数</th><th>备注</th></tr>
+<tr><td>麦格米特 (深圳, 002851)</td><td>2003</td><td>MFS 系列柔性光纤</td><td>2019 年量产；弯曲形变→模拟电信号</td><td>VR 手套/机器人关节监测</td></tr>
+</table>
+
+<h3>7.6 织物/薄膜方案</h3>
+<table>
+<tr><th>公司</th><th>成立</th><th>核心技术</th><th>关键参数</th><th>备注</th></tr>
+<tr><td>尧乐科技 (上海)</td><td>2015</td><td>织物压力传感器</td><td>最薄 0.5mm，毫牛级精度，毫秒响应，最高 100 点/cm²</td><td>智能护理/鞋垫/汽车/机器人</td></tr>
+<tr><td>弘信电子/瑞浒科技 (厦门, 300657)</td><td>2003</td><td>FPC+石墨烯+液态金属</td><td>触觉分辨率 0.01N</td><td>国内 FPC 领军，子公司瑞浒布局柔性压力传感</td></tr>
+<tr><td>圆芯电子 (宁波)</td><td>2020</td><td>印刷柔性阵列</td><td>YX-M1156: 0.15mm 厚</td><td>15 年行业经验</td></tr>
+</table>
+
+<h3>7.7 新入局/其他</h3>
+<table>
+<tr><th>公司</th><th>成立</th><th>核心技术</th><th>备注</th></tr>
+<tr><td>晶智感 (北京)</td><td>2025.6</td><td>柔性多模态</td><td>1397 触觉点/16 区域；切向力拟合算法；高密度织物手套。晶华新材子公司；2026.3 投产 20 万只灵巧手+100 万套夹爪薄膜；美国设研发实验室；与灵心巧手/TetherIA 合作</td></tr>
+<tr><td>灵犀未来 (深圳)</td><td>2025.4</td><td>三维力触觉</td><td>仿生灵巧手/双足机器人</td></tr>
+<tr><td>慧感科技 (杭州)</td><td>—(待核实)</td><td>智能触觉+行为反馈</td><td>FlexiSense S10 机器狗方案；分辨"拍打/抚摸"等模态。杨华勇院士/杨赓教授团队创办；2025.7 融资</td></tr>
+<tr><td>灵动佳芯 (苏州)</td><td>2021</td><td>压电+半导体</td><td>柔性压电触觉；核心材料配方+芯片设计+算法。Pre-A 近亿元 (2025.3 朝希资本/敦鸿资产领投；艾克斯光谷/零一创投跟投)</td></tr>
+<tr><td>铭感科技 (绍兴)</td><td>2023.10</td><td>宽温域薄膜柔性</td><td>D 系列 0-15 万牛；提前 25min 预警热失控。浙大教授团队；Pre-A 1500 万 (2025.11)；锂钠固态电池/医疗器械/人形机器人</td></tr>
+<tr><td>苏试试验 (300416)</td><td>2007</td><td>石墨烯柔性应力振动</td><td>2017 年起研发；耐弯折 >10 万次</td></tr>
+<tr><td>航凯微电 (苏州)</td><td>2021.10</td><td>MEMS 指尖触觉</td><td>>300 万次使用，1000Hz 采样，0.01N 全量程，防水防尘</td></tr>
+<tr><td>深圳先进院</td><td>2006</td><td>可拉伸 590% 柔性传感</td><td>GF=4.95@550% 拉伸，重复率误差 <0.1%</td></tr>
+</table>
+</section>
+
+<!-- §8 成熟产线复用 -->
+<section>
+<h2>8. 成熟产线复用路径</h2>
+
+<p>触觉传感器从实验室走向量产，最现实的路径不是建设全新产线，而是复用现有成熟产线。四条可复用路径——显示面板 LTPS-TFT、触控面板 CTP、柔性印刷电路板 FPC、纺织——覆盖了从高分辨率指尖到低精度全身的完整需求谱。JDI 已经证明显示面板产线复用的可行性并实现商用出货。触控面板产线全球产能过剩（智能手机增长放缓），改为压力传感只需替换层压材料，不涉及 ITO/TFT 层工艺变更。FPC 产线在深圳/东莞/昆山已极度成熟，成本低至 $0.1-0.5/cm²。纺织产线被 JQ Industries 率先验证，年产 20 万传感器、良率 95%。国内京东方、华星光电、深天马拥有 6 代/8.5 代柔性显示线，设备可复用但尚未公开触觉传感器产品。</p>
+
+<table>
+<tr><th>复用产线</th><th>空间分辨率</th><th>灵敏度/线性度</th><th>成本 (估)</th><th>量产就绪度</th><th>适用场景</th></tr>
+<tr><td><strong>LTPS-TFT 显示线 (JDI)</strong></td><td>&lt;100μm</td><td>高 (AM 消除串扰)</td><td>$10-50/模块</td><td>★★★★★ 已量产</td><td>高精度指尖/局部</td></tr>
+<tr><td><strong>触控面板 (CTP) 线</strong></td><td>5-10μm 线宽可达</td><td>中 (需微结构优化)</td><td>$5-10/片</td><td>★★★☆☆ 需工艺开发</td><td>中等精度手掌/手臂</td></tr>
+<tr><td><strong>FPC 线</strong></td><td>&gt;75μm</td><td>低-中 (被动矩阵)</td><td>$0.5-2/片</td><td>★★★★☆ 供应链成熟</td><td>低精度全身覆盖</td></tr>
+<tr><td><strong>纺织线</strong></td><td>~5-10mm</td><td>低</td><td>极低</td><td>★★★★☆ JQ 已量产</td><td>全身碰撞检测/安全</td></tr>
+</table>
+
+<h3>8.1 JDI LTPS-TFT 显示面板 → 触觉传感器</h3>
+<div class="card">
+<p>4.5 代玻璃基板 (730×920mm) 面积是 8 寸硅晶圆的 21 倍。光刻、CVD、蚀刻全复用，只需在 TFT 背板上层压导电压敏层。石川工厂已量产，通过 ISO 9001/14001/IATF 16949。提供代工/OEM/ODM。</p>
+<p>LTPS 核心工序（低温多晶硅沉积、光刻图案化、金属布线、绝缘层沉积）与触觉传感器 TFT 开关阵列完全相同，差异仅最上层材料。</p>
+</div>
+
+<h3>8.2 触控面板 (CTP) 产线复用</h3>
+<div class="card">
+<p>ITO 溅射/蚀刻在 PET/CPI 基底上、OCA 贴合、柔性布线——与电容式压力传感器高度重叠。触控屏产线全球产能过剩，ITO 图案化精度已达 5-10μm 线宽。改为压力传感只需用可压缩介电层替代 OCA/air gap。</p>
+<p>UCSD 2018 年已验证透明轻薄方案。出厂价 $1-3/片 (手机尺寸)，改为压力传感器估算 $5-10。</p>
+</div>
+
+<h3>8.3 FPC 产线复用</h3>
+<div class="card">
+<p>聚酰亚胺基底+铜箔蚀刻+覆盖膜，全球高度成熟，深圳/东莞成本 $0.1-0.5/cm²。上下两层 FPC 行/列电极，中间夹导电压敏材料 (Velostat) 或微结构介电层。弘信电子 (300657) 子公司瑞浒科技已布局。</p>
+</div>
+
+<h3>8.4 国内可复用产能</h3>
+<div class="card">
+<p><strong>显示面板：</strong>京东方 (BOE) 多条 6 代/8.5 代柔性 OLED 线，有屏下指纹/摄像头经验；华星光电 (CSOT)、深天马有柔性 OLED 和 LTPS 产线。</p>
+<p><strong>触控面板：</strong>欧菲光、蓝思科技、合力泰等 CTP 厂商，ITO/Metal Mesh 产能巨大，设备折旧已完成，工艺切换周期估计 3-6 个月。</p>
+<p><strong>FPC：</strong>鹏鼎控股、东山精密、弘信电子，深圳/昆山集群产能全球第一。</p>
+</div>
+</section>
+
+<!-- §9 前沿方向 -->
+<section>
+<h2>9. 前沿方向</h2>
+
+<div class="card">
+<p><strong>多模态解耦：</strong>同一器件同时感知压力+温度+接近度+应变且互不干扰。npj Flex Electron 2026 可扩展原位制造多模态电子皮肤；Adv. Mater. 2026 综述解耦策略（频率分离、空间分离、材料各向异性）。</p>
+</div>
+
+<div class="card">
+<p><strong>神经形态处理：</strong>从传感器端直接做脉冲编码，减少数据传输量。PNAS 2025 NRE-skin 实现疼痛感知+保护反射。事件驱动方案使大面积 (>1000 taxel) 部署在带宽和功耗上可行。</p>
+</div>
+
+<div class="card">
+<p><strong>AI 赋能传感：</strong>Materials Horizons 2026 综述。深度学习用于超分辨率重建 (稀疏 taxel→高分辨率力场)、信号解耦、自标定、异常检测。</p>
+</div>
+
+<div class="card">
+<p><strong>可持续/可降解：</strong>植物源纤维、纤维素基传感器、可回收弹性体 (Composites Part B 2025, Nature Comms 2026)。</p>
+</div>
+
+<div class="card">
+<p><strong>仿生 Janus 结构：</strong>不对称结构实现方向选择性感知 (Nano Research 2026)。上下两面对不同刺激响应不同。</p>
+</div>
+</section>
+
+<!-- §10 港中深 SIDE 报告 -->
+<section>
+<h2>10. 港中深 SIDE 产业研究报告摘要</h2>
+<p style="color:var(--text-secondary);font-size:0.85rem">来源：香港中文大学（深圳）深圳数据经济研究院，2025.06，作者尹炜锋</p>
+
+<h3>六大技术路线与代表企业</h3>
+<table>
+<tr><th>技术路线</th><th>代表企业（国内）</th><th>特点</th></tr>
+<tr><td><span class="company-tag tag-piezor">压阻式</span></td><td>汉威科技、福莱新材、墨现科技、埔慧科技</td><td>当前主流，结构简单成本低</td></tr>
+<tr><td><span class="company-tag tag-cap">电容式</span></td><td>他山科技、哈普泰克、猿声科技、韧和科技</td><td>线性响应、低功耗</td></tr>
+<tr><td>压电式</td><td>三三科技、凸申科技</td><td>自供电，仅测动态</td></tr>
+<tr><td>摩擦电式</td><td>Next Gen Bioelectronics</td><td>完全自供电</td></tr>
+<tr><td><span class="company-tag tag-mag">霍尔效应</span></td><td>XELA Robotics、帕西尼</td><td>高精度三轴，成本高</td></tr>
+<tr><td><span class="company-tag tag-optical">光学式</span></td><td>纬钛机器人、戴盟机器人、千觉机器人</td><td>最高精度，成本高体积大</td></tr>
+</table>
+
+<h3>四大趋势</h3>
+<div class="card">
+<p>(1) <strong>自愈合与自修复</strong>：首尔大学 Dae-Hyeong Kim 团队，1 小时恢复 90%+ 强度</p>
+<p>(2) <strong>高度集成与多功能化</strong>：Zhenan Bao 团队多功能阵列</p>
+<p>(3) <strong>无源驱动与自供电</strong>：中科院苏州纳米所 TENG+光伏 24h 监测；UCSD Joseph Wang 汗液生物酶燃料电池</p>
+<p>(4) <strong>生物相容性与可降解性</strong>：UIUC Rogers 团队体内可降解传感芯片</p>
+</div>
+</section>
+
+<!-- §11 耐久性与环境适应 -->
+<section>
+<h2>11. 耐久性与环境适应</h2>
+
+<div class="card">
+<p><strong>循环寿命：</strong>实验室论文通常报 5000-10000 次，机器人实际需 10⁶+ 次。漂移来源：多孔结构不可逆压缩（孔壁坍塌）、导电网络蠕变（CNT/MXene 重排）、界面脱粘（电极-敏感层分离）。Sensors & Actuators A 2026 系统研究汗液/湿度环境退化。</p>
+<p><strong>自修复：</strong>Composites Part B 2025 多模量梯度自愈合可回收电容传感器；ACS Langmuir 2025 可降解聚氨酯弹性体传感器。</p>
+<p><strong>极端温度：</strong>Cell Reports Physical Science 2025 综述耐极端温度柔性应力传感器。</p>
+<p><strong>温度-压力解耦：</strong>Nature Comms 2026 可回收、大面积、温度-压力解耦双模传感器。</p>
+</div>
+</section>
+
+<!-- §12 关键文献索引 -->
+<section>
+<h2>12. 关键文献索引</h2>
+
+<table>
+<tr><th>方向</th><th>文献</th><th>期刊/年份</th><th>关键贡献</th></tr>
+<tr><td>HRPS</td><td>Ha et al. adma.202103320</td><td>Adv. Mater. 2021</td><td>混合响应电容传感器，宽范围高灵敏度</td></tr>
+<tr><td>SHRPS</td><td>Ha et al.</td><td>Matter 2024</td><td>可拉伸版 HRPS，拉伸免疫</td></tr>
+<tr><td>3D 力传感</td><td>Yun et al. s41563-026-02508-7</td><td>Nature Materials 2026</td><td>石墨烯 APE 微型化三轴力传感器</td></tr>
+<tr><td>纳米间隙抗串扰</td><td>s41467-025-57232-8</td><td>Nature Comms 2025</td><td>物理隔离消除串扰</td></tr>
+<tr><td>神经形态电子皮肤</td><td>pnas.2520922122</td><td>PNAS 2025</td><td>NRE-skin 疼痛感知+反射</td></tr>
+<tr><td>柔性传感路线图</td><td>acsnano.2c12606</td><td>ACS Nano 2023</td><td>Berkeley/MIT/Caltech/KAIST 联合路线图</td></tr>
+<tr><td>AI+柔性传感</td><td>d5mh02286j</td><td>Materials Horizons 2026</td><td>AI 赋能柔性压力传感系统综述</td></tr>
+<tr><td>PKU 电位移场</td><td>s41467-025-63018-9</td><td>Nature Comms 2025</td><td>接触主导电位移场增强，9.22 kPa⁻¹</td></tr>
+<tr><td>Iontronic 纪录</td><td>Liu et al.</td><td>Nano-Micro Lett 2022</td><td>9280 kPa⁻¹ 灵敏度纪录</td></tr>
+<tr><td>无蠕变 Iontronic</td><td>He et al.</td><td>Nat. Mater. 2024</td><td>无蠕变聚电解质弹性体</td></tr>
+</table>
+</section>
+
+</div>
+
+<footer>
+  柔性压力传感器与电子皮肤调研 &mdash; 调研时间 2026-04-30 &mdash; Last updated April 2026
+</footer>
+
+<script src="nav.js"></script>
+</body>
+</html>

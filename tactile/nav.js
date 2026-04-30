@@ -16,6 +16,7 @@
     { href: 'p3-model-loop.html',  label: 'Model+FWM',     accent: null, color: '#3b5bdb' },
     { href: 'p5-benchmark.html',   label: 'Benchmark',      accent: null, color: '#059669' },
     { href: 'p6-ttt.html',         label: 'TTT',            accent: null, color: '#8b5cf6' },
+    { href: 'p7-materials-companies.html', label: 'Flex Sensor', accent: null, color: '#9d174d' },
   ];
 
   function renderNav() {
